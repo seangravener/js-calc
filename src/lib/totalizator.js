@@ -6,12 +6,11 @@ const _memory = memory
 
 class Totalizator {
   get answer() {
-    this.save()
-    _input.reset()
     return this.compute().toString();
   }
 
   get currentOperand() {
+    // return store.input.value
     return _input.value;
   }
 
