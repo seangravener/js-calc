@@ -1,5 +1,5 @@
 import { input, memory } from "./index.js";
-import { arithmetic } from "../functions/basic.js";
+import { arithmetic } from "./functions/basic.js";
 
 const _input = input
 const _memory = memory

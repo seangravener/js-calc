@@ -1,10 +1,5 @@
-/**
- * [number, String<operand>]
- */
-
-
-import { events } from "./index.js";
-import { operators } from '../functions/basic.js'
+import { events } from "../../lib/index.js";
+import { operators } from '../../lib/functions.js'
 
 let _memory = [];
 
@@ -61,4 +56,5 @@ const run = () => {
   return _instance || (_instance = new Memory(_memory));
 };
 
-export default run();
+export default Memory;
+// export { Memory }
