@@ -1,31 +1,37 @@
+import Module from "./module.js";
+
+let _instance = undefined;
 let _events = {};
 
-class EventBus {
+class EventBus extends Module {
   get events() {
     return _events;
   }
 
   constructor(events = {}) {
+    super(_instance)
+    this.hi('no way! called base method')
     _events = events;
   }
 
-  listenTo(event, callback) {
-    if (!_events.hasOwnProperty(event)) {
-      _events[event] = [];
-    }
+  listenTo(nameSpaces, callback) {
+    nameSpaces.forEach((nameSpace) => {
+      _events[nameSpace] = _events[nameSpace] || [];
+      _events[nameSpace].push(callback);
+    });
 
-    console.log(this)
-    return _events[event].push(callback);
+    return this;
   }
 
-  publish(event, payload = {}) {
-    return _events.hasOwnProperty(event)
-      ? _events[event].map((callback) => callback(payload))
-      : [];
+  publish(nameSpace, payload = {}) {
+    if (_events[nameSpace]) {
+      _events[nameSpace].map((callback) => callback(payload));
+    }
+
+    return this;
   }
 }
 
-let _instance = undefined;
 const run = () => {
   return _instance || (_instance = new EventBus());
 };
