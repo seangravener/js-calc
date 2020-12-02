@@ -1,12 +1,18 @@
-export const operators = {
+export const keyOperators = {
+  Enter: (a, b) => a,
+};
+
+export const mathOperators = {
   "*": (a, b) => a * b,
   "-": (a, b) => a - b,
   "/": (a, b) => a / b,
   "+": (a, b) => a + b,
   "=": (a, b) => a,
-  Enter: (a, b) => a,
 };
 
+export const operators = Object.keys(mathOperators);
+
+const _functions = { ...keyOperators, ...mathOperators };
 export function arithmetic(operator, values) {
-  return operators[operator](...values);
+  return _functions[operator](...values);
 }
