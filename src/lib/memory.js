@@ -1,3 +1,5 @@
+import { events } from "./index.js";
+
 let _memory = [];
 
 class Memory {
@@ -6,11 +8,11 @@ class Memory {
   }
 
   constructor(memory = []) {
-    _memory = memory;
     return this;
   }
 
   store(value, operator) {
+    events.publish("memory:store", [value, operator]);
     _memory.push(parseFloat(value), operator);
     return this;
   }
@@ -25,6 +27,7 @@ class Memory {
   }
 
   clear() {
+    events.publish("memory:clear");
     _memory = [];
     return this;
   }
