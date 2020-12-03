@@ -1,29 +1,13 @@
 import Component from "../data/models/component.js";
-
+import store from "../data/store/index.js";
 class Calculator extends Component {
-  constructor({ memory, events }) {
-    super({ memory, events });
-
-    events.listenTo(["memory:store"], (a) =>
-      console.log("memory:store -->", a)
-    );
-    events.listenTo(["memory:store"], (a) =>
-      console.log("memory:store -->", a)
-    );
-    events.listenTo(["memory:store1"], (a) =>
-      console.log("memory:store 1-->", a)
-    );
-    events.listenTo(["memory:store2"], (a) =>
-      console.log("memory:store 2-->", a)
-    );
-
-    // memory.store(1, "+")
-
-    // store.memory.store(1, "+");
-    // calc.memory.store();
-
-    events.publish("memory:store", "woot!");
+  constructor() {
+    super({ store });
   }
+}
+
+export default Calculator;
+
 
   //   compute(operator, a, b) {
   //     memory.store(b, operator)
@@ -32,6 +16,3 @@ class Calculator extends Component {
 
   //     memory.set([1, '+', 1, ''])
   //   }
-}
-
-export default Calculator

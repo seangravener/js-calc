@@ -1,10 +1,9 @@
-import Calculator from "../../ui/calculator.js";
-import Memory from "./memory.js";
-import EventBus from "./events.js.js.js";
+import { Store } from "./store.js";
 
-const memory = new Memory();
-const events = new Event()
-const calculator = new Calculator({ memory, events });
+let _instance = undefined;
+export const singleton = () => {
+  return _instance || (_instance = new Store());
+};
 
-export { memory };
-// export default calculator;
+export { Store };
+export default singleton();

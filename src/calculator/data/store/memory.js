@@ -1,6 +1,7 @@
 import { events } from "../../lib/index.js";
-import { operators } from '../../lib/functions.js'
+import { operators } from "../../lib/functions.js";
 
+let _instance = undefined;
 let _memory = [];
 
 class Memory {
@@ -29,7 +30,7 @@ class Memory {
 
   validate() {
     let isValid = true;
-    const candidate = this.memory.recall(1)
+    const candidate = this.memory.recall(1);
 
     for (operator of operators) {
       if (operator !== candidate) {
@@ -38,8 +39,8 @@ class Memory {
     }
 
     if (!isValid) {
-      _errCorrect()
-      _memory.push('') // set to state.operator
+      // _errCorrect();
+      _memory.push(""); // set to state.operator
     }
     return isValid;
   }
@@ -49,12 +50,15 @@ class Memory {
     _memory = [];
     return this;
   }
+
+  static load() {
+    return _instance || (_instance = new Memory(_memory));
+  }
 }
 
-let _instance = undefined;
-const run = () => {
-  return _instance || (_instance = new Memory(_memory));
+const singleton = () => {
+  return Memory.load();
 };
 
-export default Memory;
-// export { Memory }
+export { Memory };
+export default singleton();

@@ -1,3 +1,2 @@
-import calculator from './index.js';
-
+import calculator from './calculator/main.js';
 calculator.debug();

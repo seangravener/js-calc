@@ -11,4 +11,5 @@ class Component {
   }
 }
 
+export { Component };
 export default Component;
