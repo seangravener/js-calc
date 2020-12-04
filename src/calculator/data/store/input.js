@@ -1,5 +1,6 @@
-import KeyBindings from "./keys.js";
+import KeyBindings from "../../lib/keys.js";
 
+let _instance = undefined;
 let _history = [];
 
 class Input {
@@ -39,11 +40,11 @@ class Input {
 
     return this;
   }
+
+  static load() {
+    return _instance || (_instance = new Input());
+  }
 }
 
-let _instance = undefined;
-const run = () => {
-  return _instance || (_instance = new Input());
-};
-
-export default run();
+export { Input };
+export default Input.load()

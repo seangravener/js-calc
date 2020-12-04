@@ -1,20 +1,22 @@
-import Module from "./module.js";
-
 let _instance = undefined;
 let _events = {};
 
-class EventBus extends Module {
+class EventBus {
   get events() {
     return _events;
   }
 
   constructor(events = {}) {
-    super(_instance)
-    this.hi('no way! called base method')
     _events = events;
   }
 
+  // https://medium.com/@jesusgalvan/vue-js-event-bus-promises-f83e73a81d72
+  listenTo$(nameSpaces) {
+    return new Promise((resolve, reject) => {})
+  }
+
   listenTo(nameSpaces, callback) {
+    nameSpaces = [...[nameSpaces]];
     nameSpaces.forEach((nameSpace) => {
       _events[nameSpace] = _events[nameSpace] || [];
       _events[nameSpace].push(callback);
@@ -24,16 +26,22 @@ class EventBus extends Module {
   }
 
   publish(nameSpace, payload = {}) {
+    console.log("publish", nameSpace);
     if (_events[nameSpace]) {
       _events[nameSpace].map((callback) => callback(payload));
     }
 
     return this;
   }
+
+  static load() {
+    return _instance || (_instance = new EventBus(_events));
+  }
 }
 
-const run = () => {
-  return _instance || (_instance = new EventBus());
+const singleton = () => {
+  return EventBus.load();
 };
 
-export default run();
+export { EventBus };
+export default singleton();

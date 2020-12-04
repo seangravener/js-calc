@@ -1,3 +1,5 @@
+// MOVE TO SERVICE
+
 let _instance = undefined;
 
 class State {
@@ -12,4 +14,9 @@ class State {
   }
 }
 
+const singleton = () => {
+  return State.load();
+};
+
 export { State };
+export default singleton();

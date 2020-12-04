@@ -1,10 +1,13 @@
-import { input, memory } from "./index.js";
-import { arithmetic } from "./functions/basic.js";
+// import { input } from "../../lib/index.js";
+import _store from "../store/instance.js"
+import { Service } from "../models/service.js";
+import { arithmetic } from "../../lib/functions.js";
 
-const _input = input
-const _memory = memory
+let _instance = undefined;
+const _input = _store.input
+const _memory = _store.memory
 
-class Totalizator {
+class Totalizator extends Service {
   get answer() {
     return this.compute().toString();
   }
@@ -36,6 +39,7 @@ class Totalizator {
   }
 
   constructor() {
+    super()
   }
 
   // move to calculator.js
@@ -74,11 +78,10 @@ class Totalizator {
     _input.operator = "";
     _memory.clear();
   }
+
+  static load() {
+    return _instance || (_instance = new Totalizator());
+  }
 }
 
-let _instance = undefined;
-const run = () => {
-  return _instance || (_instance = new Totalizator());
-};
-
-export default run();
+export { Totalizator };

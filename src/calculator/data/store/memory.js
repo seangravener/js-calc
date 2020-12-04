@@ -56,6 +56,7 @@ class Memory {
   }
 }
 
+
 const singleton = () => {
   return Memory.load();
 };
