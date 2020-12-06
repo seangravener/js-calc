@@ -1,5 +1,15 @@
-import events, { EventBus } from "./events.js";
+import events from "./events.js";
 import { operators } from "../lib/functions.js";
+
+/**
+ */
+
+// const memType = [
+//   "OperandA<Float>",
+//   "Operator<String>",
+//   "OperandB<Float>",
+//   "currentOperator<String>",
+// ];
 
 let _instance = undefined;
 let _memory = [];
@@ -9,7 +19,7 @@ class Memory {
     return _memory.length;
   }
 
-  constructor(memory = []) {
+  constructor() {
     return this;
   }
 
@@ -56,10 +66,5 @@ class Memory {
   }
 }
 
-
-const singleton = () => {
-  return Memory.load();
-};
-
 export { Memory };
-export default singleton();
+export default Memory.load();

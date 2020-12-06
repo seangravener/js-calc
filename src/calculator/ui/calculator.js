@@ -8,9 +8,9 @@ import { State } from "../data/state.js";
 
 const startup = {
   state: State.load(),
-  events: EventBus.load(),
-  memory: Memory.load(),
   totalizator: Totalizator.load(),
+  memory: Memory.load(),
+  events: EventBus.load(),
   // ui: Ui.load(),
 };
 
@@ -22,16 +22,18 @@ class Calculator extends Component {
 
 export default Calculator;
 
-// use state api to set calculation props
+// use state api to set operands
 // use state api to getAnswer()
 // use state api to bind currOperator with the last memory bit [...'+']
 
 // in state api:
 // use totalizator api to compute()(), getOperands(), setOperands(), setCurrOperator
+// use mem api to crud
+// use memory as the authority for [operandA, 'operator', operandB, 'currOperator' ]
 
 // in totalizator api:
-// use memory as the authority for [operandA, 'operator', operandB, 'currOperator' ]
-// use use memory to get and store totalizator's state bits
+// use state to get and set totalizator's state bits.
+//   ^^ or use state.operandA in totalizator <--
 
 
 

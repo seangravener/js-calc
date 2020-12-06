@@ -1,4 +1,4 @@
-// MOVE TO SERVICE
+import memory from "./memory.js"
 
 let _instance = undefined;
 
@@ -7,7 +7,21 @@ class State {
     return "i ❤️ 80083";
   }
 
-  constructor() {}
+  get operandA() {}
+  set operandA() {
+    inputs.operandA = 123
+  }
+
+  set operandB() {}
+  get operandB() {}
+
+  get operator() {
+    return this.inputs.operator
+  }
+
+  constructor() {
+    this.inputs = new Inputs()
+  }
 
   static load() {
     return _instance || (_instance = new State());
