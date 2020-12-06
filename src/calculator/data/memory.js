@@ -1,5 +1,5 @@
-import { events } from "../../lib/index.js";
-import { operators } from "../../lib/functions.js";
+import events, { EventBus } from "./events.js";
+import { operators } from "../lib/functions.js";
 
 let _instance = undefined;
 let _memory = [];

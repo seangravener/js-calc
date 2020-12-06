@@ -1,4 +1,4 @@
-import KeyBindings from "../../lib/keys.js";
+import KeyBindings from "../lib/keys.js";
 
 let _instance = undefined;
 let _history = [];
