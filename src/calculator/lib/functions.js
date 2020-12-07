@@ -1,5 +1,6 @@
 const keyOperators = {
   Enter: (a, b) => a,
+  "=": (a, b) => a,
 };
 
 const mathOperators = {
@@ -7,7 +8,6 @@ const mathOperators = {
   "-": (a, b) => a - b,
   "/": (a, b) => a / b,
   "+": (a, b) => a + b,
-  "=": (a, b) => a,
 };
 
 const operators = Object.keys(mathOperators);

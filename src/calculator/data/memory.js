@@ -12,7 +12,7 @@ import totalizator from "./totalizator.js";
 //   "currentOperator<String>",
 // ];
 
-const _nullMemorySet = [null, null, null];
+const _nullMemorySet = [0, ""];
 let _memory = [..._nullMemorySet];
 let _instance = undefined;
 
@@ -24,46 +24,43 @@ class Memory {
 
   get operandA() {
     console.log("get", this.get(3));
-    this.get(3);
-  }
-
-  set operandA(num) {
-    console.log("set", num);
-    this.set(3, num);
+    console.log("totalizator.compute() -->", totalizator.compute(_memory));
+    return totalizator.compute(_memory);
   }
 
   get operandB() {
-    this.get(1);
+    return this.get(2) || 0;
   }
 
   set operandB(num) {
-    this.set(1, num);
+    this.set(2, num);
   }
 
   get operator() {
-    this.get(2);
+    console.log("op", this.get(1));
+    return this.get(1);
   }
 
   set operator(symbol) {
-    this.set(2, symbol);
+    this.set(1, symbol);
   }
 
   constructor() {}
 
-  store([operandA, operator, operandB]) {
+  store([operator, operandB]) {
     // validate prev memory set
-    _memory.push(operandA, operator, operandB);
+    _memory.push(operator, operandB);
   }
 
   save() {
-    // this.operandA = totalizator.getAnswer()
-    events.publish("memory:save", this.recall(3));
+    // this.operandA = totalizator.compute(_memory);
+    events.publish("memory:save", _memory);
     _memory.push(..._nullMemorySet);
   }
 
   set(location, value) {
     _memory[_memory.length - location] = value;
-    events.publish("memory:set", location, value);
+    // events.publish("memory:set", location, value);
   }
 
   get(location) {

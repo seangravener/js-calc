@@ -1,45 +1,59 @@
 import inputs from "./inputs.js";
-import { arithmetic } from "../lib/functions.js";
+import { arithmetic, operators } from "../lib/functions.js";
 
 let _instance = undefined;
-const _input = {}; // _store.input
-const _memory = {}; // _store.memory
 
 class Totalizator {
-  get answer() {
-    return this.compute().toString();
-  }
-
   constructor() {}
 
-  // move to calculator.js
-
-  compute() {
-    const snapshot = _memory.recall();
-
+  compute(memory) {
+    const snapshot = memory;
+    console.log("reduce!\n", snapshot.reduce(this.memoryReducer, {}));
     return snapshot.length
-      ? snapshot.reduce(_memoryReducer.bind(this))
+      ? snapshot.reduce(this.memoryReducer, {}).operandB
       : "Err. Nothing in memory to compute.";
   }
 
-  memoryReducer(total, item) {
-    let localValue = 0;
-    let localOperator = this.operator;
-    const key = _input.keys.get(item);
+  memoryReducer(state, value, index, memory) {
+    if (!value) return state;
 
-    if (key.isOfType("operators")) {
-      localOperator = item;
-      localValue = total;
-    } else if (!isNaN(item)) {
-      localValue = arithmetic(localOperator, [total, item]);
+    const initState = { operandA: 0, operandB: 0, operator: "" };
+    state = { ...initState, ...state };
+
+    if (index === 1) {
+      state.operandA = value;
+      return state;
     }
-    return localValue;
-  }
 
-  // move to calculator.js
-  clear() {
-    _input.operator = "";
-    _memory.clear();
+    const mode = operators.includes(value) ? "operator" : "number";
+
+    // const toggle = () => {}
+    state = {
+      ...state,
+      operandB: mode === "number" ? value : state.operandB,
+      operator: mode === "operator" ? value : state.operator,
+      answer() {
+        return arithmetic(state.operator, [state.operandA, state.operandB]);
+      },
+    };
+
+    const isValid = () =>
+      !!state.operandA && !!state.operandB && !!state.operator;
+
+    if (isValid()) {
+      state.operandA = arithmetic(state.operator, [
+        state.operandA,
+        state.operandB,
+      ]);
+      state.operandB = 0;
+    } else if (mode === "number" && !state.operandB) {
+      state.operandA = state.operandB;
+    } else {
+      console.log("else? set operator -->", state.operator, state);
+    }
+
+    debugger;
+    return state;
   }
 
   static load() {
