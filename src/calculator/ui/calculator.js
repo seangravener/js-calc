@@ -3,36 +3,36 @@ import { operators } from "../lib/functions.js";
 import { Memory } from "../data/memory.js";
 import { EventBus } from "../data/events.js";
 import { Totalizator } from "../data/totalizator.js";
-import { State } from "../data/state.js";
+import { Inputs } from "../data/inputs.js";
 
 
-const startup = {
-  state: State.load(),
-  totalizator: Totalizator.load(),
-  memory: Memory.load(),
+const _state = {
   events: EventBus.load(),
+  inputs: Inputs.load(),
+  memory: Memory.load(),
+  totalizator: Totalizator.load(),
   // ui: Ui.load(),
 };
 
 class Calculator extends Component {
   constructor(state) {
-    super({ state, ...startup });
+    super({ ...state, ..._state });
   }
 }
 
 export default Calculator;
 
-// use state api to set operands
-// use state api to getAnswer()
-// use state api to bind currOperator with the last memory bit [...'+']
+// use input api to set operands
+// use input api to getAnswer()
+// use input api to bind currOperator with the last memory bit [...'+']
 
-// in state api:
+// in input api:
 // use totalizator api to compute()(), getOperands(), setOperands(), setCurrOperator
 // use mem api to crud
 // use memory as the authority for [operandA, 'operator', operandB, 'currOperator' ]
 
 // in totalizator api:
-// use state to get and set totalizator's state bits.
+// use inputs to get and set totalizator's state bits.
 //   ^^ or use state.operandA in totalizator <--
 
 

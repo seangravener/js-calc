@@ -1,5 +1,6 @@
 import events from "./events.js";
 import { operators } from "../lib/functions.js";
+import totalizator from "./totalizator.js";
 
 /**
  */
@@ -11,36 +12,70 @@ import { operators } from "../lib/functions.js";
 //   "currentOperator<String>",
 // ];
 
+const _nullMemorySet = [null, null, null];
+let _memory = [..._nullMemorySet];
 let _instance = undefined;
-let _memory = [];
 
 class Memory {
   get length() {
+    console.log(_memory);
     return _memory.length;
   }
 
-  constructor() {
-    return this;
+  get operandA() {
+    console.log("get", this.get(3));
+    this.get(3);
   }
 
-  store(value, operator) {
-    events.publish("memory:store", [value, operator]);
-    _memory.push(parseFloat(value), operator);
-    return this;
+  set operandA(num) {
+    console.log("set", num);
+    this.set(3, num);
+  }
+
+  get operandB() {
+    this.get(1);
+  }
+
+  set operandB(num) {
+    this.set(1, num);
+  }
+
+  get operator() {
+    this.get(2);
+  }
+
+  set operator(symbol) {
+    this.set(2, symbol);
+  }
+
+  constructor() {}
+
+  store([operandA, operator, operandB]) {
+    // validate prev memory set
+    _memory.push(operandA, operator, operandB);
+  }
+
+  save() {
+    // this.operandA = totalizator.getAnswer()
+    events.publish("memory:save", this.recall(3));
+    _memory.push(..._nullMemorySet);
   }
 
   set(location, value) {
     _memory[_memory.length - location] = value;
-    return this;
+    events.publish("memory:set", location, value);
   }
 
-  recall(location) {
-    return location ? _memory.slice(-location)[0] : _memory;
+  get(location) {
+    return this.recall(location)[0];
   }
 
-  validate() {
+  recall(count) {
+    return count ? _memory.slice(-count) : _memory;
+  }
+
+  validate(candidate = this.memory.recall(1)) {
     let isValid = true;
-    const candidate = this.memory.recall(1);
 
     for (operator of operators) {
       if (operator !== candidate) {
@@ -49,15 +84,18 @@ class Memory {
     }
 
     if (!isValid) {
-      // _errCorrect();
-      _memory.push(""); // set to state.operator
+      // _errCorrectIfPossible();
+      console.log(_memory);
+      throw new Error("memory seems invalid\n");
     }
+
     return isValid;
   }
 
   clear() {
+    _memory = [..._nullMemorySet];
     events.publish("memory:clear");
-    _memory = [];
+
     return this;
   }
 

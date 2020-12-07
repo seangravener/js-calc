@@ -1,51 +1,18 @@
+import inputs from "./inputs.js";
 import { arithmetic } from "../lib/functions.js";
 
 let _instance = undefined;
-const _input = {} // _store.input
-const _memory = {} // _store.memory
+const _input = {}; // _store.input
+const _memory = {}; // _store.memory
 
 class Totalizator {
   get answer() {
     return this.compute().toString();
   }
 
-  get currentOperand() {
-    // return store.input.value
-    return _input.value;
-  }
-
-  set currentOperand(value) {
-    _input.value = value;
-  }
-
-  get previousOperand() {
-    return _memory.recall(2);
-  }
-
-  get operator() {
-    return _input.operator || _memory.recall(1) || "";
-  }
-
-  set operator(symbol) {
-    console.log("--set-operator=", symbol);
-    if (_memory.length && symbol) {
-      console.log("--set-memory=", symbol);
-      _memory.set(1, symbol);
-    }
-    _input.operator = symbol;
-  }
-
-  constructor() {
-  }
+  constructor() {}
 
   // move to calculator.js
-  save() {
-    // this.mode('hold') // don't accept input
-    _memory.store(_input.value, this.operator);
-    _input.reset('', this.compute());
-
-    return _input.value
-  }
 
   compute() {
     const snapshot = _memory.recall();
@@ -81,3 +48,4 @@ class Totalizator {
 }
 
 export { Totalizator };
+export default Totalizator.load();
