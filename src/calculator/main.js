@@ -3,43 +3,49 @@ import { Calculator } from "./ui/index.js";
 
 const calculator = new Calculator();
 
-calculator.events.listenTo("memory:save", (data) =>
-  console.log(data, "saved!!")
-);
-
-// calculator.memory.operandA = <prevAnswer> --> 0
 calculator.memory.operandB = 2;
 calculator.memory.operator = "+";
 
 // on number key:
 let keyType = "number";
 if (keyType === "number") {
-  calculator.memory.save(); // #1 insert null mem set
-  calculator.memory.operandB = 4; // #2 set operandB ${key}
+  calculator.memory.save();
 }
-// answer = 6
 
-// calculator.memory.operandA = <prevAnswer> --> 6
-// calculator.memory.operator = "/";
-// calculator.memory.operator = "-";
-// calculator.memory.operator = "+";
+calculator.memory.operandB = 3;
+calculator.memory.operator = "+";
+calculator.memory.operator = "-";
+calculator.memory.operandB = 2;
+calculator.memory.operator = "/";
+calculator.memory.operandB = 3;
 calculator.memory.operator = "*";
+calculator.memory.operator = "+";
+calculator.memory.operandB = 2;
 
 // on number key:
 if (keyType === "number") {
-  calculator.memory.save(); // #1 insert null mem set
-  calculator.memory.operandB = 2; // #2 set operandB
+  calculator.memory.save();
 }
-// answer = 6
+// set state
+calculator.memory.operandB = 1;
+calculator.memory.operator = "*";
+calculator.memory.save();
 
-// keyType = 'compute'
-if (keyType === 'compute') {
-    calculator.memory.save();
-    calculator.memory.operandB = calculator.memory.operandA
-    calculator.memory.operator = "";
-}
+calculator.memory.operandB = 2;
+calculator.memory.operator = "+";
+calculator.memory.save();
 
-// calculator.memory.store([1, '+', 11])
+calculator.memory.operandB = 2;
+calculator.memory.operator = "-";
+calculator.memory.save();
+
+calculator.memory.operandB = 1;
+calculator.memory.operator = "*";
+calculator.memory.save();
+
+calculator.memory.operandB = 3;
+calculator.memory.operator = "*";
+calculator.memory.save();
+
 console.log(calculator.memory);
-
 export default calculator;

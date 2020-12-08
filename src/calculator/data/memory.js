@@ -2,18 +2,8 @@ import events from "./events.js";
 import { operators } from "../lib/functions.js";
 import totalizator from "./totalizator.js";
 
-/**
- */
-
-// const memType = [
-//   "OperandA<Float>",
-//   "Operator<String>",
-//   "OperandB<Float>",
-//   "currentOperator<String>",
-// ];
-
-const _nullMemorySet = [0, ""];
-let _memory = [..._nullMemorySet];
+const _nullMemorySet = () => [[null, 0]];
+let _memory = _nullMemorySet();
 let _instance = undefined;
 
 class Memory {
@@ -23,74 +13,70 @@ class Memory {
   }
 
   get operandA() {
-    console.log("get", this.get(3));
-    console.log("totalizator.compute() -->", totalizator.compute(_memory));
     return totalizator.compute(_memory);
   }
 
   get operandB() {
-    return this.get(2) || 0;
+    return this.get(1).operandB;
   }
 
-  set operandB(num) {
-    this.set(2, num);
+  set operandB(operandB) {
+    this.set(1, { operandB });
   }
 
   get operator() {
-    console.log("op", this.get(1));
-    return this.get(1);
+    return this.get(1).operator;
   }
 
-  set operator(symbol) {
-    this.set(1, symbol);
+  set operator(operator) {
+    this.set(1, { operator });
   }
 
   constructor() {}
 
   store([operator, operandB]) {
     // validate prev memory set
-    _memory.push(operator, operandB);
+    _memory.push([operator, operandB]);
   }
 
   save() {
-    // this.operandA = totalizator.compute(_memory);
-    events.publish("memory:save", _memory);
-    _memory.push(..._nullMemorySet);
+    const isValid = this.operandB && this.operator;
+    _memory.push(..._nullMemorySet());
+    console.log("Saved.", "Current Answer --> ", this.operandA);
+    return this.operandA;
   }
 
-  set(location, value) {
-    _memory[_memory.length - location] = value;
-    // events.publish("memory:set", location, value);
+  set(loc, { operator, operandB }) {
+    const [localOperator, localOperandB] = _memory[_memory.length - loc]; // this is stored mem set
+    console.log(`set this loc: ${loc}`, _memory[_memory.length - loc]);
+
+    operator = operator || localOperator;
+    operandB = !isNaN(operandB) ? operandB : localOperandB; // this is active mem set
+    console.log(`with :`, { operator, operandB });
+
+    _memory[_memory.length - loc] = [operator, operandB];
+
+    console.log(
+      `result: ${_memory[_memory.length - loc]}`,
+      `--MEM= ${_memory}`,
+      "\n\n"
+    );
+    return { operator, operandB };
   }
 
-  get(location) {
-    return this.recall(location)[0];
+  get(loc) {
+    const operator = this.recall(loc)[0][0];
+    const operandB = this.recall(loc)[0][1];
+
+    return { operator, operandB };
   }
 
   recall(count) {
     return count ? _memory.slice(-count) : _memory;
   }
 
-  validate(candidate = this.memory.recall(1)) {
-    let isValid = true;
-
-    for (operator of operators) {
-      if (operator !== candidate) {
-        isValid = false;
-      }
-    }
-
-    if (!isValid) {
-      // _errCorrectIfPossible();
-      console.log(_memory);
-      throw new Error("memory seems invalid\n");
-    }
-
-    return isValid;
-  }
-
   clear() {
-    _memory = [..._nullMemorySet];
+    _memory = _nullMemorySet();
     events.publish("memory:clear");
 
     return this;
