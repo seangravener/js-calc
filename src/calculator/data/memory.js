@@ -1,5 +1,4 @@
 import events from "./events.js";
-import { operators } from "../lib/functions.js";
 import totalizator from "./totalizator.js";
 
 const _nullMemorySet = () => [[null, 0]];
@@ -8,7 +7,6 @@ let _instance = undefined;
 
 class Memory {
   get length() {
-    console.log(_memory);
     return _memory.length;
   }
 
@@ -21,7 +19,7 @@ class Memory {
   }
 
   set operandB(operandB) {
-    this.set(1, { operandB });
+    this.set(1, { operandB: parseFloat(operandB) });
   }
 
   get operator() {
@@ -34,40 +32,27 @@ class Memory {
 
   constructor() {}
 
-  store([operator, operandB]) {
-    // validate prev memory set
-    _memory.push([operator, operandB]);
+  store({ operator, operandB }) {
+    _memory.push([operator, parseFloat(operandB)]);
   }
 
   save() {
-    const isValid = this.operandB && this.operator;
     _memory.push(..._nullMemorySet());
     console.log("Saved.", "Current Answer --> ", this.operandA);
+
     return this.operandA;
   }
 
-  set(loc, { operator, operandB }) {
-    const [localOperator, localOperandB] = _memory[_memory.length - loc]; // this is stored mem set
-    console.log(`set this loc: ${loc}`, _memory[_memory.length - loc]);
+  set(position, locals) {
+    const stored = { ...this.get(position) };
+    const { operator, operandB } = { ...stored, ...locals };
+    _memory[_memory.length - position] = [operator, parseFloat(operandB)];
 
-    operator = operator || localOperator;
-    operandB = !isNaN(operandB) ? operandB : localOperandB; // this is active mem set
-    console.log(`with :`, { operator, operandB });
-
-    _memory[_memory.length - loc] = [operator, operandB];
-
-    console.log(
-      `result: ${_memory[_memory.length - loc]}`,
-      `--MEM= ${_memory}`,
-      "\n\n"
-    );
     return { operator, operandB };
   }
 
-  get(loc) {
-    const operator = this.recall(loc)[0][0];
-    const operandB = this.recall(loc)[0][1];
-
+  get(position) {
+    const [operator, operandB] = this.recall(position)[0];
     return { operator, operandB };
   }
 
@@ -78,8 +63,6 @@ class Memory {
   clear() {
     _memory = _nullMemorySet();
     events.publish("memory:clear");
-
-    return this;
   }
 
   static load() {
