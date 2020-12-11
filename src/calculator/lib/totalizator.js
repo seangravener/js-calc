@@ -1,7 +1,4 @@
-import inputs from "./inputs.js";
-import { arithmetic } from "../lib/functions.js";
-
-let _instance = undefined;
+import { arithmetic } from "./functions.js";
 
 class Totalizator {
   constructor() {}
@@ -15,14 +12,9 @@ class Totalizator {
   }
 
   memoryReducer(operandA, [operator, operandB]) {
-    console.log(operator, [operandA, operandB])
     return arithmetic(operator)([operandA, operandB]);
-  }
-
-  static load() {
-    return _instance || (_instance = new Totalizator());
   }
 }
 
 export { Totalizator };
-export default Totalizator.load();
+export default new Totalizator();

@@ -1,60 +1,52 @@
 import events from "./events.js";
 import memory from "./memory.js";
-import totalizator from "./totalizator.js";
-import { KeyBindings } from "../lib/keys.js";
-import { Totalizator } from "./totalizator.js";
 
 let _instance = undefined;
-
 class Inputs {
   get length() {
-    return this.operandB.length;
+    return memory.operandB.length;
   }
 
-  get operandB() {
-    console.log("get");
-    return memory.recall(2);
-  }
-
-  set operandB(value) {
-    console.log("set", value);
-    memory.set(2, value);
-  }
-
-  get digits() {
-    return memory
-      .recall(2)
-      .split("")
-      .map((digit) => parseFloat(digit));
+  get active() {
+    const { operator, operandB } = memory;
+    return { operator, operandB };
   }
 
   get display() {
-    return `${memory.operator} ${memory.operandB}`;
+    const digits = memory.operandB.split("");
+    return { digits };
   }
 
-  constructor() {}
+  set active({ operator, operandB }) {
+    memory.set(1, {
+      operandB: operandB || memory.operandB,
+      operator: operator || memory.operator,
+    });
+  }
+
+  constructor() {
+    console.log(this.active, this.display);
+  }
 
   append(digit) {
-    this.operandB = `${this.operandB}${digit}`;
+    console.log(digit);
+    console.log([...memory.operandB, digit]);
+    memory.operandB = [...memory.operandB, digit];
   }
 
-  remove() {
-    _history.pop();
+  // .pop not mutating with getters/setters?
+  backspace(count = 1) {
+    let { digits } = this.display;
+    const popDigit = (count) => {
+      digits.splice(-count);
+      return digits;
+    };
+
+    digits = digits.length === 1 ? ["0"] : popDigit(count);
+    this.active = { ...this.active, operandB: digits };
   }
 
-  reset(operator = "", operandB = "") {
-    memory.operator = operator;
-    memory.operandB = operandB;
-
-    return this;
-  }
-
-  save() {
-    // memory.store(_input.operandB, this.operator);
-    // this.reset("", totalizator.compute());
-
-    return _input.operandB;
-  }
+  reset(operator = "", operandB = "") {}
 
   static load() {
     return _instance || (_instance = new Inputs());

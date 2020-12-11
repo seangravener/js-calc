@@ -3,8 +3,6 @@ class Component {
     Object.assign(this, props);
   }
 
-  render() {}
-
   debug() {
     console.log(this);
     return this;

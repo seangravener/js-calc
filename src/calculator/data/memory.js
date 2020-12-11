@@ -1,25 +1,30 @@
 import events from "./events.js";
-import totalizator from "./totalizator.js";
+import totalizator from "../lib/totalizator.js";
 
-const _nullMemorySet = () => [[null, 0]];
+const _nullMemorySet = () => [[null, "0"]];
 let _memory = _nullMemorySet();
 let _instance = undefined;
 
 class Memory {
   get length() {
+    console.log(_memory);
     return _memory.length;
   }
 
   get operandA() {
-    return totalizator.compute(_memory);
+    return `${totalizator.compute(_memory)}`;
   }
 
   get operandB() {
     return this.get(1).operandB;
   }
 
+  // operandB: "100" | ["1", "0", "0"]
   set operandB(operandB) {
-    this.set(1, { operandB: parseFloat(operandB) });
+    console.log(operandB, `\n^^^ operandB in string format: --> `, `${operandB}`.replace(/[, ]+/g, ""))
+    this.set(1, {
+      operandB: `${operandB}`.replace(/[, ]+/g, ""),
+    });
   }
 
   get operator() {
@@ -33,7 +38,7 @@ class Memory {
   constructor() {}
 
   store({ operator, operandB }) {
-    _memory.push([operator, parseFloat(operandB)]);
+    _memory.push([operator, `${operandB}`]);
   }
 
   save() {
@@ -45,7 +50,7 @@ class Memory {
 
   set(position, locals) {
     const { operator, operandB } = { ...this.get(position), ...locals };
-    _memory[_memory.length - position] = [operator, parseFloat(operandB)];
+    _memory[_memory.length - position] = [operator, `${operandB}`];
 
     return { operator, operandB };
   }

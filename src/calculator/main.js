@@ -43,9 +43,9 @@ const doCalc = () => {
   calculator.memory.operator = "*";
   calculator.memory.save();
 
-  calculator.memory.operandB = 3;
+  calculator.memory.operandB = 300;
   calculator.memory.operator = "*";
-  calculator.memory.save();
+  // calculator.memory.save();
 }
 
 doCalc()
