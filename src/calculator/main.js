@@ -1,4 +1,3 @@
-import totalizator from "./data/totalizator.js";
 import { Calculator } from "./ui/index.js";
 
 const calculator = new Calculator();

@@ -44,8 +44,7 @@ class Memory {
   }
 
   set(position, locals) {
-    const stored = { ...this.get(position) };
-    const { operator, operandB } = { ...stored, ...locals };
+    const { operator, operandB } = { ...this.get(position), ...locals };
     _memory[_memory.length - position] = [operator, parseFloat(operandB)];
 
     return { operator, operandB };

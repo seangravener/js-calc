@@ -1,18 +1,25 @@
-export const _keyBindings = {
+const keyOperators = {
+  Enter: (a, b) => a,
+  "=": (a, b) => a,
+};
+
+const mathOperators = {
+  "*": (a, b) => a * b,
+  "-": (a, b) => a - b,
+  "/": (a, b) => a / b,
+  "+": (a, b) => a + b,
+};
+
+const keyBindings = {
   reset: ["c"],
   operators: ["/", "-", "+", "%", "*"],
   controls: ["Enter", "Delete", "Backspace", "="],
   numbers: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
 };
 
-export const _keyReducers = {
-  operators: (result, item) => {},
-  numbers: (result, item) => {},
-};
-
 let _key = "";
 
-export default class KeyBindings {
+class KeyBindings {
   get value() {
     return _key;
   }
@@ -73,3 +80,5 @@ export default class KeyBindings {
     return _keyBindings[type].includes(key);
   }
 }
+
+export { mathOperators, keyOperators, keyBindings, KeyBindings }

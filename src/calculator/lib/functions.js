@@ -1,20 +1,11 @@
-const keyOperators = {
-  Enter: (a, b) => a,
-  "=": (a, b) => a,
-};
-
-const mathOperators = {
-  "*": (a, b) => a * b,
-  "-": (a, b) => a - b,
-  "/": (a, b) => a / b,
-  "+": (a, b) => a + b,
-};
-
-const operators = Object.keys(mathOperators);
+import { keyOperators } from "./keys.js";
+import { mathOperators } from "./keys.js";
 
 const _functions = { ...keyOperators, ...mathOperators };
-function arithmetic(operator, values) {
-  return _functions[operator](...values);
-}
+const operators = Object.keys(mathOperators);
+
+const arithmetic = (operator) => {
+  return (values) => (operator ? _functions[operator](...values) : values[0]);
+};
 
 export { keyOperators, mathOperators, operators, arithmetic };

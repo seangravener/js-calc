@@ -1,4 +1,4 @@
-import KeyBindings from "../lib/keys.js";
+import { KeyBindings } from "../lib/keys.js";
 
 let _instance = undefined;
 let _history = [];
@@ -47,4 +47,4 @@ class Input {
 }
 
 export { Input };
-export default Input.load()
+export default Input.load();

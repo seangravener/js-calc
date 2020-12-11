@@ -1,7 +1,7 @@
 import events from "./events.js";
 import memory from "./memory.js";
 import totalizator from "./totalizator.js";
-import KeyBindings from "../lib/keys.js";
+import { KeyBindings } from "../lib/keys.js";
 import { Totalizator } from "./totalizator.js";
 
 let _instance = undefined;
@@ -12,12 +12,12 @@ class Inputs {
   }
 
   get operandB() {
-    console.log('get')
+    console.log("get");
     return memory.recall(2);
   }
 
   set operandB(value) {
-    console.log('set', value)
+    console.log("set", value);
     memory.set(2, value);
   }
 
@@ -32,7 +32,7 @@ class Inputs {
     return `${memory.operator} ${memory.operandB}`;
   }
 
-  constructor() {  }
+  constructor() {}
 
   append(digit) {
     this.operandB = `${this.operandB}${digit}`;
