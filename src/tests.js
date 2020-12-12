@@ -1,6 +1,4 @@
-import { Calculator } from "./ui/index.js";
-
-const calculator = new Calculator();
+import calculator from './calculator/index.js';
 
 const doCalc = () => {
   calculator.memory.operandB = 12;
@@ -47,8 +45,4 @@ const doCalc = () => {
   calculator.memory.operator = "*";
   // calculator.memory.save();
 }
-
-doCalc()
-
-console.log(calculator.memory);
-export default calculator;
+export {doCalc}
