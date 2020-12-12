@@ -38,8 +38,10 @@ class Memory {
   }
 
   save() {
-    _memory.push(..._nullMemorySet());
-    console.log("Saved.", "Current Answer --> ", this.operandA);
+    if (this.operator) {
+      _memory.push(..._nullMemorySet());
+      console.log("Saved.", "Current Answer --> ", this.operandA);
+    }
 
     return this.operandA;
   }
