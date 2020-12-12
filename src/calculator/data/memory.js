@@ -19,12 +19,8 @@ class Memory {
     return this.get(1).operandB;
   }
 
-  // operandB: "100" | ["1", "0", "0"]
   set operandB(operandB) {
-    console.log(operandB, `\n^^^ operandB in string format: --> `, `${operandB}`.replace(/[, ]+/g, ""))
-    this.set(1, {
-      operandB: `${operandB}`.replace(/[, ]+/g, ""),
-    });
+    this.set(1, { operandB: Memory.toString(operandB) });
   }
 
   get operator() {
@@ -38,7 +34,7 @@ class Memory {
   constructor() {}
 
   store({ operator, operandB }) {
-    _memory.push([operator, `${operandB}`]);
+    _memory.push([operator, Memory.toString(operandB)]);
   }
 
   save() {
@@ -50,7 +46,7 @@ class Memory {
 
   set(position, locals) {
     const { operator, operandB } = { ...this.get(position), ...locals };
-    _memory[_memory.length - position] = [operator, `${operandB}`];
+    _memory[_memory.length - position] = [operator, Memory.toString(operandB)];
 
     return { operator, operandB };
   }
@@ -67,6 +63,10 @@ class Memory {
   clear() {
     _memory = _nullMemorySet();
     events.publish("memory:clear");
+  }
+
+  static toString(obj) {
+    return `${obj}`.replace(/[, ]+/g, "");
   }
 
   static load() {
