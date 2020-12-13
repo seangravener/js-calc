@@ -1,6 +1,9 @@
 class Component {
   constructor(props) {
     Object.assign(this, props);
+
+    // overload initial memry
+    // if (locals.memory) this.memory.reset({ chunks: locals.memory})
   }
 
   debug() {
@@ -10,4 +13,3 @@ class Component {
 }
 
 export { Component };
-export default Component;
