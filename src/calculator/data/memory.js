@@ -1,8 +1,8 @@
 import events from "./events.js";
 import totalizator from "../lib/totalizator.js";
 
-const _nullMemorySet = () => [[null, "0"]];
-let _memory = _nullMemorySet();
+const _nullMemoryChunk_ = [null, "0"];
+let _memory = [_nullMemoryChunk_];
 let _instance = undefined;
 
 class Memory {
@@ -31,24 +31,48 @@ class Memory {
     this.set(1, { operator });
   }
 
-  constructor() {}
-
-  store({ operator, operandB }) {
-    _memory.push([operator, Memory.toString(operandB)]);
+  constructor(chunks = _memory) {
+    _memory = chunks;
   }
 
+  store(chunks) {
+    chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
+    _memory = [..._memory, ...chunks];
+  }
+
+  // capture? addChunk?
   save() {
     if (this.operator) {
-      _memory.push(..._nullMemorySet());
+      _memory.push(_nullMemoryChunk_);
       console.log("Saved.", "Current Answer --> ", this.operandA);
     }
 
     return this.operandA;
   }
 
+  reset(chunks = [_nullMemoryChunk_]) {
+    chunks.forEach((chunk, i) => {
+      const [operator, operandB] = chunks[i];
+
+      if (i < _memory.length) {
+        this.set(i + 1, { operator, operandB });
+      } else {
+        this.store([[operator, operandB]]);
+      }
+    });
+
+    return _memory;
+  }
+
   set(position, locals) {
     const { operator, operandB } = { ...this.get(position), ...locals };
-    _memory[_memory.length - position] = [operator, Memory.toString(operandB)];
+
+    if (operator) {
+      const index = _memory.length - position;
+      _memory[index] = [operator, Memory.toString(operandB)];
+    } else {
+      this.store([operator, operandB]);
+    }
 
     return { operator, operandB };
   }
@@ -63,7 +87,7 @@ class Memory {
   }
 
   clear() {
-    _memory = _nullMemorySet();
+    _memory = [_nullMemoryChunk_];
     events.publish("memory:clear");
   }
 
@@ -71,8 +95,8 @@ class Memory {
     return `${obj}`.replace(/[, ]+/g, "");
   }
 
-  static load() {
-    return _instance || (_instance = new Memory(_memory));
+  static load(memory) {
+    return _instance || (_instance = new Memory(memory || _memory));
   }
 }
 
