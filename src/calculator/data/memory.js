@@ -36,7 +36,7 @@ class Memory {
   }
 
   store(chunks) {
-    chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
+    chunks = chunks.map(Memory.toChunk);
     _memory = [..._memory, ...chunks];
   }
 
@@ -89,6 +89,10 @@ class Memory {
   clear() {
     _memory = [_nullMemoryChunk_];
     events.publish("memory:clear");
+  }
+
+  static toChunk([operator, operandB]) {
+    return [operator, Memory.toString(operandB)]
   }
 
   static toString(obj) {
