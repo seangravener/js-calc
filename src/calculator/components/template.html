@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Calc component</h1>
+    <app-calulator>
+      <display-screen slot="screen"></display-screen>
+      <p>and then ...</p>
+      <display-buttons slot="buttons"></display-buttons>
+    </app-calulator>
+
+    <!-- outer modal template -->
+    <template id="displayTemplate">
+      <div class="displayWrapper">
+        <slot name="screen"></slot>
+      </div>
+
+      <div class="buttonsWrapper">
+        <slot name="buttons"></slot>
+      </div>
+    </template>
+
+    <!-- screen template which will be slotted into the wrapper above -->
+    <template id="displayScreen">
+      <!-- Whatever you want to be in this element, could be another component if you wish -->
+      <h1>Hey! Screen!</h1>
+
+      <!-- <slot name="outputHistory"></slot>
+  <slot name="outputMain"></slot> -->
+    </template>
+
+    <template id="displayButtons">
+      <h1>Buttons!</h1>
+    </template>
+
+    <script>
+      customElements.define(
+        "app-calculator",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const parent1 = document.querySelector('#displayTemplate')
+
+            this.attachShadow({ mode: "open" });
+            this.shadowRoot.appendChild(parent1.content.cloneNode(true));
+          }
+        }
+      );
+
+      customElements.define(
+        "display-screen",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const child1 = document.querySelector('#displayScreen')
+
+            var sh = this.attachShadow({ mode: "open" });
+            sh.appendChild(child1.content.cloneNode(true));
+          }
+        }
+      );
+
+      customElements.define(
+        "display-buttons",
+        class extends HTMLElement {
+          constructor() {
+            super();
+            const child1 = document.querySelector('#displayButtons')
+
+            var sh = this.attachShadow({ mode: "open" });
+            sh.appendChild(child1.content.cloneNode(true));
+          }
+        }
+      );
+    </script>
+  </body>
+</html>
