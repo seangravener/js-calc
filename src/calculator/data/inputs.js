@@ -24,7 +24,7 @@ class Inputs {
   }
 
   append(digit) {
-    memory.operandB = `${memory.operandB}${digit}`;
+    this.set({operandB: `${memory.operandB}${digit}`});
   }
 
   backspace(count = 1) {
