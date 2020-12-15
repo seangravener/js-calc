@@ -65,9 +65,10 @@ class Memory {
   }
 
   set(position, locals) {
-    const { operator, operandB } = { ...this.get(position), ...locals };
+    const positionValue = this.get(position);
+    const { operator, operandB } = { ...positionValue, ...locals };
 
-    if (operator) {
+    if (positionValue) {
       const index = _memory.length - position;
       _memory[index] = [operator, Memory.toString(operandB)];
     } else {
@@ -79,7 +80,7 @@ class Memory {
 
   get(position) {
     const [operator, operandB] = this.recall(position)[0];
-    return { operator, operandB };
+    return this.length >= position ? { operator, operandB } : undefined;
   }
 
   recall(count) {
