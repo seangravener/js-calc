@@ -1,32 +1,27 @@
 // Nested components: https://stackoverflow.com/questions/38976819/composing-v1-nested-web-components
 
 // import { styles } from "./layout.styles.js";
-import { ButtonsComponent } from "../buttons/buttons.component.js";
+import { KeypadComponent } from "../keypad/keypad.component.js";
 import { DisplayComponent } from "../display/display.component.js";
-import { template } from "./layout.template.js";
-class CalcComponent extends HTMLElement {
+import { templateFn } from "./layout.template.js";
+import { Component } from "../base/component.js";
+class CalcComponent extends Component {
   constructor(state) {
     super();
 
-    this.attachShadow({ mode: "open" });
-    // const localStyles = document.createElement('styles')
-    // localStyles.innerHTML = styles
-    // this.shadowRoot.appendChild(localStyles)
-    this.shadowRoot.innerHTML = template;
+    this.locals = {}
+    this.templateFn = templateFn;
   }
 
   connectedCallback() {
-    console.log("connected!");
-  }
 
-  debug() {
-    console.log(this);
-    return this;
+    this.render();
+    console.log("connected calccomponent!");
   }
 }
 
-customElements.define("app-calculator", CalcComponent);
+customElements.define("app-calc", CalcComponent);
 customElements.define("calc-display", DisplayComponent);
-customElements.define("calc-buttons", ButtonsComponent);
+customElements.define("calc-keypad", KeypadComponent);
 
 export { CalcComponent };

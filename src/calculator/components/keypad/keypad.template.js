@@ -1,5 +1,7 @@
-const template = `
-    <div class="calc-button-row">
+const templateFn = ({ title }) => `
+<b>Title:</b>
+<h1>${title}</h1>
+<div class="calc-button-row">
       <div class="button c">C</div>
       <div class="button l">≠</div>
       <div class="button l">%</div>
@@ -31,4 +33,4 @@ const template = `
     </div>
   </div>`;
 
-export { template };
+export { templateFn };

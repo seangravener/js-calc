@@ -1,11 +1,12 @@
-import { Component } from "../component.js";
-import { template } from "./display.template.js";
+import { Component } from "../base/component.js";
+import { templateFn } from "./display.template.js";
 class DisplayComponent extends Component {
-  constructor(state) {
-    super(state);
+  constructor() {
+    super();
 
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.innerHTML = template;
+    this.locals = { operation: "operation value!!" };
+    this.templateFn = templateFn;
+    this.render();
   }
 
   connectedCallback() {

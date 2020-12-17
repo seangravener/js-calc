@@ -6,13 +6,12 @@
     <link rel="stylesheet" href="calculator/styles.css" />
   </head>
   <body>
-    <div id="calculatorApp" class="container">
-      <app-calculator class="calc-body">
-        <calc-display slot="display" class="calc-screen"></calc-display>
-        <calc-buttons slot="buttons" id="calcButtons"></calc-buttons>
-      </app-calculator>
+    <div class="container">
+      <app-calc class="calc-body">
+        <calc-display slot="display"></calc-display>
+        <calc-keypad slot="buttons"></calc-keypad>
+      </app-calc>
     </div>
-
     <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
     <script type="module" src="main.js"></script>
   </body>
