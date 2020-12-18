@@ -1,3 +1,5 @@
+import events from "../../data/events.js"
+
 const button = ({ symbol, classes }) =>
   `<div class="${classes.join(" ")}">${symbol}</div>`;
 

@@ -1,8 +1,9 @@
-import { keyOperators } from "./keys.js";
-import { mathOperators } from "./keys.js";
+import { keyControls, mathOperators } from "./inputs.js";
 
+const noop = () => {console.log('noop!')};
 const operators = Object.keys(mathOperators);
-const _functions = { ...keyOperators, ...mathOperators };
+
+const _functions = { ...keyControls, ...mathOperators };
 const arithmetic = (operator) => {
   return (operands) =>
     operator
@@ -10,4 +11,4 @@ const arithmetic = (operator) => {
       : operands[0];
 };
 
-export { keyOperators, mathOperators, operators, arithmetic };
+export { operators, arithmetic, noop };
