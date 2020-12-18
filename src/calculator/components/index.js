@@ -3,7 +3,7 @@ import {
   CalculatorComponent,
   KeypadComponent,
   DisplayComponent,
-} from "./register.js";
+} from "./base/component.register.js";
 
 registerComponents();
 

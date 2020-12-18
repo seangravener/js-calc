@@ -1,6 +1,6 @@
-import { KeypadComponent } from "./keypad/keypad.component.js";
-import { DisplayComponent } from "./display/display.component.js";
-import { CalculatorComponent } from "./calculator/calculator.component.js";
+import { KeypadComponent } from "../keypad/keypad.component.js";
+import { DisplayComponent } from "../display/display.component.js";
+import { CalculatorComponent } from "../calculator/calculator.component.js";
 
 const registerComponents = () => {
   customElements.define("app-calc", CalculatorComponent);
