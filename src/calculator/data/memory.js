@@ -6,8 +6,6 @@ let _memory = [_nullMemoryChunk_];
 let _instance = undefined;
 
 class Memory {
-  get _mem() { return console.log(_memory)}
-
   get length() {
     return _memory.length;
   }

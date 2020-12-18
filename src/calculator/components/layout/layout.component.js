@@ -9,6 +9,7 @@ class CalcComponent extends Component {
   constructor(state) {
     super();
 
+    Object.assign(this, state)
     this.locals = {}
     this.templateFn = templateFn;
   }

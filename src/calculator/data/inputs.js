@@ -8,23 +8,39 @@ class Inputs {
   }
 
   get display() {
-    return { digits: memory.operandB.split(""), ...this.get() };
+    return {
+      history: this.history,
+      digits: memory.operandB.split(""),
+      ...this.get(),
+    };
+  }
+
+  get history() {
+    return memory
+      .recall()
+      .reduce(
+        (history, [operator, operandB]) => `
+        ${history} ${operator} ${operandB} `,
+        ""
+      )
+      .trim();
   }
 
   constructor() {}
 
   get() {
     const { operator, operandB } = memory;
-    return { operator, operandB };
+    return { operator, operandB, history: this.history };
   }
 
   set(locals) {
-    const { operator, operandB } = memory;
+    const { operator, operandB, history } = this.get();
+    events.publish("save", { operator, operandB, history });
     memory.set(1, { operator, operandB, ...locals });
   }
 
   append(digit) {
-    this.set({operandB: `${memory.operandB}${digit}`});
+    this.set({ operandB: `${memory.operandB}${digit}` });
   }
 
   backspace(count = 1) {
