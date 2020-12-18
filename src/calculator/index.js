@@ -1,4 +1,4 @@
-import { CalculatorComponent } from "./components/calculator/calculator.component.js";
+import { CalculatorComponent } from "./components/index.js";
 
 const singleton = () => {
   return new CalculatorComponent();
