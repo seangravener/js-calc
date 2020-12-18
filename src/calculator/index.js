@@ -1,18 +1,8 @@
-import { CalcComponent } from "./components/layout/layout.component.js";
-import { Memory } from "./data/memory.js";
-import { EventBus } from "./data/events.js";
-import { Inputs } from "./data/inputs.js";
-
-const _state = new CalcComponent({
-  events: EventBus.load(),
-  inputs: Inputs.load(),
-  memory: Memory.load(),
-  // ui: Ui.load(),
-});
+import { CalculatorComponent } from "./components/calculator/calculator.component.js";
 
 const singleton = () => {
-  return new CalcComponent(_state)
+  return new CalculatorComponent();
 };
 
-export { CalcComponent }
-export default singleton()
+export { CalculatorComponent };
+export default singleton();
