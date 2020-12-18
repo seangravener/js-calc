@@ -1,12 +1,12 @@
 const historyDisplay = (history) => `
   <div class="calc-operation">
-    ${history.replace("null", "") || ""}
+    ${exists(history)}
   </div>`;
 
-const mainDisplay = (operator, operandB) => `
+const mainDisplay = ({ operator, operandA, operandB }) => `
   <div class="calc-typed" id="mainDisplay">
     <span class="operator">${exists(operator)}</span>
-    ${exists(operandB, "- - -")}
+    ${parseFloat(operandB) ? operandB : operandA}
   </div>`;
 
 const exists = (value, placeholder = "") => (value ? `${value}` : placeholder);
@@ -16,8 +16,8 @@ const compose = (...parts) =>
     return `${whole}${part}`;
   }, "");
 
-const templateFn = ({ operator, history, operandB }) => {
-  return compose(historyDisplay(history), mainDisplay(operator, operandB));
+const templateFn = ({ history, ...state }) => {
+  return compose(historyDisplay(history), mainDisplay({ ...state }));
 };
 
 export { templateFn };

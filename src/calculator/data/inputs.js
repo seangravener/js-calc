@@ -18,19 +18,17 @@ class Inputs {
   get history() {
     return memory
       .recall()
-      .reduce(
-        (history, [operator, operandB]) => `
-        ${history} ${operator} ${operandB}`,
-        ""
-      )
+      .reduce((history, [operator, operandB]) => {
+        return `${history} ${operator} ${operandB}`;
+      }, "")
       .trim();
   }
 
   constructor() {}
 
   get() {
-    const { operator, operandB } = memory;
-    return { operator, operandB, history: this.history };
+    const { operator, operandA, operandB } = memory;
+    return { operator, operandA, operandB, history: this.history };
   }
 
   set(locals) {
@@ -40,7 +38,7 @@ class Inputs {
   }
 
   save() {
-    memory.save()
+    memory.save();
     events.publish("inputs:save", { ...this.get() });
   }
 
