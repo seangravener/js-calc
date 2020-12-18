@@ -1,36 +1,46 @@
-const templateFn = ({ title }) => `
-<b>Title:</b>
-<h1>${title}</h1>
-<div class="calc-button-row">
-      <div class="button c">C</div>
-      <div class="button l">≠</div>
-      <div class="button l">%</div>
-      <div class="button l">/</div>
-    </div>
-    <div class="calc-button-row">
-      <div class="button">7</div>
-      <div class="button">8</div>
-      <div class="button">9</div>
-      <div class="button l">x</div>
-    </div>
-    <div class="calc-button-row">
-      <div class="button">4</div>
-      <div class="button">5</div>
-      <div class="button">6</div>
-      <div class="button l">−</div>
-    </div>
-    <div class="calc-button-row">
-      <div class="button">1</div>
-      <div class="button">2</div>
-      <div class="button">3</div>
-      <div class="button l">+</div>
-    </div>
-    <div class="calc-button-row">
-      <div class="button">.</div>
-      <div class="button">0</div>
-      <div class="button"><</div>
-      <div class="button l">=</div>
-    </div>
-  </div>`;
+const button = ({ symbol, classes }) =>
+  `<div class="${classes.join(" ")}">${symbol}</div>`;
 
-export { templateFn };
+const buttonRow = (row) => `
+  <div class="calc-button-row">
+    ${row.map((props) => button(props)).join("")}
+  </div>
+`;
+
+const templateFn = ({ layout }) =>
+  `${layout.map((row) => buttonRow(row)).join("")}`;
+
+const keypadLayout = [
+  [
+    { symbol: "C", classes: ["button", "c"] },
+    { symbol: "≠", classes: ["button", "l"] },
+    { symbol: "%", classes: ["button", "l"] },
+    { symbol: "/", classes: ["button", "l"] },
+  ],
+  [
+    { symbol: "7", classes: ["button"] },
+    { symbol: "8", classes: ["button"] },
+    { symbol: "9", classes: ["button"] },
+    { symbol: "x", classes: ["button", "l"] },
+  ],
+  [
+    { symbol: "4", classes: ["button"] },
+    { symbol: "5", classes: ["button"] },
+    { symbol: "6", classes: ["button"] },
+    { symbol: "−", classes: ["button", "l"] },
+  ],
+  [
+    { symbol: "1", classes: ["button"] },
+    { symbol: "2", classes: ["button"] },
+    { symbol: "3", classes: ["button"] },
+    { symbol: "+", classes: ["button", "l"] },
+  ],
+  [
+    { symbol: ".", classes: ["button"] },
+    { symbol: "0", classes: ["button"] },
+    { symbol: "<", classes: ["button"] },
+    { symbol: "=", classes: ["button", "l"] },
+  ],
+];
+
+export { templateFn, keypadLayout, button, buttonRow };

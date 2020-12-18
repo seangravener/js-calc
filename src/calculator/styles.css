@@ -34,72 +34,9 @@ body {
 .calc-body {
   width: 275px;
   margin: auto;
-  min-height: 400px;
   border: solid 1px var(--grey-1);
   box-shadow: 0 8px 50px -7px black;
-}
-
-calc-screen {
-  background: var(--grey-1);
-  width: 100%;
-  height: 150px;
-  padding: 20px;
-}
-
-.calc-operation {
-  text-align: right;
-  color: var(--grey-3);
-  font-size: 21px;
-  padding-bottom: 10px;
-  border-bottom: dotted 1px;
-}
-
-.calc-typed {
-  margin-top: 20px;
-  font-size: 45px;
-  text-align: right;
-  color: var(--text-color);
-}
-
-.calc-button-row {
-  width: 100%;
-  background: var(--grey-4);
-}
-
-.button {
-  width: 25%;
-  background: var(--grey-2);
-  color: var(--text-color);
-  padding: 20px;
-  display: inline-block;
-  font-size: 25px;
-  text-align: center;
-  vertical-align: middle;
-  margin-right: -4px;
-  border-right: solid 2px var(--grey-4);
-  border-bottom: solid 2px var(--grey-4);
-  transition: all 0.2s ease-in-out;
-}
-
-.button.l {
-  color: var(--button-l-color);
-  background: var(--button-l-bg);
-}
-
-.button.c {
-  color: var(--button-c-color);
-  background: var(--button-c-bg);
-}
-
-.button:hover {
-  background: var(--highlight);
-  /* transform: rotate(5deg); */
-}
-
-.button.c:hover,
-.button.l:hover {
-  background: var(--highlight);
-  color: var(--text--hover);
+  display: block;
 }
 
 .blink-me {

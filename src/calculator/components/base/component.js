@@ -1,12 +1,20 @@
-// Nested components: https://stackoverflow.com/questions/38976819/composing-v1-nested-web-components
-import * as layout from "../layout/layout.component.js";
+import { newEl } from "../../lib/elements.js";
 
 class Component extends HTMLElement {
+  locals = {};
+  styles = "";
+  templateFn = Component.noop;
+
+  get styleEl() {
+    return newEl("style", this.styles);
+  }
+
+  get markup() {
+    return this.templateFn(this.locals);
+  }
+
   constructor() {
     super();
-
-    this.locals = {};
-    this.templateFn = Component.noop;
     this.attachShadow({ mode: "open" });
   }
 
@@ -20,7 +28,8 @@ class Component extends HTMLElement {
   }
 
   render(locals = this.locals) {
-    this.shadowRoot.innerHTML = this.templateFn(locals);
+    this.shadowRoot.innerHTML = this.markup;
+    this.shadowRoot.prepend(this.styleEl);
   }
 
   static noop = () => {};
