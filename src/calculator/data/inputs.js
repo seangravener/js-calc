@@ -20,7 +20,7 @@ class Inputs {
       .recall()
       .reduce(
         (history, [operator, operandB]) => `
-        ${history} ${operator} ${operandB} `,
+        ${history} ${operator} ${operandB}`,
         ""
       )
       .trim();
@@ -35,8 +35,13 @@ class Inputs {
 
   set(locals) {
     const { operator, operandB, history } = this.get();
-    events.publish("save", { operator, operandB, history });
     memory.set(1, { operator, operandB, ...locals });
+    events.publish("inputs:save", { ...this.get() });
+  }
+
+  save() {
+    memory.save()
+    events.publish("inputs:save", { ...this.get() });
   }
 
   append(digit) {
