@@ -40,13 +40,13 @@ class Memory {
   }
 
   // capture? addChunk?
-  save() {
+  newTotal() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
-      console.log("Saved.", "Current Answer --> ", this.operandA);
+      this.operandB = this.operandB
     }
 
-    return this.operandA;
+    return this;
   }
 
   reset(chunks = [_nullMemoryChunk_]) {

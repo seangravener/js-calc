@@ -22,8 +22,8 @@ class KeypadComponent extends Component {
     const key = new Key(symbol);
 
     if (key.isDefined) {
-      key.press().then((key) => {
-        console.log(key)
+      key.press().then(({ key, api }) => {
+        console.log(key, api);
         this.render();
       });
     }

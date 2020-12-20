@@ -1,3 +1,4 @@
+import inputs from "../../data/inputs.js";
 import { noop } from "../../lib/functions.js";
 import { keyBindings, keyTypeHandlers } from "../../lib/inputs.js";
 
@@ -20,17 +21,17 @@ class Key {
     }, "");
   }
 
-  get handler() {
-    const handler = Key.getKeyTypeHandler(this.type);
-    return handler ? handler.bind(this) : noop;
+  get resolver() {
+    const resolver = Key.getKeyTypeHandler(this.type);
+    return resolver ? resolver({ key: this, api: inputs }) : noop;
   }
 
   constructor(key) {
     this.key = `${key}`;
   }
 
-  press(key = this.key) {
-    return new Promise(this.handler);
+  press(resolver = this.resolver) {
+    return new Promise(resolver);
   }
 
   static getKeyTypes() {

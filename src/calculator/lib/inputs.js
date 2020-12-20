@@ -18,20 +18,34 @@ const keyBindings = {
 };
 
 const keyTypeHandlers = {
-  controls(res, rej) {
-    res(this.key);
+  operators({ key, api }) {
+    console.log(this)
+    return (res, rej) => {
+      api.operator = key.symbol;
+      res({ key, api });
+    };
   },
 
-  numbers(res, rej) {
-    return res(this.key);
+  numbers({ key, api }) {
+    return (res, rej) => {
+      api.operandB = key.symbol;
+      res({ key, api });
+    };
   },
 
-  operators(res, rej) {
-    return res(this.key);
+  controls({ key, api }) {
+    return (res, rej) => {
+      api.save();
+      res({ key, api });
+    };
   },
 
-  reset(res, rej) {
-    return res(this.key);
+  reset({ key, api }) {
+    return (res, rej) => {
+      console.log('reset!')
+      api.reset();
+      res({ key, api });
+    };
   },
 };
 

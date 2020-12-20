@@ -34,12 +34,13 @@ class Inputs {
   set(locals) {
     const { operator, operandB, history } = this.get();
     memory.set(1, { operator, operandB, ...locals });
-    events.publish("inputs:save", { ...this.get() });
+    events.publish("api:save", { ...this.get() });
   }
 
   save() {
-    memory.save();
-    events.publish("inputs:save", { ...this.get() });
+    const { operator, operandB } = memory.newTotal();
+    this.set({ operator, operandB });
+    console.log("mem:save. now ->", { ...this.get() });
   }
 
   append(digit) {

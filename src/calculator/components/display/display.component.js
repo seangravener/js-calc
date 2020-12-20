@@ -19,7 +19,7 @@ class DisplayComponent extends Component {
     // watch locals for changes with Proxy?
     this.locals = inputs.get()
 
-    events.listenTo("inputs:save", (locals) => {
+    events.listenTo("api:save", (locals) => {
       console.log('save!', locals)
       this.locals = locals;
       this.render()
