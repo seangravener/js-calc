@@ -19,16 +19,16 @@ const keyBindings = {
 
 const keyTypeHandlers = {
   operators({ key, api }) {
-    console.log(this)
+    console.log(this);
     return (res, rej) => {
-      api.operator = key.symbol;
+      api.set({ operator: key.symbol });
       res({ key, api });
     };
   },
 
   numbers({ key, api }) {
     return (res, rej) => {
-      api.operandB = key.symbol;
+      api.set({ operandB: key.symbol });
       res({ key, api });
     };
   },
@@ -42,7 +42,7 @@ const keyTypeHandlers = {
 
   reset({ key, api }) {
     return (res, rej) => {
-      console.log('reset!')
+      console.log("reset!");
       api.reset();
       res({ key, api });
     };
