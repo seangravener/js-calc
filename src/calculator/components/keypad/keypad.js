@@ -1,7 +1,7 @@
 import { Component } from "../base/component.js";
-import { templateFn, keypadLayout } from "./keypad.template.js";
-import { css } from "./keypad.styles.js";
 import { Key } from "../base/key.js";
+import { templateFn, keypadLayout } from "./keypad.template.js";
+import { styles } from "./keypad.styles.js";
 
 class KeypadComponent extends Component {
   constructor() {
@@ -12,7 +12,7 @@ class KeypadComponent extends Component {
   }
 
   init() {
-    this.styles = css;
+    this.styles = styles;
     this.templateFn = templateFn;
     this.locals = { layout: keypadLayout };
     this.hotkeys = hotkeys("*", (event) => this.handleKeyPress(event.key));
@@ -34,4 +34,5 @@ class KeypadComponent extends Component {
   }
 }
 
+customElements.define("calc-keypad", KeypadComponent);
 export { KeypadComponent };

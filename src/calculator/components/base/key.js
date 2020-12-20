@@ -1,6 +1,7 @@
-import inputs from "../../data/inputs.js";
+import api from "../../data/service.js";
 import { noop } from "../../lib/functions.js";
-import { keyBindings, keyTypeHandlers } from "../../lib/inputs.js";
+import { keypadHandlers } from "../keypad/keypad.handlers.js";
+import { keypadBindings } from "../keypad/keypad.bindings.js";
 
 class Key {
   get isDefined() {
@@ -15,7 +16,7 @@ class Key {
     if (!this.key) return;
 
     return Key.getKeyTypes().reduce((result, type) => {
-      return keyBindings[type].includes(this.key)
+      return keypadBindings[type].includes(this.key)
         ? `${result} ${type}`.trim()
         : result;
     }, "");
@@ -23,7 +24,7 @@ class Key {
 
   get resolver() {
     const resolver = Key.getKeyTypeHandler(this.type);
-    return resolver ? resolver({ key: this, api: inputs }) : noop;
+    return resolver ? resolver({ key: this, api: api }) : noop;
   }
 
   constructor(key) {
@@ -35,11 +36,11 @@ class Key {
   }
 
   static getKeyTypes() {
-    return Object.keys(keyBindings);
+    return Object.keys(keypadBindings);
   }
 
   static getKeyTypeHandler(keyType) {
-    return keyTypeHandlers[keyType];
+    return keypadHandlers[keyType];
   }
 
   debug() {

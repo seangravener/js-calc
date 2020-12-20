@@ -8,7 +8,7 @@ class Totalizator {
 
     return snapshot.length
       ? snapshot.reduce(this.memoryReducer, 0)
-      : "Err. Nothing in memory to compute.";
+      : "Err. No memory to compute.";
   }
 
   memoryReducer(operandA, [operator, operandB]) {

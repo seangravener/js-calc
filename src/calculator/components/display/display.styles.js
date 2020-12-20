@@ -1,6 +1,6 @@
-import { useBorderBox } from "../../lib/css.js";
+import { useBorderBox } from "../../lib/styles.js";
 
-let css = `
+let styles = `
   :host {
     display: block;
     background: var(--grey-1);
@@ -25,5 +25,5 @@ let css = `
   }
 `;
 
-css = useBorderBox(css)
-export { css }
+styles = useBorderBox(styles)
+export { styles }

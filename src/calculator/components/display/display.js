@@ -1,7 +1,7 @@
-import inputs from "../../data/inputs.js";
+import api from "../../data/service.js";
 import events from "../../data/events.js";
 import { Component } from "../base/component.js";
-import { css } from "./display.styles.js";
+import { styles } from "./display.styles.js";
 import { templateFn } from "./display.template.js";
 
 class DisplayComponent extends Component {
@@ -13,11 +13,11 @@ class DisplayComponent extends Component {
   }
 
   init() {
-    this.styles = css;
+    this.styles = styles;
     this.templateFn = templateFn;
 
     // watch locals for changes with Proxy?
-    this.locals = inputs.get()
+    this.locals = api.get()
 
     events.listenTo("api:save", (locals) => {
       console.log('api locals after save: ', locals)
@@ -31,4 +31,5 @@ class DisplayComponent extends Component {
   }
 }
 
+customElements.define("calc-display", DisplayComponent);
 export { DisplayComponent };

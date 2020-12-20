@@ -2,7 +2,8 @@ import events from "./events.js";
 import memory from "./memory.js";
 
 let _instance = undefined;
-class Inputs {
+
+class DataService {
   get length() {
     return memory.operandB.length;
   }
@@ -70,15 +71,15 @@ class Inputs {
     this.set({ operandB: digits.length ? digits : ["0"] });
   }
 
-  reset(operator = "", operandB = "") {
+  clear(operator = "", operandB = "") {
     console.log("reset!", this);
     memory.reset();
   }
 
   static load() {
-    return _instance || (_instance = new Inputs());
+    return _instance || (_instance = new DataService());
   }
 }
 
-export { Inputs };
-export default Inputs.load();
+export { DataService };
+export default DataService.load();

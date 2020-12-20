@@ -1,4 +1,4 @@
-import { newEl } from "../../lib/elements.js";
+import { newEl } from "../../lib/functions.js";
 
 class Component extends HTMLElement {
   locals = {};

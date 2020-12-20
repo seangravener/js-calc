@@ -1,6 +1,6 @@
-import { useBorderBox } from "../../lib/css.js";
+import { useBorderBox } from "../../lib/styles.js";
 
-let css = `
+let styles = `
 .calc-button-row {
   width: 100%;
   background: var(--grey-4);
@@ -41,5 +41,5 @@ let css = `
   color: var(--text--hover);
 }`;
 
-css = useBorderBox(css);
-export { css };
+styles = useBorderBox(styles);
+export { styles };

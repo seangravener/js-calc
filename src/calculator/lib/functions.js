@@ -1,9 +1,9 @@
-import { keyControls, mathOperators } from "./inputs.js";
+import { controlOperations, mathOperations } from "./formulas.js";
 
-const noop = () => {console.log('noop!')};
-const operators = Object.keys(mathOperators);
+const noop = () => {};
+const operators = Object.keys(mathOperations);
+const _functions = { ...controlOperations, ...mathOperations };
 
-const _functions = { ...keyControls, ...mathOperators };
 const arithmetic = (operator) => {
   return (operands) =>
     operator
@@ -11,4 +11,10 @@ const arithmetic = (operator) => {
       : operands[0];
 };
 
-export { operators, arithmetic, noop };
+const newEl = (name, markup) => {
+  const tag = document.createElement(name);
+  tag.innerHTML = markup;
+  return tag;
+};
+
+export { newEl, operators, arithmetic, noop };
