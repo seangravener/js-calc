@@ -22,7 +22,7 @@ class Component extends HTMLElement {
     this.attachShadow({ mode: "open" });
   }
 
-  render(locals = this.locals) {
+  render() {
     this.shadowRoot.innerHTML = this.markup;
     this.shadowRoot.prepend(this.styleEl);
   }
