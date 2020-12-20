@@ -8,14 +8,6 @@ class DataService {
     return memory.operandB.length;
   }
 
-  get display() {
-    return {
-      history: this.history,
-      digits: memory.operandB.split(""),
-      ...this.get(),
-    };
-  }
-
   get history() {
     const reducer = (history, [operator, operandB]) =>
       `${history} ${operator} ${operandB}`;
@@ -62,10 +54,10 @@ class DataService {
   }
 
   backspace(count = 1) {
-    let { digits } = this.display;
+    let digits = this.operandB.split("");
 
     digits.splice(-count);
-    this.set({ operandB: digits.length ? digits : ["0"] });
+    this.set({ operandB: digits.length ? digits : "0" });
   }
 
   clear() {
