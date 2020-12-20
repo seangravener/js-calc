@@ -17,7 +17,7 @@ class Inputs {
 
   get history() {
     return memory
-      .recall()
+      .recall(-1) // omit active chunk
       .reduce((history, [operator, operandB]) => {
         return `${history} ${operator} ${operandB}`;
       }, "")
@@ -70,7 +70,10 @@ class Inputs {
     this.set({ operandB: digits.length ? digits : ["0"] });
   }
 
-  reset(operator = "", operandB = "") {}
+  reset(operator = "", operandB = "") {
+    console.log("reset!", this);
+    memory.reset();
+  }
 
   static load() {
     return _instance || (_instance = new Inputs());

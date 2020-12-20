@@ -83,6 +83,12 @@ class Memory {
   }
 
   recall(count) {
+    if (count < 0) {
+      const local = [..._memory];
+      local.splice(-1, (count *= -1));
+      return local;
+    }
+
     return count ? _memory.slice(-count) : _memory;
   }
 
