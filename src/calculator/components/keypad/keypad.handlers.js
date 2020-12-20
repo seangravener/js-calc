@@ -1,6 +1,13 @@
 const controls = ({ key, api }) => {
   return (res, rej) => {
+    if (key.symbol === "Backspace") {
+      api.backspace();
+    }
+
+    if (key.symbol === "Enter" || key.symbol === "=") {
     api.save();
+    }
+
     res({ key, api });
   };
 };
