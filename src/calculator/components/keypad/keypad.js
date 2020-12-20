@@ -1,5 +1,5 @@
-import { Component } from "../base/component.js";
-import { Key } from "../base/key.js";
+import { Component } from "../base/Component.js";
+import { Key } from "../base/Key.js";
 import { templateFn, keypadLayout } from "./keypad.template.js";
 import { styles } from "./keypad.styles.js";
 
@@ -15,14 +15,16 @@ class KeypadComponent extends Component {
     this.styles = styles;
     this.templateFn = templateFn;
     this.locals = { layout: keypadLayout };
-    this.hotkeys = hotkeys("*", (event) => this.handleKeyPress(event.key));
+
+    this.el.addEventListener("click", this.handleKeyPress.bind(this));
+    this.hotkeys = hotkeys("*", this.handleKeyPress.bind(this));
   }
 
-  handleKeyPress(symbol) {
-    const key = new Key(symbol);
+  handleKeyPress(event) {
+    const key = new Key(event);
 
     if (key.isDefined) {
-      key.press().then(({ key, api }) => {
+      key.press$().then(({ key, api }) => {
         console.log(key, api);
         this.render();
       });

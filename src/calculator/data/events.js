@@ -6,17 +6,17 @@ class EventBus {
     return _events;
   }
 
-  constructor(events = {}) {
+  constructor(events = _events) {
     _events = events;
   }
 
   // https://medium.com/@jesusgalvan/vue-js-event-bus-promises-f83e73a81d72
   listenTo$(nameSpaces) {
-    return new Promise((resolve, reject) => {})
+    return new Promise((resolve, reject) => {});
   }
 
   listenTo(nameSpaces, callback) {
-    nameSpaces = [...[nameSpaces]];
+    nameSpaces = [...[nameSpaces]]; // '' or [''] are ok
     nameSpaces.forEach((nameSpace) => {
       _events[nameSpace] = _events[nameSpace] || [];
       _events[nameSpace].push(callback);
@@ -26,7 +26,6 @@ class EventBus {
   }
 
   publish(nameSpace, payload = {}) {
-    console.log("publish", nameSpace);
     if (_events[nameSpace]) {
       _events[nameSpace].map((callback) => callback(payload));
     }
@@ -35,13 +34,9 @@ class EventBus {
   }
 
   static load() {
-    return _instance || (_instance = new EventBus(_events));
+    return _instance || (_instance = new EventBus());
   }
 }
 
-const singleton = () => {
-  return EventBus.load();
-};
-
 export { EventBus };
-export default singleton();
+export default EventBus.load();

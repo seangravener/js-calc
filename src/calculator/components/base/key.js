@@ -9,17 +9,22 @@ class Key {
   }
 
   get symbol() {
-    return this.key;
+    return this.source.key || this.source.target.textContent;
   }
 
   get type() {
-    if (!this.key) return;
+    if (!this.symbol) return;
 
+    // @todo weird var getting here... why static methods? either way, don't mix the two
     return Key.getKeyTypes().reduce((result, type) => {
-      return keypadBindings[type].includes(this.key)
+      return keypadBindings[type].includes(this.symbol)
         ? `${result} ${type}`.trim()
         : result;
     }, "");
+  }
+
+  get el() {
+    return this.source.target;
   }
 
   get resolver() {
@@ -27,11 +32,11 @@ class Key {
     return resolver ? resolver({ key: this, api: api }) : noop;
   }
 
-  constructor(key) {
-    this.key = `${key}`;
+  constructor(event) {
+    this.source = event;
   }
 
-  press(resolver = this.resolver) {
+  press$(resolver = this.resolver) {
     return new Promise(resolver);
   }
 

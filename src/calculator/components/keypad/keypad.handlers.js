@@ -13,7 +13,6 @@ const numbers = ({ key, api }) => {
 };
 
 const operators = ({ key, api }) => {
-  console.log(this);
   return (res, rej) => {
     api.set({ operator: key.symbol });
     res({ key, api });
@@ -22,7 +21,6 @@ const operators = ({ key, api }) => {
 
 const reset = ({ key, api }) => {
   return (res, rej) => {
-    console.log("reset!");
     api.clear();
     res({ key, api });
   };

@@ -39,7 +39,6 @@ class Memory {
     _memory = [..._memory, ...chunks];
   }
 
-  // capture? addChunk?
   newTotal() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
@@ -82,6 +81,10 @@ class Memory {
     return this.length >= position ? { operator, operandB } : undefined;
   }
 
+  // recall() --> [1, 2, 3] (all memory)
+  // recall(1) --> [3] (last position)
+  // recall(2) --> [2, 3] (last 2 positions)
+  // recall(-1) --> [1, 2] (exclude last N positions)
   recall(count) {
     if (count < 0) {
       const local = [..._memory];

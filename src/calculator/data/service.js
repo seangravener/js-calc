@@ -45,19 +45,18 @@ class DataService {
 
   get() {
     const { operator, operandA, operandB } = memory;
-    return { operator, operandA, operandB, history: this.history };
+    return { operator, operandA, operandB };
   }
 
   set(locals) {
     const { operator, operandB } = this.get();
     memory.set(1, { operator, operandB, ...locals });
-    events.publish("api:save", { ...this.get() });
+    this.publish("change");
   }
 
   save() {
     const { operator, operandB } = memory.newTotal();
     this.set({ operator, operandB });
-    console.log("mem:save. now ->", { ...this.get() });
   }
 
   append(digit) {
@@ -71,9 +70,13 @@ class DataService {
     this.set({ operandB: digits.length ? digits : ["0"] });
   }
 
-  clear(operator = "", operandB = "") {
-    console.log("reset!", this);
-    memory.reset();
+  clear() {
+    memory.clear();
+    this.publish("change");
+  }
+
+  publish(eventName, payload = this.get()) {
+    events.publish(`api:${eventName}`, payload)
   }
 
   static load() {

@@ -1,9 +1,13 @@
-import { newEl } from "../../lib/functions.js";
+import { newEl, noop } from "../../lib/functions.js";
 
 class Component extends HTMLElement {
   locals = {};
   styles = "";
-  templateFn = Component.noop;
+  templateFn = noop;
+
+  get el() {
+    return this.shadowRoot;
+  }
 
   get styleEl() {
     return newEl("style", this.styles);
@@ -18,21 +22,10 @@ class Component extends HTMLElement {
     this.attachShadow({ mode: "open" });
   }
 
-  connectedCallback() {
-    console.log("connected!");
-  }
-
-  debug() {
-    console.log(this);
-    return this;
-  }
-
   render(locals = this.locals) {
     this.shadowRoot.innerHTML = this.markup;
     this.shadowRoot.prepend(this.styleEl);
   }
-
-  static noop = () => {};
 }
 
 export { Component };

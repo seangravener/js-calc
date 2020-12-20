@@ -1,6 +1,6 @@
 import api from "../../data/service.js";
 import events from "../../data/events.js";
-import { Component } from "../base/component.js";
+import { Component } from "../base/Component.js";
 import { styles } from "./display.styles.js";
 import { templateFn } from "./display.template.js";
 
@@ -15,14 +15,11 @@ class DisplayComponent extends Component {
   init() {
     this.styles = styles;
     this.templateFn = templateFn;
+    this.locals = { ...this.locals, history: api.history, ...api.get() };
 
-    // watch locals for changes with Proxy?
-    this.locals = api.get()
-
-    events.listenTo("api:save", (locals) => {
-      console.log('api locals after save: ', locals)
-      this.locals = locals;
-      this.render()
+    events.listenTo("api:change", (locals) => {
+      this.locals = { history: api.history, ...locals };
+      this.render();
     });
   }
 
