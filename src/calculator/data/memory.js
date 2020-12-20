@@ -43,7 +43,7 @@ class Memory {
   newTotal() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
-      this.operandB = this.operandB
+      this.operandB = this.operandA;
     }
 
     return this;

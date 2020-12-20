@@ -20,7 +20,7 @@ class DisplayComponent extends Component {
     this.locals = inputs.get()
 
     events.listenTo("api:save", (locals) => {
-      console.log('save!', locals)
+      console.log('api locals after save: ', locals)
       this.locals = locals;
       this.render()
     });
