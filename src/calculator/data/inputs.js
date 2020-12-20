@@ -24,6 +24,22 @@ class Inputs {
       .trim();
   }
 
+  set operator(operator) {
+    this.set({ operator });
+  }
+
+  get operator() {
+    return this.get().operator;
+  }
+
+  set operandB(operandB) {
+    this.set({ operandA });
+  }
+
+  get operandB() {
+    return this.get().operandB;
+  }
+
   constructor() {}
 
   get() {
@@ -32,7 +48,7 @@ class Inputs {
   }
 
   set(locals) {
-    const { operator, operandB, history } = this.get();
+    const { operator, operandB } = this.get();
     memory.set(1, { operator, operandB, ...locals });
     events.publish("api:save", { ...this.get() });
   }
