@@ -1,7 +1,7 @@
 import api from "../../data/service.js";
 import { noop } from "../../lib/functions.js";
-import { keypadHandlers } from "../keypad/keypad.handlers.js";
-import { keypadBindings } from "../keypad/keypad.bindings.js";
+import { keypadHandlers } from "../keypad/handlers.js";
+import { keypadBindings } from "../keypad/bindings.js";
 
 class Key {
   get isDefined() {
@@ -9,6 +9,7 @@ class Key {
   }
 
   get symbol() {
+    // @todo map many-to-one symbols eg. [Enter, =], [Del, Backspace]
     return this.source.key || this.source.target.textContent;
   }
 

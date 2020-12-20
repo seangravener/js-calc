@@ -104,6 +104,7 @@ class Memory {
     return `${obj}`.replace(/[, ]+/g, "");
   }
 
+  // @todo tidy up instantiation defaults
   static load(memory) {
     return _instance || (_instance = new Memory(memory || _memory));
   }

@@ -5,7 +5,8 @@ const controls = ({ key, api }) => {
     }
 
     if (key.symbol === "Enter" || key.symbol === "=") {
-    api.save();
+      api.save();
+      console.log(api)
     }
 
     res({ key, api });
