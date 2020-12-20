@@ -17,12 +17,10 @@ class DataService {
   }
 
   get history() {
-    return memory
-      .recall(-1) // omit active chunk
-      .reduce((history, [operator, operandB]) => {
-        return `${history} ${operator} ${operandB}`;
-      }, "")
-      .trim();
+    const reducer = (history, [operator, operandB]) =>
+      `${history} ${operator} ${operandB}`;
+
+    return memory.recall(-1).reduce(reducer, "").trim();
   }
 
   set operator(operator) {
@@ -76,7 +74,7 @@ class DataService {
   }
 
   publish(eventName, payload = this.get()) {
-    events.publish(`api:${eventName}`, payload)
+    events.publish(`api:${eventName}`, payload);
   }
 
   static load() {
