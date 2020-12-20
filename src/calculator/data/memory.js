@@ -23,7 +23,7 @@ class Memory {
   }
 
   get operator() {
-    return this.get(1).operator;
+    return this.get(1).operator || '';
   }
 
   set operator(operator) {
