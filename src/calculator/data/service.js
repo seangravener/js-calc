@@ -36,6 +36,13 @@ class DataService {
     return this.get().operandB;
   }
 
+  get is() {
+    const { operator, operandB } = this.get();
+    const okToSave = !!(operator && operandB !== "0");
+
+    return { okToSave };
+  }
+
   constructor() {}
 
   get() {
