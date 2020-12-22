@@ -1,3 +1,4 @@
+import display from './display.js';
 import events from "./events.js";
 import memory from "./memory.js";
 
@@ -6,6 +7,10 @@ let _instance = undefined;
 class DataService {
   get length() {
     return memory.operandB.length;
+  }
+
+  get display() {
+    return display.state;
   }
 
   get history() {

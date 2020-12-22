@@ -15,10 +15,16 @@ class DisplayComponent extends Component {
   init() {
     this.styles = styles;
     this.templateFn = templateFn;
-    this.locals = { ...this.locals, history: api.history, ...api.get() };
+    this.locals = {
+      ...this.locals,
+      history: api.history,
+      ...api.get(),
+      display: api.display,
+    };
 
     events.listenTo("api:change", (locals) => {
-      this.locals = { history: api.history, ...locals };
+      this.locals = { display: api.display, history: api.history, ...locals };
+      console.log(this.locals);
       this.render();
     });
   }

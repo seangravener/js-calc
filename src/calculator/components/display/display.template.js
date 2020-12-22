@@ -3,10 +3,10 @@ const historyDisplay = (history) => `
     ${exists(history)}
   </div>`;
 
-const mainDisplay = ({ operator, operandA, operandB }) => `
+const mainDisplay = ({ operator, display }) => `
   <div class="calc-typed" id="mainDisplay">
     <span class="operator">${exists(operator)}</span>
-    ${parseFloat(operandB) ? operandB : operandA}
+    ${display.value}
   </div>`;
 
 const exists = (value, placeholder = "") => (value ? `${value}` : placeholder);
