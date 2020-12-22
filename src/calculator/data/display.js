@@ -1,22 +1,35 @@
+import events from "./events.js";
 import memory from "./memory.js";
 
 let _instance = undefined;
-const _blank_ = { msg: "", err: "", num: 0 }; // order is important here
+const _blank_ = { msg: "", err: "" };
 let _display = _blank_;
 
 class Display {
   get length() {
-    return _display.length;
+    return this.value.length;
+  }
+
+  get msg() {
+    return _display.msg;
+  }
+
+  get err() {
+    return _display.err;
+  }
+
+  get history() {
+    const reducer = (history, [operator, operandB]) =>
+      `${history} ${operator} ${operandB}`;
+
+    return memory.recall(-1).reduce(reducer, "").trim();
   }
 
   get value() {
-    return Object.keys(_blank_).reduce(
-      (value, type) =>
-        _display[type] ||
-        parseFloat(memory.operandB) ||
-        parseFloat(memory.operandA),
-      ""
-    );
+    const { operandB, operandA } = memory.asFloats();
+    const { msg, err } = _display;
+
+    return err || msg || operandB; // || operandA;
   }
 
   get state() {
@@ -25,19 +38,22 @@ class Display {
 
   constructor(display = _blank_) {
     _display = { ..._display, ...display };
+    events.listenTo('key:next', () => this.clear())
   }
 
   set(locals) {
-    Object.keys(locals).forEach(
-      (type) =>
-        (_display[type] = isNaN(_blank_[type])
-          ? `${locals[type]}`
-          : parseFloat(locals[type]))
-    );
+    _display = { ..._display, ...locals };
+    events.publish("api:change");
   }
 
-  get(type) {
-    return _display[type];
+  show(msg, duration = 0) {
+    this.set({ msg });
+    // events.listenTo("api:next", () => this.set({ msg: "" }));
+  }
+
+  expire(type) {
+    const cache = _display[type];
+    return cache;
   }
 
   clear() {

@@ -1,12 +1,20 @@
 const controls = ({ key, api }) => {
+  const { can, operandA } = api;
+
   return (res, rej) => {
-    if (key.symbol === "Backspace") {
+    if (key.symbol === "Backspace" || key.symbol === "Delete") {
       api.backspace();
     }
 
     if (key.symbol === "Enter" || key.symbol === "=") {
-      api.save();
-      console.log(api)
+      if (can.operate) {
+        api.save();
+        api.set({ operandB: operandA });
+      } else {
+        api.repeat();
+        // api.display.show(operandA);
+      }
+      api.display.show(`= ${operandA}`);
     }
 
     res({ key, api });
@@ -14,8 +22,17 @@ const controls = ({ key, api }) => {
 };
 
 const numbers = ({ key, api }) => {
+  const { can, operandA } = api;
+
   return (res, rej) => {
-    api.append(key.symbol);
+    if (can.save) {
+      // api.save();
+      api.set({ operandB: key.symbol });
+    } else {
+      api.append(key.symbol);
+      // api.display.show(`${operandA}`);
+    }
+
     res({ key, api });
   };
 };

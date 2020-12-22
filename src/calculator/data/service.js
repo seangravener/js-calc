@@ -1,4 +1,4 @@
-import display from './display.js';
+import display from "./display.js";
 import events from "./events.js";
 import memory from "./memory.js";
 
@@ -10,14 +10,11 @@ class DataService {
   }
 
   get display() {
-    return display.state;
+    return display;
   }
 
-  get history() {
-    const reducer = (history, [operator, operandB]) =>
-      `${history} ${operator} ${operandB}`;
-
-    return memory.recall(-1).reduce(reducer, "").trim();
+  get operandA() {
+    return this.get().operandA;
   }
 
   set operator(operator) {
@@ -36,14 +33,19 @@ class DataService {
     return this.get().operandB;
   }
 
-  get is() {
+  get can() {
     const { operator, operandB } = this.get();
-    const okToSave = !!(operator && operandB !== "0");
+    const operate = !!operator;
+    const save = !!(operator && operandB !== "0");
 
-    return { okToSave };
+    return { operate, save };
   }
 
   constructor() {}
+
+  show(msg) {
+    display.set({ msg });
+  }
 
   get() {
     const { operator, operandA, operandB } = memory;
@@ -57,12 +59,18 @@ class DataService {
   }
 
   save() {
-    const { operator, operandB } = memory.newTotal();
+    const { operator, operandB } = memory.insert();
+    // const { operandA, operator, operandB } = memory.insert();
     this.set({ operator, operandB });
   }
 
+  repeat() {
+    // this.lastOp, aka memory.get(2)
+  }
+
   append(digit) {
-    this.set({ operandB: `${memory.operandB}${digit}` });
+    const { operandB } = memory.asFloats();
+    this.set({ operandB: `${operandB || ""}${digit}` });
   }
 
   backspace(count = 1) {

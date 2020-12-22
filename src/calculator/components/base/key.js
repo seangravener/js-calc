@@ -2,6 +2,7 @@ import api from "../../data/service.js";
 import { noop } from "../../lib/functions.js";
 import { keypadHandlers } from "../keypad/handlers.js";
 import { keypadBindings } from "../keypad/bindings.js";
+import events from "../../data/events.js";
 
 class Key {
   get isDefined() {
@@ -38,6 +39,7 @@ class Key {
   }
 
   press$(resolver = this.resolver) {
+    events.publish("key:next")
     return new Promise(resolver);
   }
 

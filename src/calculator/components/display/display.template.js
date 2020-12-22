@@ -1,4 +1,4 @@
-const historyDisplay = (history) => `
+const historyDisplay = ({ history }) => `
   <div class="calc-operation">
     ${exists(history)}
   </div>`;
@@ -16,8 +16,13 @@ const compose = (...parts) =>
     return `${whole}${part}`;
   }, "");
 
-const templateFn = ({ history, ...state }) => {
-  return compose(historyDisplay(history), mainDisplay({ ...state }));
+const templateFn = ({ display, ...state }) => {
+  const { history } = display;
+
+  return compose(
+    historyDisplay({ history }),
+    mainDisplay({ display, ...state })
+  );
 };
 
 export { templateFn };

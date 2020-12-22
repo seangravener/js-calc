@@ -11,7 +11,7 @@ class Memory {
   }
 
   get operandA() {
-    return `${totalizator.compute(_memory)}`;
+    return this.length > 1 ? `${totalizator.compute(_memory)}` : '0';
   }
 
   get operandB() {
@@ -23,7 +23,7 @@ class Memory {
   }
 
   get operator() {
-    return this.get(1).operator || '';
+    return this.get(1).operator || "";
   }
 
   set operator(operator) {
@@ -34,6 +34,13 @@ class Memory {
     _memory = chunks;
   }
 
+  asFloats() {
+    const active = { ...this.get(1), operandA: this.operandA };
+    return Object.keys(active).reduce((values, key) => {
+      return { ...values, ...{ [key]: parseFloat(active[key]) } };
+    }, {});
+  }
+
   store(chunks) {
     chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
     _memory = [..._memory, ...chunks];
@@ -42,7 +49,15 @@ class Memory {
   newTotal() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
-      this.operandB = this.operandA;
+      //this.operandB = this.operandA;
+    }
+
+    return this;
+  }
+
+  insert() {
+    if (this.operator) {
+      _memory.push(_nullMemoryChunk_);
     }
 
     return this;

@@ -9,28 +9,25 @@ class DisplayComponent extends Component {
     super();
 
     this.init();
-    this.render();
   }
 
   init() {
+    const locals = api.get();
+    const display = api.display;
+
     this.styles = styles;
     this.templateFn = templateFn;
-    this.locals = {
-      ...this.locals,
-      history: api.history,
-      ...api.get(),
-      display: api.display,
-    };
+    this.locals = { ...this.locals, ...locals, display };
 
     events.listenTo("api:change", (locals) => {
-      this.locals = { display: api.display, history: api.history, ...locals };
+      this.locals = { ...this.locals, ...locals };
       console.log(this.locals);
       this.render();
     });
   }
 
   connectedCallback() {
-    console.log("connected display!");
+    this.render();
   }
 }
 
