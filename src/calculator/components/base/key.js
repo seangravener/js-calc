@@ -1,8 +1,6 @@
-import api from "../../data/service.js";
 import { noop } from "../../lib/functions.js";
 import { keypadHandlers } from "../keypad/handlers.js";
 import { keypadBindings } from "../keypad/bindings.js";
-import events from "../../data/events.js";
 
 class Key {
   get isDefined() {
@@ -17,9 +15,8 @@ class Key {
   get type() {
     if (!this.symbol) return;
 
-    // @todo weird var getting here... why static methods? either way, don't mix the two
     return Key.getKeyTypes().reduce((result, type) => {
-      return keypadBindings[type].includes(this.symbol)
+      return Key.getKeyBindings(type).includes(this.symbol)
         ? `${result} ${type}`.trim()
         : result;
     }, "");
@@ -30,17 +27,15 @@ class Key {
   }
 
   get resolver() {
-    const resolver = Key.getKeyTypeHandler(this.type);
-    return resolver ? resolver({ key: this, api: api }) : noop;
+    return Key.getKeyTypeHandler(this.type) || noop;
   }
 
   constructor(event) {
     this.source = event;
   }
 
-  press$(resolver = this.resolver) {
-    events.publish("key:next")
-    return new Promise(resolver);
+  static getKeyBindings(type) {
+    return keypadBindings[type];
   }
 
   static getKeyTypes() {
