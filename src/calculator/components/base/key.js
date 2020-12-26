@@ -1,5 +1,5 @@
 import { noop } from "../../lib/functions.js";
-import { keypadHandlers } from "../keypad/handlers.js";
+import { keypadResolvers } from "../keypad/resolvers.js";
 import { keypadBindings } from "../keypad/bindings.js";
 
 class Key {
@@ -43,7 +43,7 @@ class Key {
   }
 
   static getKeyTypeHandler(keyType) {
-    return keypadHandlers[keyType];
+    return keypadResolvers[keyType];
   }
 
   debug() {
