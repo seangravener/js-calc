@@ -17,4 +17,14 @@ const newEl = (name, markup) => {
   return tag;
 };
 
-export { newEl, operators, arithmetic, noop };
+const assign = (target, ...sources) => {
+  const filtered = sources.map((source) =>
+    Object.entries(source)
+      .filter(([key, value]) => !!value)
+      .reduce((obj, [key, value]) => ((obj[key] = value), obj), {})
+  );
+
+  return Object.assign(target, ...filtered);
+};
+
+export { newEl, operators, arithmetic, assign, noop };
