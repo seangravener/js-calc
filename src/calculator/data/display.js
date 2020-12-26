@@ -26,15 +26,17 @@ class Display {
   }
 
   get value() {
-    const { operandB, operandA } = memory.asFloats();
     const { msg, err } = _display;
+    let { operandB, operandA, operator } = memory.asFloats();
+    operandB = operator ? `${operandB}` : operandB;
 
-    return err || msg || operandB; // || operandA;
+    return err || msg || operandB || operandA;
   }
 
   constructor(display = _blank_) {
     _display = { ..._display, ...display };
     events.listenTo("input:next", () => this.clear());
+    events.listenTo("output:save", () => this.set({ msg: "Saved!" }));
   }
 
   set(locals) {
