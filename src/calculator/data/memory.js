@@ -58,8 +58,9 @@ class Memory {
   insert() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
+    } else {
+      this.reset()
     }
-
     return this;
   }
 
@@ -111,6 +112,11 @@ class Memory {
   }
 
   clear() {
+    this.reset()
+    events.publish("memory:clear");
+  }
+
+  allClear() {
     _memory = [_nullMemoryChunk_];
     events.publish("memory:clear");
   }

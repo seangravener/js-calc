@@ -55,7 +55,7 @@ class DataService {
   set(locals) {
     const { operator, operandB } = this.get();
     memory.set(1, { operator, operandB, ...locals });
-    this.publish("change");
+    this.publish("next");
   }
 
   save() {
@@ -66,6 +66,8 @@ class DataService {
 
   repeat() {
     // this.lastOp, aka memory.get(2)
+    memory.insert();
+    // memory.set(...this.get(2))
   }
 
   append(digit) {
@@ -82,11 +84,11 @@ class DataService {
 
   clear() {
     memory.clear();
-    this.publish("change");
+    this.publish("next");
   }
 
   publish(eventName, payload = this.get()) {
-    events.publish(`api:${eventName}`, payload);
+    events.publish(`output:${eventName}`, payload);
   }
 
   static load() {

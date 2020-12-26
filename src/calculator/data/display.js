@@ -32,18 +32,13 @@ class Display {
     return err || msg || operandB; // || operandA;
   }
 
-  get state() {
-    return { ..._display, value: this.value };
-  }
-
   constructor(display = _blank_) {
     _display = { ..._display, ...display };
-    events.listenTo('key:next', () => this.clear())
+    events.listenTo("input:next", () => this.clear());
   }
 
   set(locals) {
     _display = { ..._display, ...locals };
-    events.publish("api:change");
   }
 
   show(msg, duration = 0) {

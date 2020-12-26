@@ -1,53 +1,55 @@
-const controls = ({ key, api }) => {
+const controls = ({ previousKey, currentKey, api }) => {
   const { can, operandA } = api;
 
   return (res, rej) => {
-    if (key.symbol === "Backspace" || key.symbol === "Delete") {
+    if (currentKey.symbol === "Backspace" || currentKey.symbol === "Delete") {
       api.backspace();
     }
 
-    if (key.symbol === "Enter" || key.symbol === "=") {
+    if (currentKey.symbol === "Enter" || currentKey.symbol === "=") {
       if (can.operate) {
         api.save();
-        api.set({ operandB: operandA });
       } else {
         api.repeat();
         // api.display.show(operandA);
       }
+
       api.display.show(`= ${operandA}`);
     }
 
-    res({ key, api });
+    res({ previousKey, currentKey, api });
   };
 };
 
-const numbers = ({ key, api }) => {
+const numbers = ({ previousKey, currentKey, api }) => {
   const { can, operandA } = api;
 
   return (res, rej) => {
-    if (can.save) {
-      // api.save();
-      api.set({ operandB: key.symbol });
-    } else {
-      api.append(key.symbol);
-      // api.display.show(`${operandA}`);
-    }
+    // if (can.operate) {
+    //   // api.save();
+    //   api.set({ operandB: currentKey.symbol });
+    // } else {
+    //   // api.display.show(`${operandA}`);
+    // }
+    api.append(currentKey.symbol);
 
-    res({ key, api });
+    res({ previousKey, currentKey, api });
   };
 };
 
-const operators = ({ key, api }) => {
+const operators = (locals) => {
+  const { previousKey, currentKey, api } = locals;
+  api.set({ operator: currentKey.symbol });
+
   return (res, rej) => {
-    api.set({ operator: key.symbol });
-    res({ key, api });
+    res(locals);
   };
 };
 
-const reset = ({ key, api }) => {
+const reset = ({ previousKey, currentKey, api }) => {
   return (res, rej) => {
     api.clear();
-    res({ key, api });
+    res({ previousKey, currentKey, api });
   };
 };
 

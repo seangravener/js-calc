@@ -19,7 +19,7 @@ class DisplayComponent extends Component {
     this.templateFn = templateFn;
     this.locals = { ...this.locals, ...locals, display };
 
-    events.listenTo("api:change", (locals) => {
+    events.listenTo("output:next", (locals) => {
       this.locals = { ...this.locals, ...locals };
       console.log(this.locals);
       this.render();

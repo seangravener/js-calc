@@ -1,9 +1,20 @@
+import api from "../../data/service.js";
+import events from "../../data/events.js";
 import { Component } from "../base/Component.js";
 import { Key } from "../base/Key.js";
 import { templateFn, keypadLayout } from "./keypad.template.js";
 import { styles } from "./keypad.styles.js";
 
+let _keyCache = [];
 class KeypadComponent extends Component {
+  get currentKey() {
+    return _keyCache[_keyCache.length - 1];
+  }
+
+  get previousKey() {
+    return _keyCache[_keyCache.length - 2];
+  }
+
   constructor() {
     super();
 
@@ -18,17 +29,31 @@ class KeypadComponent extends Component {
 
     this.el.addEventListener("click", this.handleKeyPress.bind(this));
     this.hotkeys = hotkeys("*", this.handleKeyPress.bind(this));
+
+    events.listenTo("input:next", () => this.render());
   }
 
   handleKeyPress(event) {
-    const key = new Key(event);
+    let key = new Key(event);
 
     if (key.isDefined) {
-      key.press$().then(({ key, api }) => {
-        console.log(key, api);
-        this.render();
+      _keyCache.push(key);
+      this.press(key).then((locals) => {
+        console.log(locals);
+        events.publish(`input:next`, locals);
       });
     }
+  }
+
+  press(key) {
+    const { previousKey, currentKey } = this;
+    const locals = { previousKey, currentKey, api };
+
+    return new Promise(key.resolver(locals));
+  }
+
+  clear() {
+    _keyCache = [];
   }
 
   connectedCallback() {
