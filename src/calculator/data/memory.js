@@ -11,7 +11,7 @@ class Memory {
   }
 
   get operandA() {
-    return this.length > 1 ? `${totalizator.compute(_memory)}` : '0';
+    return this.length > 1 ? `${totalizator.compute(_memory)}` : "0";
   }
 
   get operandB() {
@@ -35,10 +35,13 @@ class Memory {
   }
 
   asFloats() {
-    const active = { ...this.get(1), operandA: this.operandA };
-    return Object.keys(active).reduce((values, key) => {
+    const { operator, operandB } = this.get(1);
+    const active = { operandB, operandA: this.operandA };
+    const operands = Object.keys(active).reduce((values, key) => {
       return { ...values, ...{ [key]: parseFloat(active[key]) } };
     }, {});
+
+    return { operator, ...operands };
   }
 
   store(chunks) {
@@ -46,25 +49,15 @@ class Memory {
     _memory = [..._memory, ...chunks];
   }
 
-  newTotal() {
-    if (this.operator) {
-      _memory.push(_nullMemoryChunk_);
-      //this.operandB = this.operandA;
-    }
-
-    return this;
-  }
-
   insert() {
     if (this.operator) {
       _memory.push(_nullMemoryChunk_);
     } else {
-      this.reset()
+      this.replace([_nullMemoryChunk_]);
     }
-    return this;
   }
 
-  reset(chunks = [_nullMemoryChunk_]) {
+  replace(chunks = [_nullMemoryChunk_]) {
     chunks.forEach((chunk, i) => {
       const [operator, operandB] = chunks[i];
 
@@ -94,7 +87,7 @@ class Memory {
 
   get(position) {
     const [operator, operandB] = this.recall(position)[0];
-    return this.length >= position ? { operator, operandB } : undefined;
+    return this.length >= position ? { operator, operandB } : {};
   }
 
   // recall() --> [1, 2, 3] (all memory)
@@ -112,13 +105,11 @@ class Memory {
   }
 
   clear() {
-    this.reset()
-    events.publish("memory:clear");
+    _memory = [_nullMemoryChunk_];
   }
 
   allClear() {
-    _memory = [_nullMemoryChunk_];
-    events.publish("memory:clear");
+    this.clear();
   }
 
   static toString(obj) {

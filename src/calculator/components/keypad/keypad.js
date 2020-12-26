@@ -8,11 +8,11 @@ import { styles } from "./keypad.styles.js";
 let _keyCache = [];
 class KeypadComponent extends Component {
   get currentKey() {
-    return _keyCache[_keyCache.length - 1];
+    return _keyCache[_keyCache.length - 1] || {};
   }
 
   get previousKey() {
-    return _keyCache[_keyCache.length - 2];
+    return _keyCache[_keyCache.length - 2] || {};
   }
 
   constructor() {
@@ -29,7 +29,6 @@ class KeypadComponent extends Component {
 
     this.el.addEventListener("click", this.handleKeyPress.bind(this));
     this.hotkeys = hotkeys("*", this.handleKeyPress.bind(this));
-
     events.listenTo("input:next", () => this.render());
   }
 
@@ -39,7 +38,6 @@ class KeypadComponent extends Component {
     if (key.isDefined) {
       _keyCache.push(key);
       this.press(key).then((locals) => {
-        console.log(locals);
         events.publish(`input:next`, locals);
       });
     }

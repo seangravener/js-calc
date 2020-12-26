@@ -1,6 +1,7 @@
 import display from "./display.js";
 import events from "./events.js";
 import memory from "./memory.js";
+import { assign } from "../lib/functions.js";
 
 let _instance = undefined;
 
@@ -33,8 +34,12 @@ class DataService {
     return this.get().operandB;
   }
 
+  get previous() {
+    return this.get(2) || {};
+  }
+
   get can() {
-    const { operator, operandB } = this.get();
+    const { operator, operandB, previous } = this;
     const operate = !!operator;
     const save = !!(operator && operandB !== "0");
 
@@ -47,9 +52,11 @@ class DataService {
     display.set({ msg });
   }
 
-  get() {
-    const { operator, operandA, operandB } = memory;
-    return { operator, operandA, operandB };
+  get(position = 1) {
+    const { operator, operandB } = memory.get(position);
+    const { operandA } = memory; // compute value from pos?
+
+    return { operandA, operator, operandB };
   }
 
   set(locals) {
@@ -58,16 +65,21 @@ class DataService {
     this.publish("next");
   }
 
-  save() {
-    const { operator, operandB } = memory.insert();
-    // const { operandA, operator, operandB } = memory.insert();
-    this.set({ operator, operandB });
+  save(locals) {
+    memory.insert();
+
+    if (locals) {
+      memory.set(1, locals);
+    }
+    this.publish("next");
   }
 
   repeat() {
-    // this.lastOp, aka memory.get(2)
+    console.log({ prev: this.previous, curr: this.get()})
+    const snapshot = assign({}, this.previous, this.get());
     memory.insert();
-    // memory.set(...this.get(2))
+    console.log("repeat!", snapshot);
+    this.set(snapshot);
   }
 
   append(digit) {
