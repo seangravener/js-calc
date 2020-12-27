@@ -7,7 +7,7 @@ class Totalizator {
     const snapshot = memory;
 
     return snapshot.length
-      ? snapshot.reduce(this.memoryReducer, 0)
+      ? `${snapshot.reduce(this.memoryReducer, 0)}`
       : "Err. No memory to compute.";
   }
 
