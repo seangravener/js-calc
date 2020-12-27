@@ -1,4 +1,3 @@
-import events from "./events.js";
 import totalizator from "../lib/totalizator.js";
 
 const _nullMemoryChunk_ = [null, "0"];
@@ -65,11 +64,12 @@ class Memory {
 
   set(position, locals) {
     const positionValue = this.get(position);
-    const { operator, operandB } = { ...positionValue, ...locals };
+    let { operator, operandB } = { ...positionValue, ...locals };
+    operandB = Memory.toString(operandB);
 
     if (positionValue) {
       const index = _memory.length - position;
-      _memory[index] = [operator, Memory.toString(operandB)];
+      _memory[index] = [operator, operandB];
     } else {
       this.store([operator, operandB]);
     }
@@ -78,19 +78,20 @@ class Memory {
   }
 
   get(position) {
-    const [operator, operandB] = this.recall(position)[0];
-    return this.length >= position ? { operator, operandB } : {};
+    const chunks = this.recall(position);
+    const [operator, operandB] = chunks[0];
+    const operandA = Memory.compute(chunks);
+
+    return this.length >= position ? { operandA, operator, operandB } : {};
   }
 
   // recall() --> [1, 2, 3] (all memory)
   // recall(1) --> [3] (last position)
   // recall(2) --> [2, 3] (last 2 positions)
-  // recall(-1) --> [1, 2] (exclude last N positions)
+  // recall(-1) --> [1, 2] (exclude last n positions)
   recall(count) {
     if (count < 0) {
-      const local = [..._memory];
-      local.splice(-1, (count *= -1));
-      return local;
+      return _memory.slice(0, count);
     }
 
     return count ? _memory.slice(-count) : _memory;
@@ -106,6 +107,11 @@ class Memory {
 
   static toString(obj) {
     return `${obj}`.replace(/[, ]+/g, "");
+  }
+
+  static compute(memory) {
+    console.log("compute", `${totalizator.compute(memory)}`);
+    return `${totalizator.compute(memory)}`;
   }
 
   // @todo tidy up instantiation defaults

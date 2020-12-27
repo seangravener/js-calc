@@ -1,51 +1,33 @@
 import display from "./display.js";
 import events from "./events.js";
-import memory from "./memory.js";
+import memory, { Memory } from "./memory.js";
 import { assign } from "../lib/functions.js";
 
 let _instance = undefined;
 
 class DataService {
   get length() {
-    return memory.operandB.length;
+    return memory.length;
   }
 
   get display() {
     return display;
   }
 
-  get operandA() {
-    return this.get().operandA;
+  get current() {
+    return this.get();
   }
 
-  set operator(operator) {
-    this.set({ operator });
-  }
-
-  get operator() {
-    return this.get().operator;
-  }
-
-  set operandB(operandB) {
-    this.set({ operandB });
-  }
-
-  get operandB() {
-    return this.get().operandB;
+  set current(locals = {}) {
+    memory.set(1, { ...this.current, ...locals });
+    this.publish("next");
   }
 
   get previous() {
-    return (
-      memory.recall(-1).reduce((value, chunk) => {
-        if (value.operator) return value;
-        const [operator, operandB] = chunk;
-
-        if (operator) {
-          return { operator, operandB };
-        }
-        return {};
-      }, {}) || this.get(1)
-    );
+    return memory.recall(-1).reduce((value, chunk) => {
+      const [operator, operandB] = chunk;
+      return operator ? (value = { operator, operandB }) : value;
+    }, {});
   }
 
   get can() {
@@ -58,58 +40,39 @@ class DataService {
     };
   }
 
-  constructor() {}
-
-  show(msg) {
-    display.set({ msg });
+  constructor() {
+    this.memory = memory
   }
 
   get(position = 1) {
-    const { operator, operandB } = memory.get(position);
-    const { operandA } = memory; // compute value from pos?
-
+    const { operandA, operator, operandB } = memory.get(position);
     return { operandA, operator, operandB };
   }
 
-  set(locals) {
-    const { operator, operandB } = this.get();
-    memory.set(1, { operator, operandB, ...locals });
-    this.publish("next");
-  }
-
-  save(locals) {
-    memory.insert();
-
-    if (locals) {
-      memory.set(1, locals);
-    }
-    this.publish("next");
-  }
-
-  repeat() {
+  save(locals = {}) {
     console.log({ prev: this.previous });
-    console.log({ curr: this.get() });
-    const snapshot = assign({}, this.previous, this.get());
-    const { operator, operandB } = snapshot;
+    const { current, previous } = this;
+    this.current = assign(this.previous, current, locals);
 
-    memory.store([[operator, operandB]]);
-    console.log("repeat! set-->", { operator, operandB });
-    memory.store([[null, this.operandA]]);
-    console.log(memory);
+    memory.store();
+    // this.current = { operandB: this.current.operandA };
+  }
 
-    this.publish("next");
+  setPrevious() {
+    const { operator, operandB } = this.previous;
+    memory.set(1, { operator, operandB });
   }
 
   append(digit) {
     const { operandB } = memory.asFloats();
-    this.set({ operandB: `${operandB || ""}${digit}` });
+    this.current = { operandB: `${operandB || ""}${digit}` };
   }
 
   backspace(count = 1) {
     let digits = this.operandB.split("");
 
     digits.splice(-count);
-    this.set({ operandB: digits.length ? digits : "0" });
+    this.current = { operandB: digits.length ? digits : "0" };
   }
 
   clear() {
@@ -117,7 +80,7 @@ class DataService {
     this.publish("next");
   }
 
-  publish(eventName, payload = this.get()) {
+  publish(eventName, payload = this.current) {
     events.publish(`output:${eventName}`, payload);
   }
 

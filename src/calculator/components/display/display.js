@@ -12,7 +12,7 @@ class DisplayComponent extends Component {
   }
 
   init() {
-    const locals = api.get();
+    const locals = api.current;
     const display = api.display;
 
     this.styles = styles;
