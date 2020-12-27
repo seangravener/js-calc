@@ -27,7 +27,7 @@ class DataService {
   }
 
   set operandB(operandB) {
-    this.set({ operandA });
+    this.set({ operandB });
   }
 
   get operandB() {
@@ -35,15 +35,27 @@ class DataService {
   }
 
   get previous() {
-    return this.get(2) || {};
+    return (
+      memory.recall(-1).reduce((value, chunk) => {
+        if (value.operator) return value;
+        const [operator, operandB] = chunk;
+
+        if (operator) {
+          return { operator, operandB };
+        }
+        return {};
+      }, {}) || this.get(1)
+    );
   }
 
   get can() {
     const { operator, operandB, previous } = this;
-    const operate = !!operator;
-    const save = !!(operator && operandB !== "0");
 
-    return { operate, save };
+    return {
+      operate: !!operator,
+      save: !!(operator && operandB !== "0"),
+      repeat: !!(operator && previous.operandB),
+    };
   }
 
   constructor() {}
@@ -75,11 +87,17 @@ class DataService {
   }
 
   repeat() {
-    console.log({ prev: this.previous, curr: this.get()})
+    console.log({ prev: this.previous });
+    console.log({ curr: this.get() });
     const snapshot = assign({}, this.previous, this.get());
-    memory.insert();
-    console.log("repeat!", snapshot);
-    this.set(snapshot);
+    const { operator, operandB } = snapshot;
+
+    memory.store([[operator, operandB]]);
+    console.log("repeat! set-->", { operator, operandB });
+    memory.store([[null, this.operandA]]);
+    console.log(memory);
+
+    this.publish("next");
   }
 
   append(digit) {
