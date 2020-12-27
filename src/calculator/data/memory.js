@@ -44,17 +44,9 @@ class Memory {
     return { operator, ...operands };
   }
 
-  store(chunks) {
+  store(chunks = [_nullMemoryChunk_]) {
     chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
     _memory = [..._memory, ...chunks];
-  }
-
-  insert() {
-    if (this.operator) {
-      _memory.push(_nullMemoryChunk_);
-    } else {
-      this.replace([_nullMemoryChunk_]);
-    }
   }
 
   replace(chunks = [_nullMemoryChunk_]) {
