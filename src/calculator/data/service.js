@@ -41,7 +41,7 @@ class DataService {
   }
 
   constructor() {
-    this.memory = memory
+    this.memory = memory;
   }
 
   get(position = 1) {
@@ -50,12 +50,11 @@ class DataService {
   }
 
   save(locals = {}) {
-    console.log({ prev: this.previous });
     const { current, previous } = this;
-    this.current = assign(this.previous, current, locals);
+    this.current = assign(previous, current, locals);
 
     memory.store();
-    // this.current = { operandB: this.current.operandA };
+    this.current = { operandB: current.operandA };
   }
 
   setPrevious() {

@@ -1,20 +1,15 @@
 const controls = ({ previousKey, currentKey, api }) => {
-  const { can, operandA } = api;
+  const { can, current } = api;
 
   if (currentKey.symbol === "Backspace" || currentKey.symbol === "Delete") {
     api.backspace();
   }
 
   if (currentKey.symbol === "Enter" || currentKey.symbol === "=") {
-    if (can.operate) {
-      console.log('save!', api.operator, api.operandB)
+    if (previousKey.type === "numbers") {
+      console.log("save!", { op: current.operator, B: current.operandB });
       api.save();
-    } else {
-      api.repeat();
-      // api.display.show(operandA);
     }
-
-    api.display.show(`= ${operandA}`);
   }
 
   return (res, rej) => res({ previousKey, currentKey, api });
@@ -33,8 +28,15 @@ const numbers = ({ previousKey, currentKey, api }) => {
 };
 
 const operators = (locals) => {
-  const { currentKey, api } = locals;
-  api.set({ operator: currentKey.symbol });
+  let { currentKey, api } = locals;
+
+  console.log(currentKey.symbol, api.current.operator);
+  if (api.current.operator !== currentKey.symbol) {
+    console.log("set up", currentKey.symbol);
+    api.current = { operator: currentKey.symbol };
+  } else {
+    api.current = { operator: "" };
+  }
 
   return (res, rej) => res(locals);
 };

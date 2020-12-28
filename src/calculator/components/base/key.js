@@ -27,7 +27,7 @@ class Key {
   }
 
   get resolver() {
-    return Key.getKeyTypeHandler(this.type) || noop;
+    return Key.getKeyTypeResolver(this.type) || noop;
   }
 
   constructor(event) {
@@ -42,7 +42,7 @@ class Key {
     return Object.keys(keypadBindings);
   }
 
-  static getKeyTypeHandler(keyType) {
+  static getKeyTypeResolver(keyType) {
     return keypadResolvers[keyType];
   }
 

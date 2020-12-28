@@ -19,10 +19,11 @@ class Display {
   }
 
   get history() {
+    const localHistory = memory.recall(-1);
     const reducer = (history, [operator, operandB]) =>
       `${history} ${operator} ${operandB}`;
 
-    return memory.recall(-1).reduce(reducer, "").trim();
+    return localHistory.reduce(reducer, "").trim();
   }
 
   get value() {
@@ -30,7 +31,7 @@ class Display {
     let { operandB, operandA, operator } = memory.asFloats();
     operandB = operator ? `${operandB}` : operandB;
 
-    return err || msg || operandB || operandA;
+    return err || msg || operandB || `${operandA}.`;
   }
 
   constructor(display = _blank_) {

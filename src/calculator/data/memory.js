@@ -1,16 +1,34 @@
 import totalizator from "../lib/totalizator.js";
 
-const _nullMemoryChunk_ = [null, "0"];
-let _memory = [_nullMemoryChunk_];
 let _instance = undefined;
 
+const _zero_ = "0";
+const _nullMemoryChunk_ = [null, _zero_];
+let _memory = [_nullMemoryChunk_];
+
 class Memory {
+  get memory() {
+    return _memory;
+  }
+
+  set memory(chunks) {
+    let [first, second = _nullMemoryChunk_, ...rest] = chunks;
+    const [startBit, operandA] = first;
+    const [operator = startBit, operandB = _zero_] = second;
+
+    if (startBit !== null) {
+      first = [null, operandA];
+      second = [operator, operandB];
+    }
+    _memory = [first, second, ...rest];
+  }
+
   get length() {
-    return _memory.length;
+    return this.memory.length;
   }
 
   get operandA() {
-    return this.length > 1 ? `${totalizator.compute(_memory)}` : "0";
+    return this.length > 1 ? `${totalizator.compute(_memory)}` : _zero_;
   }
 
   get operandB() {
@@ -29,8 +47,8 @@ class Memory {
     this.set(1, { operator });
   }
 
-  constructor(chunks = _memory) {
-    _memory = chunks;
+  constructor(memory = _memory) {
+    this.memory = memory;
   }
 
   asFloats() {
@@ -45,21 +63,21 @@ class Memory {
 
   store(chunks = [_nullMemoryChunk_]) {
     chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
-    _memory = [..._memory, ...chunks];
+    this.memory = [...this.memory, ...chunks];
   }
 
   replace(chunks = [_nullMemoryChunk_]) {
     chunks.forEach((chunk, i) => {
       const [operator, operandB] = chunks[i];
 
-      if (i < _memory.length) {
+      if (i < this.memory.length) {
         this.set(i + 1, { operator, operandB });
       } else {
         this.store([[operator, operandB]]);
       }
     });
 
-    return _memory;
+    return this.memory;
   }
 
   set(position, locals) {
@@ -68,8 +86,8 @@ class Memory {
     operandB = Memory.toString(operandB);
 
     if (positionValue) {
-      const index = _memory.length - position;
-      _memory[index] = [operator, operandB];
+      const index = this.memory.length - position;
+      this.memory[index] = [operator, operandB];
     } else {
       this.store([operator, operandB]);
     }
@@ -79,8 +97,8 @@ class Memory {
 
   get(position) {
     const chunks = this.recall(position);
-    const [operator, operandB] = chunks[0];
     const operandA = Memory.compute(chunks);
+    const [operator, operandB] = chunks[0];
 
     return this.length >= position ? { operandA, operator, operandB } : {};
   }
@@ -91,14 +109,14 @@ class Memory {
   // recall(-1) --> [1, 2] (exclude last n positions)
   recall(count) {
     if (count < 0) {
-      return _memory.slice(0, count);
+      return this.memory.slice(0, count);
     }
 
-    return count ? _memory.slice(-count) : _memory;
+    return count ? this.memory.slice(-count) : this.memory;
   }
 
   clear() {
-    _memory = [_nullMemoryChunk_];
+    this.memory = [_nullMemoryChunk_];
   }
 
   allClear() {
@@ -110,13 +128,12 @@ class Memory {
   }
 
   static compute(memory) {
-    console.log("compute", `${totalizator.compute(memory)}`);
     return `${totalizator.compute(memory)}`;
   }
 
   // @todo tidy up instantiation defaults
-  static load(memory) {
-    return _instance || (_instance = new Memory(memory || _memory));
+  static load(memory = _memory) {
+    return _instance || (_instance = new Memory(memory));
   }
 }
 

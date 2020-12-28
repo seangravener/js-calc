@@ -7,21 +7,18 @@ import { templateFn } from "./display.template.js";
 class DisplayComponent extends Component {
   constructor() {
     super();
-
     this.init();
   }
 
   init() {
     const locals = api.current;
     const display = api.display;
-
     this.styles = styles;
     this.templateFn = templateFn;
     this.locals = { ...this.locals, ...locals, display };
 
     events.listenTo("output:next", (locals) => {
       this.locals = { ...this.locals, ...locals };
-      console.log(this.locals);
       this.render();
     });
   }
