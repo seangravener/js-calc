@@ -4,15 +4,14 @@ class Totalizator {
   constructor() {}
 
   compute(memory) {
-    const snapshot = memory;
-
-    return snapshot.length
-      ? `${snapshot.reduce(this.memoryReducer, 0)}`
-      : "Err. No memory to compute.";
+    return memory.length
+      ? `${memory.reduce(this.memoryReducer)[0]}`
+      : "0";
   }
 
-  memoryReducer(operandA, [operator, operandB]) {
-    return arithmetic(operator)([operandA, operandB]);
+  memoryReducer(chunk, [operandB, nextOperator]) {
+    const [operandA, operator] = chunk;
+    return [arithmetic(operator)([operandA, operandB]), nextOperator];
   }
 }
 

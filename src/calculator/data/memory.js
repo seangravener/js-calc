@@ -3,7 +3,7 @@ import totalizator from "../lib/totalizator.js";
 let _instance = undefined;
 
 const _zero_ = "0";
-const _nullMemoryChunk_ = [null, _zero_];
+const _nullMemoryChunk_ = [_zero_, null];
 let _memory = [_nullMemoryChunk_];
 
 class Memory {
@@ -12,15 +12,7 @@ class Memory {
   }
 
   set memory(chunks) {
-    let [first, second = _nullMemoryChunk_, ...rest] = chunks;
-    const [startBit, operandA] = first;
-    const [operator = startBit, operandB = _zero_] = second;
-
-    if (startBit !== null) {
-      first = [null, operandA];
-      second = [operator, operandB];
-    }
-    _memory = [first, second, ...rest];
+    _memory = this.stringifyChunks(chunks);
   }
 
   get length() {
@@ -28,7 +20,7 @@ class Memory {
   }
 
   get operandA() {
-    return this.length > 1 ? `${totalizator.compute(_memory)}` : _zero_;
+    return this.length > 1 ? `${totalizator.compute(this.memory)}` : _zero_;
   }
 
   get operandB() {
@@ -36,7 +28,7 @@ class Memory {
   }
 
   set operandB(operandB) {
-    this.set(1, { operandB: Memory.toString(operandB) });
+    this.set(1, { operandB });
   }
 
   get operator() {
@@ -62,18 +54,17 @@ class Memory {
   }
 
   store(chunks = [_nullMemoryChunk_]) {
-    chunks = chunks.map((chunk) => [chunk[0], Memory.toString(chunk[1])]);
     this.memory = [...this.memory, ...chunks];
   }
 
   replace(chunks = [_nullMemoryChunk_]) {
     chunks.forEach((chunk, i) => {
-      const [operator, operandB] = chunks[i];
+      const [operandB, operator] = chunks[i];
 
       if (i < this.memory.length) {
         this.set(i + 1, { operator, operandB });
       } else {
-        this.store([[operator, operandB]]);
+        this.store([[operandB, operator]]);
       }
     });
 
@@ -82,23 +73,20 @@ class Memory {
 
   set(position, locals) {
     const positionValue = this.get(position);
-    let { operator, operandB } = { ...positionValue, ...locals };
-    operandB = Memory.toString(operandB);
+    const index = this.memory.length - position;
+    const { operator, operandB } = { ...positionValue, ...locals };
 
-    if (positionValue) {
-      const index = this.memory.length - position;
-      this.memory[index] = [operator, operandB];
-    } else {
-      this.store([operator, operandB]);
-    }
+    positionValue
+      ? (this.memory[index] = [operandB, operator])
+      : this.store([operandB, operator]);
 
     return { operator, operandB };
   }
 
   get(position) {
     const chunks = this.recall(position);
-    const operandA = Memory.compute(chunks);
-    const [operator, operandB] = chunks[0];
+    const operandA = Memory.compute(this.recall(position * -1));
+    const [operandB, operator] = chunks[0];
 
     return this.length >= position ? { operandA, operator, operandB } : {};
   }
@@ -121,6 +109,13 @@ class Memory {
 
   allClear() {
     this.clear();
+  }
+
+  stringifyChunks(chunks) {
+    return chunks.map(([operandA, operator]) => [
+      Memory.toString(operandA),
+      operator,
+    ]);
   }
 
   static toString(obj) {

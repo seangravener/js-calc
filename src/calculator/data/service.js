@@ -25,7 +25,7 @@ class DataService {
 
   get previous() {
     return memory.recall(-1).reduce((value, chunk) => {
-      const [operator, operandB] = chunk;
+      const [operandB, operator] = chunk;
       return operator ? (value = { operator, operandB }) : value;
     }, {});
   }
@@ -45,16 +45,15 @@ class DataService {
   }
 
   get(position = 1) {
-    const { operandA, operator, operandB } = memory.get(position);
-    return { operandA, operator, operandB };
+    return memory.get(position);
   }
 
   save(locals = {}) {
     const { current, previous } = this;
-    this.current = assign(previous, current, locals);
+    let saved = assign(previous, current, locals);
 
     memory.store();
-    this.current = { operandB: current.operandA };
+    this.current = { operator: "", operandB: current.operandA };
   }
 
   setPrevious() {
@@ -68,10 +67,9 @@ class DataService {
   }
 
   backspace(count = 1) {
-    let digits = this.operandB.split("");
-
+    let digits = this.current.operandB.split("");
     digits.splice(-count);
-    this.current = { operandB: digits.length ? digits : "0" };
+    this.current = { operandB: digits.length ? `${digits.join("")}` : "0" };
   }
 
   clear() {
