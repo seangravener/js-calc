@@ -4,14 +4,17 @@ class Totalizator {
   constructor() {}
 
   compute(memory) {
-    return memory.length
-      ? `${memory.reduce(this.memoryReducer)[0]}`
-      : "0";
+    return memory.length ? `${memory.reduce(this.memoryReducer)[0]}` : "0";
   }
 
-  memoryReducer(chunk, [operandB, nextOperator]) {
-    const [operandA, operator] = chunk;
-    return [arithmetic(operator)([operandA, operandB]), nextOperator];
+  memoryReducer(chunk, [operandB, nextOperator = ""]) {
+    let [operandA, operator] = [`${chunk[0]}`, chunk[1]];
+    operandA =
+      operandB && operator
+        ? arithmetic(operator)(operandA, operandB)
+        : operandA;
+
+    return [operandA, nextOperator];
   }
 }
 

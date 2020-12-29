@@ -53,8 +53,10 @@ class Memory {
     return { operator, ...operands };
   }
 
-  store(chunks = [_nullMemoryChunk_]) {
-    this.memory = [...this.memory, ...chunks];
+  store(chunk = []) {
+    this.memory = [...this.memory, chunk, _nullMemoryChunk_];
+
+    return this;
   }
 
   replace(chunks = [_nullMemoryChunk_]) {
@@ -123,7 +125,7 @@ class Memory {
   }
 
   static compute(memory) {
-    return `${totalizator.compute(memory)}`;
+    return totalizator.compute(memory);
   }
 
   // @todo tidy up instantiation defaults

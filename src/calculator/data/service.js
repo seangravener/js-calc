@@ -41,24 +41,38 @@ class DataService {
   }
 
   constructor() {
-    this.memory = memory;
+    this.memory = memory; // temp
   }
 
   get(position = 1) {
     return memory.get(position);
   }
 
-  save(locals = {}) {
-    const { current, previous } = this;
-    let saved = assign(previous, current, locals);
+  // saveAndRepeat // save().repeat()
+  // save(locals = {}) {
+  //   const { current, previous } = this;
+  //   // let save = assign(previous, current, locals);
+  //   let save = { ...previous, ...current, ...locals };
 
-    memory.store();
-    this.current = { operator: "", operandB: current.operandA };
+  //   if (!save.operator || !save.operandB) return;
+  //   console.log("save", save);
+  //   memory.store([save.operandB, save.operator]);
+
+  //   return this;
+  // }
+
+  save(locals = {}) {
+    const save = { ...current, ...locals };
+    memory.store().set(1, [save.operandB, save.operator]);
+
+    return this;
   }
 
   setPrevious() {
     const { operator, operandB } = this.previous;
     memory.set(1, { operator, operandB });
+
+    return this;
   }
 
   append(digit) {

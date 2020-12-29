@@ -29,9 +29,9 @@ class Display {
   get value() {
     const { msg, err } = _display;
     let { operandB, operandA, operator } = memory.asFloats();
-    operandB = operator ? `...` : operandB;
+    operandB = operator ? `${operandB}` : operandB;
 
-    return err || msg || operandB // || `${operandA}.`;
+    return err || msg || operandB || `${operandA}.`;
   }
 
   constructor(display = _blank_) {

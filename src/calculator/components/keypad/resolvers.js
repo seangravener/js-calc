@@ -6,9 +6,11 @@ const controls = ({ previousKey, currentKey, api }) => {
   }
 
   if (currentKey.symbol === "Enter" || currentKey.symbol === "=") {
-    if (previousKey.type === "numbers") {
-      console.log("save!", { op: current.operator, B: current.operandB });
-      api.save();
+    if (previousKey.type === "numbers" || previousKey.type === "operators") {
+      console.log("display answer!", { ...current });
+      // api.save();
+      // api.reps
+
     }
   }
 
@@ -16,10 +18,12 @@ const controls = ({ previousKey, currentKey, api }) => {
 };
 
 const numbers = ({ previousKey, currentKey, api }) => {
-  const { can, operandA } = api;
+  const { can, current } = api;
 
   if (previousKey.type === "operators") {
-    api.save({ operandB: currentKey.symbol });
+    console.log(api.current)
+    api.save({ operandB: currentKey.symbol, operator: '' });
+    api.current = { operator: "" }
   } else {
     api.append(currentKey.symbol);
   }
@@ -30,9 +34,8 @@ const numbers = ({ previousKey, currentKey, api }) => {
 const operators = (locals) => {
   let { currentKey, api } = locals;
 
-  console.log(currentKey.symbol, api.current.operator);
+  // @todo only allow to switch to new op
   if (api.current.operator !== currentKey.symbol) {
-    console.log("set up", currentKey.symbol);
     api.current = { operator: currentKey.symbol };
   } else {
     api.current = { operator: "" };
