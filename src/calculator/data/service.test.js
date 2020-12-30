@@ -1,10 +1,11 @@
 import { DataService } from './service.js';
 
 const api = DataService.load();
+const _nullMemoryChunk_ = ['0', null];
 
 describe('DataService', () => {
   beforeEach(() => {
-    api.current = { operandA: '0', operator: '', operandB: '' };
+    api.memory.clear();
   });
 
   test('api should be an instance', () => {
@@ -48,11 +49,23 @@ describe('DataService', () => {
   });
 
   test('#store() should store data and insert null row', () => {
-    const newRows = [
+    const expected = {};
+    const state = [
       ['1', '+'],
       ['2', '+'],
       ['3', '*']
     ];
+
+    api.store(state);
+    expect(api.memory.recall().length).toBe(4);
+    expect(api.memory.recall()).toMatchObject([
+      ...state,
+      _nullMemoryChunk_
+    ]);
+    expect(api.current).toMatchObject({
+      operator: null,
+      operandB: '0'
+    });
   });
 
   test("#get(n) should return n's values", () => {});

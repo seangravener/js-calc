@@ -55,7 +55,7 @@ class Memory {
   }
 
   store(chunks = []) {
-    const [first, ...rest] = chunks
+    const [first = [], ...rest] = chunks
     const [startChunk] = this.recall()
     const store = !Array.isArray(first) ? [[first, ...rest]] : chunks
 

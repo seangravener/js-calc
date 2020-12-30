@@ -76,6 +76,25 @@ describe('Memory Module', () => {
     expect(memory.recall().length).toBe(3);
   });
 
+  test('#store() should append a null chunk', () => {
+    const startWith = [['1', '+']];
+    let expected = [...startWith, _nullMemoryChunk_];
+    memory.memory = startWith;
+
+    memory.store();
+    expect(memory.length).toBe(2);
+    expect(memory.recall()).toMatchObject(expected);
+
+    memory.set(1, { operator: '+', operandB: '2' });
+    memory.store();
+    expect(memory.length).toBe(3);
+    expect(memory.recall()).toMatchObject([
+      ...startWith,
+      ['2', '+'],
+      _nullMemoryChunk_
+    ]);
+  });
+
   test('#store(chunk) should accept and store a single chunk', () => {
     const expected = [['2', '+'], _nullMemoryChunk_];
     memory.store(['2', '+']);
@@ -84,7 +103,7 @@ describe('Memory Module', () => {
     expect(memory.recall()).toMatchObject(expected);
   });
 
-  test('#store([chunks]) should accept and store multiple chunks', () => {
+  test('#store(chunks) should accept and store multiple chunks', () => {
     const inputs = [
       ['1', '+'],
       ['2', '-']

@@ -51,18 +51,21 @@ class DataService {
   set(position, locals = {}) {
     memory.set(1, { ...this.current, ...locals })
     this.publish('next')
-  }
-
-  save(locals = {}) {
-    const save = { ...current, ...locals }
-    memory.store().set(1, [save.operandB, save.operator])
 
     return this
   }
 
-  store(locals = {}) {
-    const save = { ...current, ...locals }
-    memory.store()
+  save(locals = {}) {
+    const saved = { ...this.current, ...locals }
+    console.log(saved)
+    this.store() //.set(1, [saved.operandB, saved.operator])
+
+    return this
+  }
+
+  store(chunks = []) {
+    memory.store(chunks)
+    return this
   }
 
   append(digit) {
