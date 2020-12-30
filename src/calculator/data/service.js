@@ -68,6 +68,7 @@ class DataService {
     return this;
   }
 
+  // useprevious?
   setPrevious() {
     const { operator, operandB } = this.previous;
     memory.set(1, { operator, operandB });
