@@ -1,31 +1,31 @@
-import { newEl, noop } from "../../lib/functions.js";
+import { newEl, noop } from '../../lib/functions.js'
 
 class Component extends HTMLElement {
-  locals = {};
-  styles = "";
-  templateFn = noop;
+  locals = {}
+  styles = ''
+  templateFn = noop
 
   get el() {
-    return this.shadowRoot;
+    return this.shadowRoot
   }
 
   get styleEl() {
-    return newEl("style", this.styles);
+    return newEl('style', this.styles)
   }
 
   get markup() {
-    return this.templateFn(this.locals);
+    return this.templateFn(this.locals)
   }
 
   constructor() {
-    super();
-    this.attachShadow({ mode: "open" });
+    super()
+    this.attachShadow({ mode: 'open' })
   }
 
   render() {
-    this.shadowRoot.innerHTML = this.markup;
-    this.shadowRoot.prepend(this.styleEl);
+    this.shadowRoot.innerHTML = this.markup
+    this.shadowRoot.prepend(this.styleEl)
   }
 }
 
-export { Component };
+export { Component }

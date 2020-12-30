@@ -1,4 +1,4 @@
-import { useBorderBox } from "../../lib/styles.js";
+import { useBorderBox } from '../../lib/styles.js'
 
 let styles = `
 .calc-button-row {
@@ -39,7 +39,7 @@ let styles = `
 .button.l:hover {
   background: var(--highlight);
   color: var(--text--hover);
-}`;
+}`
 
-styles = useBorderBox(styles);
-export { styles };
+styles = useBorderBox(styles)
+export { styles }

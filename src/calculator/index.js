@@ -1,4 +1,4 @@
-import { CalculatorComponent } from "./components/index.js";
+import { CalculatorComponent } from './components/index.js'
 
-export { CalculatorComponent };
-export default new CalculatorComponent();
+export { CalculatorComponent }
+export default new CalculatorComponent()

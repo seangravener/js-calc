@@ -1,28 +1,28 @@
 const historyDisplay = ({ history }) => `
   <div class="calc-operation">
     ${exists(history)}
-  </div>`;
+  </div>`
 
 const mainDisplay = ({ operator, display }) => `
   <div class="calc-typed" id="mainDisplay">
     <span class="operator">${exists(operator)}</span>
     ${display.value}
-  </div>`;
+  </div>`
 
-const exists = (value, placeholder = "") => (value ? `${value}` : placeholder);
+const exists = (value, placeholder = '') => (value ? `${value}` : placeholder)
 
 const compose = (...parts) =>
   parts.reduce((whole, part) => {
-    return `${whole}${part}`;
-  }, "");
+    return `${whole}${part}`
+  }, '')
 
 const templateFn = ({ display, ...state }) => {
-  const { history } = display;
+  const { history } = display
 
   return compose(
     historyDisplay({ history }),
     mainDisplay({ display, ...state })
-  );
-};
+  )
+}
 
-export { templateFn };
+export { templateFn }

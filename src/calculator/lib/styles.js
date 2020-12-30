@@ -2,6 +2,6 @@ const useBorderBox = (css) => `* {
     box-sizing: border-box;
 }
 
-${css}`;
+${css}`
 
-export { useBorderBox };
+export { useBorderBox }

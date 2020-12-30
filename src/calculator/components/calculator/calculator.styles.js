@@ -20,6 +20,6 @@ const styles = `
     border: solid 1px #3A4655;
     box-shadow: 0 8px 50px -7px black;
   }
-`;
+`
 
-export { styles };
+export { styles }

@@ -1,4 +1,4 @@
-import { useBorderBox } from "../../lib/styles.js";
+import { useBorderBox } from '../../lib/styles.js'
 
 let styles = `
   :host {
@@ -23,7 +23,7 @@ let styles = `
     text-align: right;
     color: var(--text-color);
   }
-`;
+`
 
 styles = useBorderBox(styles)
 export { styles }
