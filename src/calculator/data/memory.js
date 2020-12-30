@@ -1,4 +1,5 @@
 import totalizator from "../lib/totalizator.js";
+import { arraysMatch } from "../lib/functions.js"
 
 let _instance = undefined;
 
@@ -12,7 +13,7 @@ class Memory {
   }
 
   set memory(chunks) {
-    _memory = this.stringifyChunks(chunks);
+    _memory = this.stringifyChunks(chunks); // not working in all cases?
   }
 
   get length() {
@@ -53,8 +54,15 @@ class Memory {
     return { operator, ...operands };
   }
 
-  store(chunk = []) {
-    this.memory = [...this.memory, chunk, _nullMemoryChunk_];
+  store(chunks = []) {
+    const [first, ...rest] = chunks;
+    const [startChunk] = this.recall();
+    const store = !Array.isArray(first) ? [[first, ...rest]] : chunks;
+
+    if (arraysMatch(startChunk, _nullMemoryChunk_)) {
+      this.memory.shift();
+    }
+    this.memory = [...this.memory, ...store, _nullMemoryChunk_];
 
     return this;
   }
@@ -93,10 +101,6 @@ class Memory {
     return this.length >= position ? { operandA, operator, operandB } : {};
   }
 
-  // recall() --> [1, 2, 3] (all memory)
-  // recall(1) --> [3] (last position)
-  // recall(2) --> [2, 3] (last 2 positions)
-  // recall(-1) --> [1, 2] (exclude last n positions)
   recall(count) {
     if (count < 0) {
       return this.memory.slice(0, count);

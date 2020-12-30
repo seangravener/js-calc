@@ -29,4 +29,7 @@ const assign = (target, ...sources) => {
   return Object.assign(target, ...filtered);
 };
 
-export { newEl, operators, arithmetic, assign, noop };
+const arraysMatch = (a, b) =>
+  a.length === b.length && a.every((v, i) => v === b[i]);
+
+export { newEl, operators, arraysMatch, arithmetic, assign, noop };

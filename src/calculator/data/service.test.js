@@ -3,7 +3,9 @@ import { DataService } from "./service.js";
 const api = DataService.load();
 
 describe("DataService", () => {
-  beforeEach(() => {});
+  beforeEach(() => {
+    api.current = { operandA: "0", operator: "", operandB: "" };
+  });
 
   test("api should be an instance", () => {
     expect(api).toBeInstanceOf(DataService);
@@ -13,7 +15,7 @@ describe("DataService", () => {
     const state = { operator: "+", operandB: "1" };
     api.current = state;
 
-    expect(api.current).toMatchObject({ ...state, operandA: "0" });
+    expect(api.current).toMatchObject(state);
   });
 
   test("should append digits '23' to current operandB", () => {
@@ -22,11 +24,7 @@ describe("DataService", () => {
     api.append("2");
     api.append("3");
 
-    expect(api.current).toMatchObject({
-      ...state,
-      operandB: "123",
-      operandA: "0",
-    });
+    expect(api.current).toMatchObject({ operandB: "123" });
   });
 
   test("should backspace N digits from current operandB", () => {
@@ -49,5 +47,10 @@ describe("DataService", () => {
     expect(api.current.operandB).toEqual("0");
   });
 
-  test("#get(n) should return position n's values", () => {});
+  test("#store() should store data and insert null row", () => {
+    const newRows = [["1", "+"], ["2", "+"], ["3", "*"]];
+
+  });
+
+  test("#get(n) should return n's values", () => {});
 });

@@ -48,18 +48,10 @@ class DataService {
     return memory.get(position);
   }
 
-  // saveAndRepeat // save().repeat()
-  // save(locals = {}) {
-  //   const { current, previous } = this;
-  //   // let save = assign(previous, current, locals);
-  //   let save = { ...previous, ...current, ...locals };
-
-  //   if (!save.operator || !save.operandB) return;
-  //   console.log("save", save);
-  //   memory.store([save.operandB, save.operator]);
-
-  //   return this;
-  // }
+  set(position, locals = {}) {
+    memory.set(1, { ...this.current, ...locals });
+    this.publish("next");
+  }
 
   save(locals = {}) {
     const save = { ...current, ...locals };
@@ -68,12 +60,9 @@ class DataService {
     return this;
   }
 
-  // useprevious?
-  setPrevious() {
-    const { operator, operandB } = this.previous;
-    memory.set(1, { operator, operandB });
-
-    return this;
+  store(locals = {}) {
+    const save = { ...current, ...locals }
+    memory.store()
   }
 
   append(digit) {
