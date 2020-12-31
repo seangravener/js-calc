@@ -55,16 +55,29 @@ class Memory {
   }
 
   store(chunks = []) {
-    const [first = [], ...rest] = chunks
-    const [startChunk] = this.recall()
-    const store = !Array.isArray(first) ? [[first, ...rest]] : chunks
+    const { memory, normalizeChunks } = this;
+    let forStore = [...memory, ...normalizeChunks(chunks)]
 
+    // When operator is given, append empty row as a courteous
+    if (!!forStore[forStore.length - 1][1]) {
+      forStore = [...forStore, _nullMemoryChunk_]
+    }
+
+    this.memory = forStore
+    this.validateStartChunk()
+    return this
+  }
+
+  validateStartChunk() {
+    const [startChunk, ...rest] = this.recall()
     if (arraysMatch(startChunk, _nullMemoryChunk_)) {
       this.memory.shift()
     }
-    this.memory = [...this.memory, ...store, _nullMemoryChunk_]
+  }
 
-    return this
+  normalizeChunks(chunks) {
+    const [first = [], ...rest] = chunks
+    return !Array.isArray(first) ? [[first, ...rest]] : chunks
   }
 
   replace(chunks = [_nullMemoryChunk_]) {

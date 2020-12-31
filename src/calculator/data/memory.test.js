@@ -114,4 +114,16 @@ describe('Memory Module', () => {
     expect(memory.length).toBe(3);
     expect(memory.recall()).toMatchObject(expected);
   });
+
+  test('#store(chunks) w/out operator should omit appending null chunk', () => {
+    const expected = [
+      ['1', '+'],
+      ['2', '']
+    ];
+
+    memory.store(expected);
+    expect(memory.length).toBe(2);
+    expect(memory.recall(1)[0][1]).toBe('');
+    expect(memory.recall()).toMatchObject(expected);
+  });
 });
