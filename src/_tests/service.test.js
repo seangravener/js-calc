@@ -48,7 +48,7 @@ describe('DataService', () => {
     expect(api.current.operandB).toEqual('0');
   });
 
-  test('#store() should store data and insert null row', () => {
+  test('#storeChunks() should store data and insert null row', () => {
     const expected = {};
     const state = [
       ['1', '+'],
@@ -56,12 +56,9 @@ describe('DataService', () => {
       ['3', '*']
     ];
 
-    api.store(state);
+    api.storeChunks(state);
     expect(api.memory.recall().length).toBe(4);
-    expect(api.memory.recall()).toMatchObject([
-      ...state,
-      _nullMemoryChunk_
-    ]);
+    expect(api.memory.recall()).toMatchObject([...state, _nullMemoryChunk_]);
     expect(api.current).toMatchObject({
       operator: null,
       operandB: '0'

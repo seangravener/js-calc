@@ -54,7 +54,7 @@ class Memory {
     return { operator, ...operands }
   }
 
-  store(chunks = []) {
+  storeChunks(chunks = []) {
     const { memory, normalizeChunks } = this
     let forStore = [...memory, ...normalizeChunks(chunks)]
 
@@ -80,14 +80,14 @@ class Memory {
     return !Array.isArray(first) ? [[first, ...rest]] : chunks
   }
 
-  replace(chunks = [_nullMemoryChunk_]) {
+  setChunks(chunks = [_nullMemoryChunk_]) {
     chunks.forEach((chunk, i) => {
       const [operandB, operator] = chunks[i]
 
       if (i < this.memory.length) {
         this.set(i + 1, { operator, operandB })
       } else {
-        this.store([[operandB, operator]])
+        this.storeChunks([operandB, operator])
       }
     })
 
@@ -101,7 +101,7 @@ class Memory {
 
     positionValue
       ? (this.memory[index] = [operandB, operator])
-      : this.store([operandB, operator])
+      : this.storeChunks([operandB, operator])
 
     return { operator, operandB }
   }

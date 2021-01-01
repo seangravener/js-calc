@@ -7,7 +7,7 @@ describe('Calculator component', () => {
 
   describe('should successively calculate total', () => {
     test('1+1 = 2', () => {
-      com.api.store([
+      com.api.storeChunks([
         ['1', '+'],
         ['1', '']
       ]);
@@ -16,13 +16,13 @@ describe('Calculator component', () => {
 
     test('2*2 = 4', () => {
       com.api.current = { operator: '*' };
-      com.api.store(['2', '']);
+      com.api.storeChunks(['2', '']);
       expect(com.api.current).toMatchObject({ operandA: '4' });
     });
 
     test('4+1+2+3 = 10', () => {
       com.api.current = { operator: '+' };
-      com.api.store([
+      com.api.storeChunks([
         ['1', '+'],
         ['2', '+'],
         ['3', '']
@@ -36,7 +36,7 @@ describe('Calculator component', () => {
     });
 
     test('10-10 = 0', () => {
-      com.api.store([['10', '+']]);
+      com.api.storeChunks([['10', '+']]);
       expect(com.api.current).toMatchObject({ operandA: '0' });
     });
 

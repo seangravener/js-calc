@@ -17,7 +17,7 @@ describe('Memory module', () => {
     const [one, two, three] = expected;
 
     beforeEach(() => {
-      memory.store(expected);
+      memory.storeChunks(expected);
     });
 
     test('#recall() should return all memory', () => {
@@ -68,7 +68,7 @@ describe('Memory module', () => {
     ];
     let expected = [['1', '+'], ['3', '+'], _nullMemoryChunk_];
 
-    memory.store(startWith);
+    memory.storeChunks(startWith);
     expect(memory.recall().length).toBe(3);
 
     memory.set(2, { operandB: '3' });
@@ -76,17 +76,17 @@ describe('Memory module', () => {
     expect(memory.recall().length).toBe(3);
   });
 
-  test('#store() should append a null chunk', () => {
+  test('#storeChunks() should append a null chunk', () => {
     let startWith = [['1', '+']];
     let expected = [...startWith, _nullMemoryChunk_];
     memory.memory = startWith;
 
-    memory.store();
+    memory.storeChunks();
     expect(memory.length).toBe(2);
     expect(memory.recall()).toMatchObject(expected);
 
     memory.set(1, { operator: '+', operandB: '2' });
-    memory.store();
+    memory.storeChunks();
     expect(memory.length).toBe(3);
     expect(memory.recall()).toMatchObject([
       ...startWith,
@@ -100,39 +100,39 @@ describe('Memory module', () => {
       ['2', '']
     ];
 
-    memory.store(startWith);
+    memory.storeChunks(startWith);
     expect(memory.length).toBe(2);
     expect(memory.recall(1)[0][1]).toBe('');
     expect(memory.recall()).toMatchObject(startWith);
   });
 
-  test('#store(chunk) should accept and store a single chunk', () => {
+  test('#storeChunks() should accept and store a single chunk', () => {
     const expected = [['2', '+'], _nullMemoryChunk_];
-    memory.store(['2', '+']);
+    memory.storeChunks(['2', '+']);
 
     expect(memory.length).toBe(2);
     expect(memory.recall()).toMatchObject(expected);
   });
 
-  test('#store(chunks) should accept and store multiple chunks', () => {
+  test('#storeChunks() should accept and store multiple chunks', () => {
     const inputs = [
       ['1', '+'],
       ['2', '-']
     ];
     const expected = [...inputs, _nullMemoryChunk_];
 
-    memory.store(inputs);
+    memory.storeChunks(inputs);
     expect(memory.length).toBe(3);
     expect(memory.recall()).toMatchObject(expected);
   });
 
-  test('#store(chunks) w/out operator should omit appending null chunk', () => {
+  test('#storeChunks() w/out operator should omit appending null chunk', () => {
     const expected = [
       ['1', '+'],
       ['2', '']
     ];
 
-    memory.store(expected);
+    memory.storeChunks(expected);
     expect(memory.length).toBe(2);
     expect(memory.recall(1)[0][1]).toBe('');
     expect(memory.recall()).toMatchObject(expected);

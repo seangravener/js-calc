@@ -58,7 +58,7 @@ class DataService {
   save(locals = {}) {
     const saved = { ...this.current, ...locals }
     console.log(saved)
-    this.store() //.set(1, [saved.operandB, saved.operator])
+    this.storeChunks() //.set(1, [saved.operandB, saved.operator])
 
     return this
   }
