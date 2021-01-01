@@ -1,6 +1,5 @@
 import { arithmetic, arraysMatch } from './functions.js'
-
-const _nullMemoryChunk_ = ['0', null]
+import { _nullMemoryChunk_ } from '../data/memory.js';
 
 class Totalizator {
   constructor() {}

@@ -1,6 +1,5 @@
-import { Memory } from '../calculator/data/memory.js';
+import { Memory, _nullMemoryChunk_ } from '../calculator/data/memory.js';
 
-const _nullMemoryChunk_ = ['0', null];
 let memory = Memory.load();
 
 describe('Memory module', () => {

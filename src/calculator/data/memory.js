@@ -55,7 +55,7 @@ class Memory {
   }
 
   store(chunks = []) {
-    const { memory, normalizeChunks } = this;
+    const { memory, normalizeChunks } = this
     let forStore = [...memory, ...normalizeChunks(chunks)]
 
     // When operator is given, append empty row
@@ -151,5 +151,5 @@ class Memory {
   }
 }
 
-export { Memory }
+export { Memory, _zero_, _nullMemoryChunk_ }
 export default Memory.load()

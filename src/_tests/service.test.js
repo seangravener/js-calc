@@ -1,7 +1,7 @@
 import { DataService } from '../calculator/data/service.js';
+import { _nullMemoryChunk_ } from '../calculator/data/memory.js';
 
 const api = DataService.load();
-const _nullMemoryChunk_ = ['0', null];
 
 describe('DataService', () => {
   beforeEach(() => {
