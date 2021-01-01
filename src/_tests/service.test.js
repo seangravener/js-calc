@@ -1,4 +1,4 @@
-import { DataService } from './service.js';
+import { DataService } from '../calculator/data/service.js';
 
 const api = DataService.load();
 const _nullMemoryChunk_ = ['0', null];

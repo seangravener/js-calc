@@ -1,4 +1,4 @@
-import { CalculatorComponent } from './calculator.js';
+import { CalculatorComponent } from '../calculator/components/calculator/calculator.js';
 
 describe('Calculator component', () => {
   const com = new CalculatorComponent();

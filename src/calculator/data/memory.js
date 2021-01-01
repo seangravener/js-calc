@@ -13,7 +13,7 @@ class Memory {
   }
 
   set memory(chunks) {
-    _memory = this.stringifyChunks(chunks) // working in all cases?
+    _memory = this.stringifyChunks(chunks) // working in all cases? this is crap. use mthd()
   }
 
   get length() {
@@ -108,7 +108,7 @@ class Memory {
 
   get(position) {
     const chunks = this.recall(position)
-    const operandA = Memory.compute(this.recall())
+    const operandA = Memory.compute(this.recall()) // not position aware?
     const [operandB, operator] = chunks[0]
 
     return this.length >= position ? { operandA, operator, operandB } : {}
