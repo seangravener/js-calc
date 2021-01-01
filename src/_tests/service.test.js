@@ -8,7 +8,7 @@ describe('DataService', () => {
     api.memory.clear();
   });
 
-  test('api should be an instance', () => {
+  test('should be created', () => {
     expect(api).toBeInstanceOf(DataService);
   });
 
