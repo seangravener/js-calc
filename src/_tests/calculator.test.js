@@ -15,13 +15,13 @@ describe('Calculator component', () => {
     });
 
     test('2*2 = 4', () => {
-      com.api.current = { operator: '*' };
+      com.api.setCurrent({ operator: '*' });
       com.api.storeChunks(['2', '']);
       expect(com.api.current).toMatchObject({ operandA: '4' });
     });
 
     test('4+1+2+3 = 10', () => {
-      com.api.current = { operator: '+' };
+      com.api.setCurrent({ operator: '+' });
       com.api.storeChunks([
         ['1', '+'],
         ['2', '+'],
@@ -31,7 +31,7 @@ describe('Calculator component', () => {
     });
 
     test('set operator to "-"', () => {
-      com.api.current = { operator: '-' }; // set current?
+      com.api.setCurrent({ operator: '-' }); // set current?
       expect(com.api.current).toMatchObject({ operandA: '10', operator: '-' });
     });
 
@@ -41,7 +41,7 @@ describe('Calculator component', () => {
     });
 
     test('set operandB to "10"', () => {
-      com.api.current = { operandB: 10 };
+      com.api.setCurrent({ operandB: 10 });
       expect(com.api.current).toMatchObject({ operandA: '10' });
     });
   });

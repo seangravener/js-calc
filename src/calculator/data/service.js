@@ -63,20 +63,27 @@ class DataService {
     return this
   }
 
-  store(chunks = []) {
-    memory.store(chunks)
+  setCurrent(locals = {}) {
+    memory.set(1, { ...this.current, ...locals })
+    this.publish('next')
+
+    return this
+  }
+
+  storeChunks(chunks = []) {
+    memory.storeChunks(chunks)
     return this
   }
 
   append(digit) {
     const { operandB } = memory.asFloats()
-    this.current = { operandB: `${operandB || ''}${digit}` }
+    this.setCurrent({ operandB: `${operandB || ''}${digit}` })
   }
 
   backspace(count = 1) {
     let digits = this.current.operandB.split('')
     digits.splice(-count)
-    this.current = { operandB: digits.length ? `${digits.join('')}` : '0' }
+    this.setCurrent({ operandB: digits.length ? `${digits.join('')}` : '0' })
   }
 
   clear() {

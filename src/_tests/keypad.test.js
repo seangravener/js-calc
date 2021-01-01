@@ -23,12 +23,12 @@ describe('Keypad module', () => {
 
     event = newKeyboardEvent('Enter');
     com.handleKeyPress(event);
-    expect(!!events['Enter']).toBe(true)
+    expect(!!events['Enter']).toBe(true);
     expect(com.currentKey.symbol).toBe('Enter');
 
     event = newKeyboardEvent('1');
     com.handleKeyPress(event);
-    expect(!!events['1']).toBe(true)
+    expect(!!events['1']).toBe(true);
     expect(com.previousKey.symbol).toBe('Enter');
     expect(com.currentKey.symbol).toBe('1');
   });

@@ -14,14 +14,14 @@ describe('DataService', () => {
 
   test('should set current chunk to [1, +]', () => {
     const state = { operator: '+', operandB: '1' };
-    api.current = state;
+    api.setCurrent(state);
 
     expect(api.current).toMatchObject(state);
   });
 
   test("should append digits '23' to current operandB", () => {
     const state = { operator: '', operandB: '1' };
-    api.current = state;
+    api.setCurrent(state);
     api.append('2');
     api.append('3');
 
@@ -32,7 +32,7 @@ describe('DataService', () => {
     const state = { operandB: '123' };
     const expected = { operandB: '1' };
 
-    api.current = state;
+    api.setCurrent(state);
     api.backspace();
     api.backspace();
     expect(api.current).toMatchObject(expected);

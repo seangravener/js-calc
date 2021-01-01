@@ -22,7 +22,7 @@ const numbers = ({ previousKey, currentKey, api }) => {
   if (previousKey.type === 'operators') {
     console.log(api.current)
     api.save({ operandB: currentKey.symbol, operator: '' })
-    api.current = { operator: '' }
+    api.setCurrent({ operator: '' })
   } else {
     api.append(currentKey.symbol)
   }
@@ -35,9 +35,9 @@ const operators = (locals) => {
 
   // @todo only allow to switch to new op
   if (api.current.operator !== currentKey.symbol) {
-    api.current = { operator: currentKey.symbol }
+    api.setCurrent({ operator: currentKey.symbol })
   } else {
-    api.current = { operator: '' }
+    api.setCurrent({ operator: '' })
   }
 
   return (res, rej) => res(locals)
