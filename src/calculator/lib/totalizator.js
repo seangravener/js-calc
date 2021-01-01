@@ -1,5 +1,5 @@
 import { arithmetic, arraysMatch } from './functions.js'
-import { _nullMemoryChunk_ } from '../data/memory.js';
+import { _nullMemoryChunk_ } from '../data/memory.js'
 
 class Totalizator {
   constructor() {}
@@ -14,12 +14,13 @@ class Totalizator {
   }
 
   memoryReducer(chunk, [operandB, nextOperator = '']) {
-    let [operandA, operator] = chunk
+    const [operandA, operator] = chunk
+    const nextOperandA =
+      operator && `${operandB}`
+        ? arithmetic(operator)(operandA, operandB)
+        : operandA
 
-    operandA =
-      operator && `${operandB}` ? arithmetic(operator)(operandA, operandB) : operandA
-
-    return [operandA, nextOperator]
+    return [nextOperandA, nextOperator]
   }
 }
 
