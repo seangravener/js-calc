@@ -49,7 +49,7 @@ class DataService {
   }
 
   set(position, locals = {}) {
-    memory.set(1, { ...this.current, ...locals })
+    memory.set(position, { ...this.current, ...locals })
     this.publish('next')
 
     return this

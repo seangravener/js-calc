@@ -5,10 +5,17 @@ module.exports = {
   singleQuote: true,
   overrides: [
     {
-      files: '*.test.js',
+      files: ['*.test.js', 'test/*.js'],
       options: {
-        semi: true
-      }
-    }
-  ]
-}
+        semi: true,
+      },
+    },
+    {
+      files: '*.config.js',
+      options: {
+        semi: true,
+        trailingComma: 'all',
+      },
+    },
+  ],
+};

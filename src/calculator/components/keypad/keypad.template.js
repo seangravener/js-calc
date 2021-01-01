@@ -15,7 +15,7 @@ const keypadLayout = [
     { symbol: 'C', classes: ['button', 'c'] },
     { symbol: '≠', classes: ['button', 'l'] },
     { symbol: '%', classes: ['button', 'l'] },
-    { symbol: '/', classes: ['button', 'l'] }
+    { symbol: '÷', classes: ['button', 'l'] }
   ],
   [
     { symbol: '7', classes: ['button'] },

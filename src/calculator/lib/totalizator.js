@@ -1,16 +1,24 @@
-import { arithmetic } from './functions.js'
+import { arithmetic, arraysMatch } from './functions.js'
+
+const _nullMemoryChunk_ = ['0', null]
 
 class Totalizator {
   constructor() {}
 
   compute(memory) {
-    return memory.length ? `${memory.reduce(this.memoryReducer)[0]}` : '0'
+    const last = memory.slice(-1)[0] || []
+    const snapshot = arraysMatch(last, _nullMemoryChunk_)
+      ? memory
+      : [...memory, _nullMemoryChunk_]
+
+    return snapshot.length ? `${snapshot.reduce(this.memoryReducer)[0]}` : '0'
   }
 
   memoryReducer(chunk, [operandB, nextOperator = '']) {
-    let [operandA, operator] = [`${chunk[0]}`, chunk[1]]
+    let [operandA, operator] = chunk
+
     operandA =
-      operandB && operator ? arithmetic(operator)(operandA, operandB) : operandA
+      operator && `${operandB}` ? arithmetic(operator)(operandA, operandB) : operandA
 
     return [operandA, nextOperator]
   }

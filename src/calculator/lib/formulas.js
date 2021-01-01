@@ -6,7 +6,7 @@ const controlOperations = {
 const mathOperations = {
   '*': (a, b) => a * b,
   '-': (a, b) => a - b,
-  '/': (a, b) => a / b,
+  '÷': (a, b) => a / b,
   '+': (a, b) => a + b
 }
 

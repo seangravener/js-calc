@@ -13,7 +13,7 @@ class Memory {
   }
 
   set memory(chunks) {
-    _memory = this.stringifyChunks(chunks) // not working in all cases?
+    _memory = this.stringifyChunks(chunks) // working in all cases?
   }
 
   get length() {
@@ -58,7 +58,7 @@ class Memory {
     const { memory, normalizeChunks } = this;
     let forStore = [...memory, ...normalizeChunks(chunks)]
 
-    // When operator is given, append empty row as a courteous
+    // When operator is given, append empty row
     if (!!forStore[forStore.length - 1][1]) {
       forStore = [...forStore, _nullMemoryChunk_]
     }
@@ -108,7 +108,7 @@ class Memory {
 
   get(position) {
     const chunks = this.recall(position)
-    const operandA = Memory.compute(this.recall(position * -1))
+    const operandA = Memory.compute(this.recall())
     const [operandB, operator] = chunks[0]
 
     return this.length >= position ? { operandA, operator, operandB } : {}

@@ -3,17 +3,19 @@ import { Memory } from './memory.js';
 const _nullMemoryChunk_ = ['0', null];
 let memory = Memory.load();
 
-describe('Memory Module', () => {
+describe('Memory module', () => {
   beforeEach(() => {
     memory.clear();
   });
 
   describe('#recall()', () => {
+    let data = [];
     const expected = [
       ['1', '+'],
       ['2', '+'],
       ['3', '+']
     ];
+    const [one, two, three] = expected;
 
     beforeEach(() => {
       memory.store(expected);
@@ -26,26 +28,25 @@ describe('Memory Module', () => {
       expect(data).toMatchObject([...expected, _nullMemoryChunk_]);
     });
 
-    test('#recall(N) should return N positions', () => {
-      const [one, two, three] = expected;
-      let data = [];
-
-      // recall(1) (get last position)
+    test('#recall(1) should return last position', () => {
       data = memory.recall(1);
       expect(data.length).toBe(1);
       expect(data).toMatchObject([_nullMemoryChunk_]);
+    });
 
-      // recall(2) (get last 2 positions)
+    test('#recall(2) should return last 2 positions', () => {
       data = memory.recall(2);
       expect(data.length).toBe(2);
       expect(data).toMatchObject([three, _nullMemoryChunk_]);
+    });
 
-      // recall(-1) (exclude last N position)
+    test('#recall(-1) should exclude last position', () => {
       data = memory.recall(-1);
       expect(data.length).toBe(3);
       expect(data).toMatchObject([one, two, three]);
+    });
 
-      // recall(-2) (exclude last N position)
+    test('#recall(-2) should exclude last 2 positions', () => {
       data = memory.recall(-2);
       expect(data.length).toBe(2);
       expect(data).toMatchObject([one, two]);
@@ -61,7 +62,7 @@ describe('Memory Module', () => {
     expect(memory.recall().length).toBe(1);
   });
 
-  test('#set() should set multiple props with fallthrough to previous', () => {
+  test('#set() should set multiple props', () => {
     const startWith = [
       ['1', '+'],
       ['1', '+']
@@ -77,7 +78,7 @@ describe('Memory Module', () => {
   });
 
   test('#store() should append a null chunk', () => {
-    const startWith = [['1', '+']];
+    let startWith = [['1', '+']];
     let expected = [...startWith, _nullMemoryChunk_];
     memory.memory = startWith;
 
@@ -93,6 +94,17 @@ describe('Memory Module', () => {
       ['2', '+'],
       _nullMemoryChunk_
     ]);
+
+    memory.clear();
+    startWith = [
+      ['1', '+'],
+      ['2', '']
+    ];
+
+    memory.store(startWith);
+    expect(memory.length).toBe(2);
+    expect(memory.recall(1)[0][1]).toBe('');
+    expect(memory.recall()).toMatchObject(startWith);
   });
 
   test('#store(chunk) should accept and store a single chunk', () => {
