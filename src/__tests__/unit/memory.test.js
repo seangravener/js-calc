@@ -1,13 +1,15 @@
-import { Memory, _nullMemoryChunk_ } from '../calculator/data/memory.js';
+import { Memory, _nullMemoryChunk_ } from '../../calculator/data/memory.js';
 
 let memory = Memory.load();
 
-describe('Memory module', () => {
+describe('Given the Memory module', () => {
   beforeEach(() => {
     memory.clear();
   });
 
-  describe('#recall()', () => {
+  it('is created', () => expect(memory).toBeInstanceOf(Memory));
+
+  describe('and is loaded with expected results, then', () => {
     let data = [];
     const expected = [
       ['1', '+'],
@@ -21,8 +23,7 @@ describe('Memory module', () => {
     });
 
     test('#recall() should return all memory', () => {
-      const data = memory.recall();
-
+      data = memory.recall();
       expect(data.length).toBe(4);
       expect(data).toMatchObject([...expected, _nullMemoryChunk_]);
     });
@@ -51,17 +52,23 @@ describe('Memory module', () => {
       expect(data).toMatchObject([one, two]);
     });
   });
+});
 
-  test('#set() should set a single chunk by position id', () => {
+describe('Memory module', () => {
+  beforeEach(() => {
+    memory.clear();
+  });
+
+  test('#setPosition(1, locals) should set a single chunk by position id', () => {
     const expected = [['1', '+']];
     expect(memory.recall().length).toBe(1);
 
-    memory.set(1, { operandB: '1', operator: '+' });
+    memory.setPosition(1, { operandB: '1', operator: '+' });
     expect(memory.recall()).toMatchObject(expected);
     expect(memory.recall().length).toBe(1);
   });
 
-  test('#set() should set multiple props', () => {
+  test('#setPosition(2, locals) should update chunk by position id', () => {
     const startWith = [
       ['1', '+'],
       ['1', '+']
@@ -71,7 +78,7 @@ describe('Memory module', () => {
     memory.storeChunks(startWith);
     expect(memory.recall().length).toBe(3);
 
-    memory.set(2, { operandB: '3' });
+    memory.setPosition(2, { operandB: '3' });
     expect(memory.recall()).toMatchObject(expected);
     expect(memory.recall().length).toBe(3);
   });
@@ -85,7 +92,7 @@ describe('Memory module', () => {
     expect(memory.length).toBe(2);
     expect(memory.recall()).toMatchObject(expected);
 
-    memory.set(1, { operator: '+', operandB: '2' });
+    memory.setPosition(1, { operator: '+', operandB: '2' });
     memory.storeChunks();
     expect(memory.length).toBe(3);
     expect(memory.recall()).toMatchObject([

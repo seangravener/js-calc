@@ -13,7 +13,8 @@ class Memory {
   }
 
   set memory(chunks) {
-    _memory = this.stringifyChunks(chunks) // working in all cases? this is crap. use mthd()
+    const toStr = (value) => Memory.toString(value)
+    _memory = chunks.map(([operandA, operator]) => [toStr(operandA), operator])
   }
 
   get length() {
@@ -29,7 +30,7 @@ class Memory {
   }
 
   set operandB(operandB) {
-    this.set(1, { operandB })
+    this.setPosition(1, { operandB })
   }
 
   get operator() {
@@ -37,7 +38,7 @@ class Memory {
   }
 
   set operator(operator) {
-    this.set(1, { operator })
+    this.setPosition(1, { operator })
   }
 
   constructor(memory = _memory) {
@@ -54,6 +55,18 @@ class Memory {
     return { operator, ...operands }
   }
 
+  validateStartChunk() {
+    const [startChunk, ...rest] = this.recall()
+    if (arraysMatch(startChunk, _nullMemoryChunk_)) {
+      this.memory.shift()
+    }
+  }
+
+  normalizeChunks(chunks) {
+    const [first = [], ...rest] = chunks
+    return !Array.isArray(first) ? [[first, ...rest]] : chunks
+  }
+
   storeChunks(chunks = []) {
     const { memory, normalizeChunks } = this
     let forStore = [...memory, ...normalizeChunks(chunks)]
@@ -68,33 +81,21 @@ class Memory {
     return this
   }
 
-  validateStartChunk() {
-    const [startChunk, ...rest] = this.recall()
-    if (arraysMatch(startChunk, _nullMemoryChunk_)) {
-      this.memory.shift()
-    }
-  }
+  // setChunks(chunks = [_nullMemoryChunk_]) {
+  //   chunks.forEach((chunk, i) => {
+  //     const [operandB, operator] = chunks[i]
 
-  normalizeChunks(chunks) {
-    const [first = [], ...rest] = chunks
-    return !Array.isArray(first) ? [[first, ...rest]] : chunks
-  }
+  //     if (i < this.memory.length) {
+  //       this.setPosition(i + 1, { operator, operandB })
+  //     } else {
+  //       this.storeChunks([operandB, operator])
+  //     }
+  //   })
 
-  setChunks(chunks = [_nullMemoryChunk_]) {
-    chunks.forEach((chunk, i) => {
-      const [operandB, operator] = chunks[i]
+  //   return this.memory
+  // }
 
-      if (i < this.memory.length) {
-        this.set(i + 1, { operator, operandB })
-      } else {
-        this.storeChunks([operandB, operator])
-      }
-    })
-
-    return this.memory
-  }
-
-  set(position, locals) {
+  setPosition(position, locals) {
     const positionValue = this.get(position)
     const index = this.memory.length - position
     const { operator, operandB } = { ...positionValue, ...locals }
@@ -128,13 +129,6 @@ class Memory {
 
   allClear() {
     this.clear()
-  }
-
-  stringifyChunks(chunks) {
-    return chunks.map(([operandA, operator]) => [
-      Memory.toString(operandA),
-      operator
-    ])
   }
 
   static toString(obj) {

@@ -1,4 +1,4 @@
-import { CalculatorComponent } from '../calculator/components/calculator/calculator.js';
+import { CalculatorComponent } from '../../../calculator/components/calculator/calculator.js';
 
 describe('Calculator component', () => {
   const com = new CalculatorComponent();
@@ -36,13 +36,13 @@ describe('Calculator component', () => {
     });
 
     test('10-10 = 0', () => {
-      com.api.storeChunks([['10', '+']]);
+      com.api.storeChunks(['10', '+']);
       expect(com.api.current).toMatchObject({ operandA: '0' });
     });
 
-    test('set operandB to "10"', () => {
-      com.api.setCurrent({ operandB: 10 });
-      expect(com.api.current).toMatchObject({ operandA: '10' });
+    test('set operandB to "11"', () => {
+      com.api.setCurrent({ operandB: 11 });
+      expect(com.api.current).toMatchObject({ operandA: '11', operator: null });
     });
   });
 });

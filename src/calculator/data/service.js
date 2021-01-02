@@ -19,7 +19,7 @@ class DataService {
   }
 
   set current(locals = {}) {
-    memory.set(1, { ...this.current, ...locals })
+    memory.setPosition(1, { ...this.current, ...locals })
     this.publish('next')
   }
 
@@ -48,8 +48,8 @@ class DataService {
     return memory.get(position)
   }
 
-  set(position, locals = {}) {
-    memory.set(position, { ...this.current, ...locals })
+  setPosition(position, locals = {}) {
+    memory.setPosition(position, { ...this.current, ...locals })
     this.publish('next')
 
     return this
@@ -58,13 +58,13 @@ class DataService {
   save(locals = {}) {
     const saved = { ...this.current, ...locals }
     console.log(saved)
-    this.storeChunks() //.set(1, [saved.operandB, saved.operator])
+    this.storeChunks() //.setPosition(1, [saved.operandB, saved.operator])
 
     return this
   }
 
   setCurrent(locals = {}) {
-    memory.set(1, { ...this.current, ...locals })
+    memory.setPosition(1, { ...this.current, ...locals })
     this.publish('next')
 
     return this

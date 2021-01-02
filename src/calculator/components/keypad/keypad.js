@@ -36,7 +36,6 @@ class KeypadComponent extends Component {
     let key = new Key(event)
 
     if (key.isDefined) {
-      _keyCache.push(key)
       this.press(key).then((locals) => {
         events.publish(`input:next`, locals)
       })
@@ -44,6 +43,7 @@ class KeypadComponent extends Component {
   }
 
   press(key) {
+    _keyCache.push(key)
     const { previousKey, currentKey } = this
     const locals = { previousKey, currentKey, api }
 

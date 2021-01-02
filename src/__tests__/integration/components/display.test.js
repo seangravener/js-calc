@@ -1,14 +1,15 @@
-import { DisplayComponent } from '../calculator/components/display/display.js';
+import { DisplayComponent } from '../../../calculator/components/display/display.js';
 
 describe('Display component', () => {
   const display = new DisplayComponent();
 
-  beforeEach(() => {});
+  beforeEach(() => {
+  });
 
   test('should be created', () =>
     expect(display).toBeInstanceOf(DisplayComponent));
 
-  test('should render correct operands after input', () => {
+  test('should reflect correct operands after keyboard input', () => {
     // test display.locals
   });
 });
