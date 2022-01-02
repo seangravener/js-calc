@@ -1,4 +1,4 @@
-import { DisplayComponent } from '../../../calculator/components/display/display.js';
+import { DisplayComponent } from './display.js';
 
 describe('Display component', () => {
   const display = new DisplayComponent();

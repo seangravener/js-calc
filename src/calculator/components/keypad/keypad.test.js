@@ -1,5 +1,5 @@
-import { KeypadComponent } from '../../../calculator/components/keypad/keypad.js';
-import { Key } from '../../../calculator/components/base/Key.js';
+import { KeypadComponent } from './keypad.js';
+import { Key } from '../base/Key.js';
 
 describe('Given the <calc-keypad> module', () => {
   const keypad = new KeypadComponent();

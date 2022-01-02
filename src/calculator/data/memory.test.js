@@ -1,4 +1,4 @@
-import { Memory, _nullMemoryChunk_ } from '../../calculator/data/memory.js';
+import { Memory, _nullMemoryChunk_ } from './memory.js';
 
 let memory = Memory.load();
 

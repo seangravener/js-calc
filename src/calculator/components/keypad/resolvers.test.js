@@ -1,6 +1,6 @@
-import { DataService } from '../../calculator/data/service.js';
-import { keypadResolvers } from '../../calculator/components/keypad/resolvers.js';
-import { Key } from '../../calculator/components/base/Key.js';
+import { DataService } from '../../data/service.js';
+import { keypadResolvers } from './resolvers.js';
+import { Key } from '../base/Key.js';
 
 const api = DataService.load();
 const resolvers = keypadResolvers;
