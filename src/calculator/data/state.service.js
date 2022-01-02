@@ -1,13 +1,28 @@
-import { createMachine } from '@xstate/fsm'
+import { calcMachineDefinition } from './state.config'
+import { createMachine } from './state.machine.js'
 
-const calcStateMachine = createMachine({
-  id: 'toggle',
-  initial: 'inactive',
-  states: {
-    inactive: { on: { TOGGLE: 'active' } },
-    active: { on: { TOGGLE: 'inactive' } }
+let _instance = undefined
+
+class StateService {
+  machine = undefined
+
+  constructor(localDefinition = {}) {
+    this.set(localDefinition)
   }
-})
 
-// export default calcStateMachine
-export default calcStateMachine
+  set(localDefinition) {
+    this.definition = { ...calcMachineDefinition, ...localDefinition }
+    this.machine = createMachine(this.definition)
+  }
+
+  reset() {
+    this.machine = this.set()
+  }
+
+  static load() {
+    return _instance || (_instance = new StateService())
+  }
+}
+
+export { StateService }
+export default StateService.load()

@@ -37,7 +37,7 @@ describe('Given the <calc-keypad> module', () => {
         expect(currentKey.symbol).toBe('1');
         expect(previousKey.symbol).toBe(undefined);
 
-        console.log(api.current);
+        // console.log(api.current);
         expect(api.current).toMatchObject({
           operandA: '1',
           operator: null,
@@ -47,17 +47,17 @@ describe('Given the <calc-keypad> module', () => {
     });
 
     // return a promise of promises?
-    it('should do pattern', () => {
-      return new Promise(() => {
+    // it('should do pattern', () => {
+    //   return new Promise(() => {
 
-        return (res, rej) => res()
-      }).then((locals) => {
-        console.log(locals)
-      })
-      keys.forEach((key) => {
-        keys.press(key).then(() => {})
-      })
-    });
+    //     return (res, rej) => res()
+    //   }).then((locals) => {
+    //     console.log(locals)
+    //   })
+    //   keys.forEach((key) => {
+    //     keys.press(key).then(() => {})
+    //   })
+    // });
 
     // keys.forEach((key) => {
     //   it('presses a key', () => {
