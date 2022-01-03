@@ -16,7 +16,7 @@ function isStateDefined(fromStateId, stateDefinitions) {
   return !!stateDefinitions[fromStateId]
 }
 
-export function createMachine(stateDefinition = {}) {
+export default function createMachine(stateDefinition = {}) {
   const machine = {
     value: stateDefinition.initialState,
     transition(fromStateId, transitionId) {

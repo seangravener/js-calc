@@ -1,5 +1,5 @@
 import { calcMachineDefinition } from './state.config'
-import { createMachine } from './state.machine.js'
+import createMachine from './state.machine.js'
 
 let _instance = undefined
 
