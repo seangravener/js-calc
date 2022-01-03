@@ -18,7 +18,7 @@ function isStateDefined(fromStateId, stateDefinitions) {
 
 export default function createMachine(stateDefinition = {}) {
   const machine = {
-    value: stateDefinition.initialState,
+    value: stateDefinition.value || stateDefinition.initialState,
     transition(fromStateId, transitionId) {
       let fromState, withTransition, toState
 

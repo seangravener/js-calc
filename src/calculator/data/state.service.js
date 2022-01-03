@@ -10,13 +10,14 @@ class StateService {
     this.set(localDefinition)
   }
 
+  // needs testing
   set(localDefinition) {
     this.definition = { ...calcMachineDefinition, ...localDefinition }
     this.machine = createMachine(this.definition)
   }
 
   reset() {
-    this.machine = this.set()
+    this.set({})
   }
 
   static load() {
