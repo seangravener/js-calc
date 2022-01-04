@@ -6,7 +6,7 @@ describe('Given the StateService API', () => {
   beforeEach(() => {});
 
   it('is created', () => expect(service).toBeInstanceOf(StateService));
-  it("and a machine is init'd", () =>
+  it("and the initial state is START", () =>
     expect(service.machine.value).toBe('START'));
 
   describe('#transition() should transition the machine state: ', () => {
@@ -37,7 +37,6 @@ describe('Given the StateService API', () => {
     });
 
     it('#transition("FIRST_ARG", "opKey"), the machine should transition', () => {
-      // machine.value = 'FIRST_ARG'
       service.set({ value: 'FIRST_ARG' });
       expect(service.machine.value).toBe('FIRST_ARG');
       service.machine.transition(service.machine.value, 'opKey');

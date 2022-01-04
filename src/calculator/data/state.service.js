@@ -1,5 +1,5 @@
-import { calcMachineDefinition } from './state.config'
-import createMachine from './state.machine.js'
+import createMachine from './state-machine/fsmachine.js'
+import { calcMachineDefinition } from './state.config.js'
 
 let _instance = undefined
 
@@ -10,7 +10,6 @@ class StateService {
     this.set(localDefinition)
   }
 
-  // needs testing
   set(localDefinition) {
     this.definition = { ...calcMachineDefinition, ...localDefinition }
     this.machine = createMachine(this.definition)
