@@ -25,6 +25,20 @@ export default function createMachine(stateDefinition = {}) {
   return machine
 }
 
+export class FSMachine {
+  definition = { initialState: '' }
+  machine = { machineId: '', value: '', transition() {} }
+
+  constructor(definition = {}) {
+    this.definition = { ...this.definition, ...definition }
+    this.machine = createMachine(this.definition)
+  }
+
+  createMachine(definition = this.definition) {
+    this.machine = createMachine(definition)
+  }
+}
+
 /**
  * Specs:
  * [x] Each state can define actions that occur when a machine enters or exits that state. Actions will typically have side effects.

@@ -1,6 +1,8 @@
+// import actions and events
+
 export const testMachineDefinition = {
+  machineId: 'testMachine',
   initialState: 'OFF',
-  value: '',
 
   OFF: {
     actions: {

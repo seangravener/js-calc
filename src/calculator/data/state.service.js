@@ -1,18 +1,18 @@
-import createMachine from './state-machine/fsmachine.js'
+import createMachine, { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 
 let _instance = undefined
 
 class StateService {
-  machine = undefined
+  fsmachine = undefined
 
-  constructor(localDefinition = {}) {
-    this.set(localDefinition)
+  constructor(definition) {
+    this.set(definition)
   }
 
-  set(localDefinition) {
-    this.definition = { ...calcMachineDefinition, ...localDefinition }
-    this.machine = createMachine(this.definition)
+  set(definition = {}) {
+    this.definition = { ...calcMachineDefinition, ...definition }
+    this.fsmachine = createMachine(this.definition)
   }
 
   reset() {

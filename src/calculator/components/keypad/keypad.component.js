@@ -4,6 +4,7 @@ import { Component } from '../base/Component.js'
 import { Key } from '../base/Key.js'
 import { templateFn, keypadLayout } from './keypad.template.js'
 import { styles } from './keypad.styles.js'
+import { StateService } from '../../data/state.service.js'
 
 let _keyCache = []
 class KeypadComponent extends Component {
@@ -25,6 +26,7 @@ class KeypadComponent extends Component {
   init() {
     this.styles = styles
     this.templateFn = templateFn
+    this.stateService = StateService.load()
     this.locals = { layout: keypadLayout }
 
     this.el.addEventListener('click', this.handleKeyPress.bind(this))
@@ -45,9 +47,12 @@ class KeypadComponent extends Component {
   press(key) {
     _keyCache.push(key)
     const { previousKey, currentKey } = this
+    const fsmachine = this.stateService.fsmachine
     const locals = { previousKey, currentKey, api }
 
-    return new Promise(key.resolver(locals))
+    console.log('!! state, key.type -->>', fsmachine.value, key.type)
+    fsmachine.transition(fsmachine.value, key.type)
+    // return new Promise(key.resolver(locals))
   }
 
   clear() {

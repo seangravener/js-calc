@@ -1,4 +1,4 @@
-import createMachine from './fsmachine.js';
+import createMachine, { FSMachine } from './fsmachine.js';
 import { testMachineDefinition } from './test.config';
 
 describe('Given the Finite State Machine', () => {
@@ -37,6 +37,31 @@ describe('Given the Finite State Machine', () => {
 
       machine.transition(machine.value, 'toggle');
       expect(machine.value).toBe('OFF');
+    });
+  });
+
+  describe('FSMachine', () => {
+    let fsmachine;
+
+    beforeEach(() => {
+      fsmachine = new FSMachine(testMachineDefinition);
+    });
+
+    it('is created', () => {
+      expect(fsmachine).toBeInstanceOf(FSMachine);
+    });
+
+    it('is defined', () => {
+      expect(fsmachine.definition).to
+    });
+
+    it('and can be toggled', () => {
+      const fsmachine = new FSMachine(testMachineDefinition);
+      const machine = fsmachine.machine;
+      expect(machine.value).toBe('OFF');
+
+      machine.transition(machine.value, 'toggle');
+      expect(machine.value).toBe('ON');
     });
   });
 });
