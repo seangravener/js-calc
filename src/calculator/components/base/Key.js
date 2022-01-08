@@ -1,5 +1,4 @@
 import { noop } from '../../lib/functions.js'
-import { keypadResolvers } from '../keypad/resolvers.js'
 import { keypadBindings } from '../keypad/bindings.js'
 
 class Key {
@@ -26,9 +25,13 @@ class Key {
     return this.source.target
   }
 
-  get resolver() {
-    return Key.getKeyTypeResolver(this.type) || noop
-  }
+  // get resolver() {
+  //   return Key.getKeyTypeResolver(this.type) || noop
+  // }
+
+  // get bindings() {
+  //   return keypadBindings[this.type]
+  // }
 
   constructor(event) {
     this.source = event
@@ -42,9 +45,9 @@ class Key {
     return Object.keys(keypadBindings)
   }
 
-  static getKeyTypeResolver(keyType) {
-    return keypadResolvers[keyType]
-  }
+  // static getKeyTypeResolver(keyType) {
+  //   return keypadResolvers[keyType]
+  // }
 
   debug() {
     console.log(this)

@@ -50,9 +50,13 @@ class KeypadComponent extends Component {
     const fsmachine = this.stateService.fsmachine
     const locals = { previousKey, currentKey, api }
 
-    console.log('!! state, key.type -->>', fsmachine.value, key.type)
-    fsmachine.transition(fsmachine.value, key.type)
-    // return new Promise(key.resolver(locals))
+    // return Promise instead
+    const value = fsmachine.transition(fsmachine.value, key.type, locals)
+    const { onEnter, onExit, numKey, opKey } = value
+
+    onEnter(locals)
+
+    //return new Promise((resolve, reject) => resolve({ value, ...locals }))
   }
 
   clear() {

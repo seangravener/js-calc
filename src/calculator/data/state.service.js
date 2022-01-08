@@ -16,7 +16,7 @@ class StateService {
   }
 
   reset() {
-    this.set({})
+    this.set()
   }
 
   static load() {

@@ -1,25 +1,33 @@
 export const START = {
   actions: {
-    onEnter() {
-      // console.log('START action: onEnter');
+    onEnter(locals) {
+      console.log('START action (onEnter)', locals)
       // eventbus -> 'this.id'
       // events.publish(this.machineId, this)
     },
-    onExit() {
-      // console.log('START action: onExit');
+    onExit(locals) {
+      console.log('START action (onExit)', locals)
     }
   },
 
   transitions: {
     numKey: {
       toStateId: 'FIRST_ARG',
-      action() {
-        // display = num
+      action(locals) {
+        const { currentKey, api } = locals
+        console.log('FIRST_ARG (transition action)', currentKey, api)
+
+        if (api) {
+          console.log('api!', api)
+          api.display.set(currentKey || '0')
+        }
+        // display = num || 0
       }
     },
     dotKey: {
       toStateId: 'FIRST_ARG_FLOAT',
-      action() {
+      action({ api }) {
+        // api.display.value = '0.';
         // display = '0.'
       }
     }

@@ -1,9 +1,9 @@
 import events from './events.js'
 import memory from './memory.js'
 
+const _BLANK_ = { msg: '', err: '' }
 let _instance = undefined
-const _blank_ = { msg: '', err: '' }
-let _display = _blank_
+let _displayCache = _BLANK_
 
 class Display {
   get length() {
@@ -11,11 +11,11 @@ class Display {
   }
 
   get msg() {
-    return _display.msg
+    return _displayCache.msg
   }
 
   get err() {
-    return _display.err
+    return _displayCache.err
   }
 
   get history() {
@@ -27,21 +27,25 @@ class Display {
   }
 
   get value() {
-    const { msg, err } = _display
+    const { msg, err } = _displayCache
     let { operandB, operandA, operator } = memory.asFloats()
     operandB = operator ? `${operandB}` : operandB
 
     return err || msg || operandB || `${operandA}.`
   }
 
-  constructor(display = _blank_) {
-    _display = { ..._display, ...display }
+  set value(value) {
+
+  }
+
+  constructor(display = _BLANK_) {
+    _displayCache = { ..._displayCache, ...display }
     events.listenTo('input:next', () => this.clear())
     events.listenTo('output:save', () => this.set({ msg: 'Saved!' }))
   }
 
   set(locals) {
-    _display = { ..._display, ...locals }
+    _displayCache = { ..._displayCache, ...locals }
   }
 
   show(msg, duration = 0) {
@@ -50,15 +54,15 @@ class Display {
   }
 
   expire(type) {
-    const cache = _display[type]
+    const cache = _displayCache[type]
     return cache
   }
 
   clear() {
-    _display = _blank_
+    _displayCache = _BLANK_
   }
 
-  static load(display = _blank_) {
+  static load(display = _BLANK_) {
     return _instance || (_instance = new Display(display))
   }
 }

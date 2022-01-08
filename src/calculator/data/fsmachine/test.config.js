@@ -7,17 +7,17 @@ export const testMachineDefinition = {
   OFF: {
     actions: {
       onEnter() {
-        console.log('OFF action: onEnter');
+        // console.log('OFF action: onEnter');
       },
       onExit() {
-        console.log('OFF action: onExit');
+        // console.log('OFF action: onExit');
       },
     },
     transitions: {
       toggle: {
         toStateId: 'ON',
         action() {
-          console.log('This is a transition action for "toggle" OFF -> ON');
+          // console.log('This is a transition action for "toggle" OFF -> ON');
         },
       },
     },
@@ -26,17 +26,17 @@ export const testMachineDefinition = {
   ON: {
     actions: {
       onEnter() {
-        console.log('ON:onEnter');
+        // console.log('ON:onEnter');
       },
       onExit() {
-        console.log('ON:onEnter');
+        // console.log('ON:onEnter');
       },
     },
     transitions: {
       toggle: {
         toStateId: 'OFF',
         action() {
-          console.log('This is a transition action for "toggle" on->OFF');
+          // console.log('This is a transition action for "toggle" on->OFF');
         },
       },
     },

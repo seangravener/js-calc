@@ -33,18 +33,22 @@ describe('Given the <calc-keypad> module', () => {
     });
 
     it('should ', () => {
-      return keypad.press(keys[0]);
+      keypad.press(keys[0]); //.then(() => {})
 
-      // .then(({ previousKey, currentKey, api }) => {
-      //   expect(currentKey.symbol).toBe('1');
-      //   expect(previousKey.symbol).toBe(undefined);
+      // keys.forEach((key) => {
+      //   keypad
+      //     .press(key)
+      //     .then(({ previousKey, currentKey, api }) => {
+      //       // expect(currentKey.symbol).toBe('1');
+      //       // expect(previousKey.symbol).toBe(undefined);
 
-      //   // console.log(api.current);
-      //   expect(api.current).toMatchObject({
-      //     operandA: '1',
-      //     operator: null,
-      //     operandB: '1'
-      //   });
+      //       // // console.log(api.current);
+      //       // expect(api.current).toMatchObject({
+      //       //   operandA: '1',
+      //       //   operator: null,
+      //       //   operandB: '1'
+      //       // });
+      //     });
       // });
     });
 

@@ -5,7 +5,7 @@ function isStateDefined(fromStateId, stateDefinitions) {
 export default function createMachine(stateDefinition = {}) {
   const machine = {
     value: stateDefinition.value || stateDefinition.initialState,
-    transition(fromStateId, transitionId) {
+    transition(fromStateId, transitionId, locals = {}) {
       let fromState, withTransition, toState
 
       if (!isStateDefined(fromStateId, stateDefinition)) return
@@ -13,10 +13,18 @@ export default function createMachine(stateDefinition = {}) {
       withTransition = fromState.transitions[transitionId]
       toState = stateDefinition[withTransition.toStateId]
 
-      withTransition.action()
-      fromState.actions.onExit()
-      toState.actions.onEnter()
+      // wrap in Promise?
+      withTransition.action({ fromStateId, transitionId, ...locals })
+      fromState.actions.onExit({ toState, transitionId, ...locals })
+      toState.actions.onEnter({ fromStateId, transitionId, ...locals })
       machine.value = withTransition.toStateId
+
+      return { 
+        value: machine.value,
+        withTransitionAction: withTransition.action,
+        onExit: fromState.actions.onExit,
+        onEnter: fromState.actions.onEnter
+      }
 
       return machine.value
     }
