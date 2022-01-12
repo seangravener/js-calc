@@ -13,6 +13,38 @@ describe('Given the Finite State Machine', () => {
     expect(machine.value).toBe('OFF');
   });
 
+  describe('and uses Promises to transition ', () => {
+    it('from OFF -> ON', async () => {
+      machine = createMachine(testMachineDefinition);
+      expect(machine.value).toBe('OFF');
+
+      const { value } = await machine.transition$(machine.value, 'toggle');
+      expect(value).toBe('ON');
+      expect(machine.value).toBe('ON');
+    });
+
+    it('from OFF -> ON -> OFF -> ON -> OFF', async () => {
+      machine = createMachine(testMachineDefinition);
+      expect(machine.value).toBe('OFF');
+
+      let nextState = await machine.transition$(machine.value, 'toggle');
+      expect(nextState.value).toBe('ON');
+      expect(machine.value).toBe('ON');
+
+      nextState = await machine.transition$(machine.value, 'toggle');
+      expect(nextState.value).toBe('OFF');
+      expect(machine.value).toBe('OFF');
+
+      nextState = await machine.transition$(machine.value, 'toggle');
+      expect(nextState.value).toBe('ON');
+      expect(machine.value).toBe('ON');
+
+      nextState = await machine.transition$(machine.value, 'toggle');
+      expect(nextState.value).toBe('OFF');
+      expect(machine.value).toBe('OFF');
+    });
+  });
+
   describe('and transitions', () => {
     it('from OFF -> ON', () => {
       machine = createMachine(testMachineDefinition);
@@ -49,10 +81,6 @@ describe('Given the Finite State Machine', () => {
 
     it('is created', () => {
       expect(fsmachine).toBeInstanceOf(FSMachine);
-    });
-
-    it('is defined', () => {
-      expect(fsmachine.definition).to
     });
 
     it('and can be toggled', () => {

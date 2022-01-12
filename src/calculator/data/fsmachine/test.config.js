@@ -1,43 +1,47 @@
-// import actions and events
-
 export const testMachineDefinition = {
   machineId: 'testMachine',
   initialState: 'OFF',
 
   OFF: {
     actions: {
-      onEnter() {
-        // console.log('OFF action: onEnter');
+      onEnter$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
       },
-      onExit() {
-        // console.log('OFF action: onExit');
+      onExit$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
       },
+      onEnter() {},
+      onExit() {},
     },
     transitions: {
       toggle: {
         toStateId: 'ON',
-        action() {
-          // console.log('This is a transition action for "toggle" OFF -> ON');
+        action$(locals) {
+          return new Promise((resolve, reject) => resolve(locals));
         },
+        action() {},
       },
     },
   },
 
   ON: {
     actions: {
-      onEnter() {
-        // console.log('ON:onEnter');
+      onEnter$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
       },
-      onExit() {
-        // console.log('ON:onEnter');
+      onExit$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
       },
+      onEnter() {},
+      onExit() {},
     },
     transitions: {
       toggle: {
         toStateId: 'OFF',
-        action() {
-          // console.log('This is a transition action for "toggle" on->OFF');
+        action$(locals) {
+          return new Promise((resolve, reject) => resolve(locals));
         },
+        action() {},
       },
     },
   },

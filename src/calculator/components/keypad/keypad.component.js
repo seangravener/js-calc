@@ -38,25 +38,24 @@ class KeypadComponent extends Component {
     let key = new Key(event)
 
     if (key.isDefined) {
-      this.press(key).then((locals) => {
+      this.press$(key).then((locals) => {
         events.publish(`input:next`, locals)
       })
     }
   }
 
-  press(key) {
+  async press$(key) {
     _keyCache.push(key)
     const { previousKey, currentKey } = this
     const fsmachine = this.stateService.fsmachine
     const locals = { previousKey, currentKey, api }
+    const { value } = await fsmachine.transition$(
+      fsmachine.value,
+      key.type,
+      locals
+    )
 
-    // return Promise instead
-    const value = fsmachine.transition(fsmachine.value, key.type, locals)
-    const { onEnter, onExit, numKey, opKey } = value
-
-    onEnter(locals)
-
-    //return new Promise((resolve, reject) => resolve({ value, ...locals }))
+    return new Promise((resolve) => resolve({ value, ...locals }))
   }
 
   clear() {

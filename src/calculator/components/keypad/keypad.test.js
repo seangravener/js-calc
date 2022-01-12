@@ -1,9 +1,10 @@
 import { KeypadComponent } from './keypad.component.js';
 import { Key } from '../base/Key.js';
+import { calcMachineDefinition } from '../../data/state.config.js';
 
 describe('Given the <calc-keypad> module', () => {
   const keypad = new KeypadComponent();
-  const localKeyHandler = keypad.press.bind(keypad);
+  const localKeyHandler = keypad.press$.bind(keypad);
   const newKeyboardEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
   // @todo const newMouseEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
   let events = {};
@@ -16,9 +17,14 @@ describe('Given the <calc-keypad> module', () => {
     // keypad.press = mockKeyHandler.bind(keypad);
   };
 
+  const resetStateMachine = () => {
+    keypad.stateService.set(calcMachineDefinition);
+  };
+
   beforeEach(() => {
     events = {};
     setMockHandler();
+    resetStateMachine();
   });
 
   it('is created', () => expect(keypad).toBeInstanceOf(KeypadComponent));
@@ -32,61 +38,43 @@ describe('Given the <calc-keypad> module', () => {
       keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
     });
 
-    it('should ', () => {
-      keypad.press(keys[0]); //.then(() => {})
+    it('should transition as input is received', async () => {
+      expect(keypad.stateService.fsmachine.value).toBe('START');
 
-      // keys.forEach((key) => {
-      //   keypad
-      //     .press(key)
-      //     .then(({ previousKey, currentKey, api }) => {
-      //       // expect(currentKey.symbol).toBe('1');
-      //       // expect(previousKey.symbol).toBe(undefined);
-
-      //       // // console.log(api.current);
-      //       // expect(api.current).toMatchObject({
-      //       //   operandA: '1',
-      //       //   operator: null,
-      //       //   operandB: '1'
-      //       // });
-      //     });
-      // });
+      await keypad
+        .press$(keys[0])
+        .then(() => keypad.press$(keys[1]))
+        .then(() => keypad.press$(keys[2]))
+        .then((locals) => {
+          expect(locals.previousKey.symbol).toBe('+');
+          expect(locals.currentKey.symbol).toBe('1');
+          expect(locals.value).toBe('1');
+        })
+        .catch((err) => console.log(err));
     });
 
-    // return a promise of promises?
-    // it('should do pattern', () => {
-    //   return new Promise(() => {
+    it('should transition to known states as input is received', async () => {
+      expect(keypad.stateService.fsmachine.value).toBe('START');
 
-    //     return (res, rej) => res()
-    //   }).then((locals) => {
-    //     console.log(locals)
-    //   })
-    //   keys.forEach((key) => {
-    //     keys.press(key).then(() => {})
-    //   })
-    // });
+      await keypad
+        .press$(keys[0])
+        .then(({ currentKey, value }) => {
+          expect(currentKey.symbol).toBe('1');
+          expect(value).toBe('FIRST_ARG');
 
-    // keys.forEach((key) => {
-    //   it('presses a key', () => {
-    //     return keypad.press(key).then(({ currentKey, api }) => {
-    //       expect(currentKey.symbol).toBe('1')
-    //     })
-    //   })
-    // })
+          return keypad.press$(keys[1]);
+        })
+        .then(({ currentKey, value }) => {
+          expect(currentKey.symbol).toBe('+');
+          expect(value).toBe('OP');
 
-    // test('#press() should update currentKey and previousKey', () => {
-    //   jest.spyOn(keypad, 'press');
-    //   let event = {};
-
-    //   event = newKeyboardEvent('Enter');
-    //   keypad.press(event);
-    //   expect(!!events['Enter']).toBe(true);
-    //   expect(keypad.currentKey.symbol).toBe('Enter');
-
-    //   event = newKeyboardEvent('1');
-    //   keypad.press(event);
-    //   expect(!!events['1']).toBe(true);
-    //   expect(keypad.previousKey.symbol).toBe('Enter');
-    //   expect(keypad.currentKey.symbol).toBe('1');
-    // });
+          return keypad.press$(keys[2]);
+        })
+        .then(({ currentKey, value }) => {
+          expect(currentKey.symbol).toBe('1');
+          expect(value).toBe('OP');
+        })
+        .catch((err) => console.log(err));
+    });
   });
 });

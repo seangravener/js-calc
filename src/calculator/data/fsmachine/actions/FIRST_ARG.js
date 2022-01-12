@@ -1,11 +1,7 @@
 export const FIRST_ARG = {
   actions: {
-    onEnter() {
-      // console.log('FIRST_ARG action: onEnter');
-    },
-    onExit() {
-      // console.log('FIRST_ARG action: onExit');
-    }
+    onEnter() {},
+    onExit() {}
   },
   transitions: {
     numKey: {

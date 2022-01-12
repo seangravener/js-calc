@@ -5,6 +5,44 @@ function isStateDefined(fromStateId, stateDefinitions) {
 export default function createMachine(stateDefinition = {}) {
   const machine = {
     value: stateDefinition.value || stateDefinition.initialState,
+    transition$(fromStateId, transitionId, locals = {}) {
+      let fromState, withTransition, toState
+
+      if (!isStateDefined(fromStateId, stateDefinition)) return
+      fromState = stateDefinition[fromStateId]
+      withTransition = fromState.transitions[transitionId]
+
+      console.log('fromStateId', 'transitionId', 'withTransition')
+      console.log(fromStateId, transitionId, withTransition)
+      if (
+        !withTransition ||
+        !stateDefinition[fromState.transitions[transitionId].toStateId]
+      ) {
+        console.log('no withTransition', fromStateId, transitionId)
+        return new Promise((resolve, reject) => {
+          resolve({
+            value: machine.value,
+            ...locals
+          })
+        })
+      }
+      toState = stateDefinition[withTransition.toStateId]
+
+      console.log('**stateDefinition')
+      console.log(stateDefinition, '\n -->LOCALS', locals)
+
+      withTransition.action(locals)
+      fromState.actions.onExit(locals)
+      toState.actions.onEnter(locals)
+      machine.value = withTransition.toStateId
+
+      return new Promise((resolve, reject) => {
+        resolve({
+          value: machine.value,
+          ...locals
+        })
+      })
+    },
     transition(fromStateId, transitionId, locals = {}) {
       let fromState, withTransition, toState
 
@@ -19,7 +57,7 @@ export default function createMachine(stateDefinition = {}) {
       toState.actions.onEnter({ fromStateId, transitionId, ...locals })
       machine.value = withTransition.toStateId
 
-      return { 
+      return {
         value: machine.value,
         withTransitionAction: withTransition.action,
         onExit: fromState.actions.onExit,

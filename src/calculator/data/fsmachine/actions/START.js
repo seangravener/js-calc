@@ -1,12 +1,11 @@
 export const START = {
   actions: {
     onEnter(locals) {
-      console.log('START action (onEnter)', locals)
       // eventbus -> 'this.id'
       // events.publish(this.machineId, this)
     },
     onExit(locals) {
-      console.log('START action (onExit)', locals)
+      
     }
   },
 
@@ -15,10 +14,9 @@ export const START = {
       toStateId: 'FIRST_ARG',
       action(locals) {
         const { currentKey, api } = locals
-        console.log('FIRST_ARG (transition action)', currentKey, api)
+        
 
         if (api) {
-          console.log('api!', api)
           api.display.set(currentKey || '0')
         }
         // display = num || 0
