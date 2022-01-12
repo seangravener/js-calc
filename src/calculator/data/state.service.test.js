@@ -1,9 +1,7 @@
 import { StateService } from './state.service.js';
 
-const service = StateService.load();
-
 describe('Given the StateService API', () => {
-  beforeEach(() => {});
+  const service = StateService.load();
 
   it('is created', () => expect(service).toBeInstanceOf(StateService));
   it("and the initial value is 'START'", () =>
@@ -13,37 +11,39 @@ describe('Given the StateService API', () => {
     let machine = service.fsmachine;
 
     beforeEach(() => {
-      service.reset();
+      machine.reset();
     });
 
     it('#transition("START", "dotKey") -> FIRST_ARG_FLOAT', () => {
-      expect(service.fsmachine.value).toBe('START');
-      service.fsmachine.transition(service.fsmachine.value, 'dotKey');
-      expect(service.fsmachine.value).toBe('FIRST_ARG_FLOAT');
+      expect(machine.value).toBe('START');
+      machine
+        .transition$(machine.value, 'dotKey')
+        .then(({ value }) => expect(value).toBe('FIRST_ARG_FLOAT'));
     });
 
     it('#transition("START", "numKey") -> FIRST_ARG', () => {
-      expect(service.fsmachine.value).toBe('START');
-      service.fsmachine.transition(service.fsmachine.value, 'numKey');
-      expect(service.fsmachine.value).toBe('FIRST_ARG');
+      expect(machine.value).toBe('START');
+      machine
+        .transition$(machine.value, 'numKey')
+        .then(({ value }) => expect(value).toBe('FIRST_ARG'));
     });
 
     it('#transition("FIRST_ARG", "numKey") -> FIRST_ARG', () => {
       service.set({ value: 'FIRST_ARG' });
-      expect(service.fsmachine.value).toBe('FIRST_ARG');
+      expect(machine.value).toBe('FIRST_ARG');
 
-      service.fsmachine.transition(service.fsmachine.value, 'numKey');
-      expect(service.fsmachine.value).toBe('FIRST_ARG');
+      machine
+        .transition$(machine.value, 'numKey')
+        .then(({ value }) => expect(value).toBe('FIRST_ARG'));
     });
 
     it('#transition("FIRST_ARG", "opKey") -> OP', () => {
       service.set({ value: 'FIRST_ARG' });
-      expect(service.fsmachine.value).toBe('FIRST_ARG');
-      service.fsmachine.transition(service.fsmachine.value, 'opKey');
+      expect(machine.value).toBe('FIRST_ARG');
 
-      expect(service.fsmachine.value).toBe('OP');
+      machine
+        .transition$(machine.value, 'opKey')
+        .then(({ value }) => expect(value).toBe('OP'));
     });
   });
-
-  describe('state machine', () => {});
 });

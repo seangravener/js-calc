@@ -1,9 +1,9 @@
 import { KeypadComponent } from './keypad.component.js';
 import { Key } from '../base/Key.js';
-import { calcMachineDefinition } from '../../data/state.config.js';
 
 describe('Given the <calc-keypad> module', () => {
   const keypad = new KeypadComponent();
+  const machine = keypad.stateService.fsmachine;
   const localKeyHandler = keypad.press$.bind(keypad);
   const newKeyboardEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
   // @todo const newMouseEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
@@ -18,28 +18,26 @@ describe('Given the <calc-keypad> module', () => {
   };
 
   const resetStateMachine = () => {
-    keypad.stateService.set(calcMachineDefinition);
+    keypad.stateService.fsmachine.reset();
   };
 
   beforeEach(() => {
     events = {};
-    setMockHandler();
-    resetStateMachine();
   });
 
   it('is created', () => expect(keypad).toBeInstanceOf(KeypadComponent));
 
   describe('and receives a valid input pattern', () => {
-    let inputPattern = [];
-    let keys = [];
+    let inputPattern = ['1', '+', '1'];
+    let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
 
     beforeEach(() => {
-      inputPattern = ['1', '+', '1'];
-      keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
+      setMockHandler();
+      resetStateMachine();
     });
 
     it('should transition as input is received', async () => {
-      expect(keypad.stateService.fsmachine.value).toBe('START');
+      expect(machine.value).toBe('START');
 
       await keypad
         .press$(keys[0])
@@ -48,13 +46,13 @@ describe('Given the <calc-keypad> module', () => {
         .then((locals) => {
           expect(locals.previousKey.symbol).toBe('+');
           expect(locals.currentKey.symbol).toBe('1');
-          expect(locals.value).toBe('1');
+          expect(locals.value).toBe('OP');
         })
         .catch((err) => console.log(err));
     });
 
     it('should transition to known states as input is received', async () => {
-      expect(keypad.stateService.fsmachine.value).toBe('START');
+      expect(machine.value).toBe('START');
 
       await keypad
         .press$(keys[0])

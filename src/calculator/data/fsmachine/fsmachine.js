@@ -1,87 +1,68 @@
-function isStateDefined(fromStateId, stateDefinitions) {
-  return !!stateDefinitions[fromStateId]
-}
+let _value = ''
+let _definition = { initialState: '' }
 
-export default function createMachine(stateDefinition = {}) {
-  const machine = {
-    value: stateDefinition.value || stateDefinition.initialState,
-    transition$(fromStateId, transitionId, locals = {}) {
-      let fromState, withTransition, toState
+export class FSMachine {
+  machineId = ''
 
-      if (!isStateDefined(fromStateId, stateDefinition)) return
-      fromState = stateDefinition[fromStateId]
-      withTransition = fromState.transitions[transitionId]
+  get definition() {
+    return _definition
+  }
 
-      console.log('fromStateId', 'transitionId', 'withTransition')
-      console.log(fromStateId, transitionId, withTransition)
-      if (
-        !withTransition ||
-        !stateDefinition[fromState.transitions[transitionId].toStateId]
-      ) {
-        console.log('no withTransition', fromStateId, transitionId)
-        return new Promise((resolve, reject) => {
-          resolve({
-            value: machine.value,
-            ...locals
-          })
-        })
-      }
-      toState = stateDefinition[withTransition.toStateId]
+  set definition(definition) {
+    _definition = definition || _definition
+  }
 
-      console.log('**stateDefinition')
-      console.log(stateDefinition, '\n -->LOCALS', locals)
+  get value() {
+    return _value || this.definition.initialState
+  }
 
-      withTransition.action(locals)
-      fromState.actions.onExit(locals)
-      toState.actions.onEnter(locals)
-      machine.value = withTransition.toStateId
+  constructor(definition = {}) {
+    this.machineId = definition.machineId
+    this.definition = { ...this.definition, ...definition }
 
+    _value = definition.value || this.value
+  }
+
+  transition$(fromStateId, transitionId, locals = {}) {
+    const stateDefinition = this.definition
+    let fromState, withTransition, toState
+
+    if (!FSMachine.isStateDefined(fromStateId)) return
+    fromState = stateDefinition[fromStateId]
+    withTransition = fromState.transitions[transitionId]
+
+    if (
+      !withTransition ||
+      !stateDefinition[fromState.transitions[transitionId].toStateId]
+    ) {
       return new Promise((resolve, reject) => {
         resolve({
-          value: machine.value,
+          value: this.value,
           ...locals
         })
       })
-    },
-    transition(fromStateId, transitionId, locals = {}) {
-      let fromState, withTransition, toState
-
-      if (!isStateDefined(fromStateId, stateDefinition)) return
-      fromState = stateDefinition[fromStateId]
-      withTransition = fromState.transitions[transitionId]
-      toState = stateDefinition[withTransition.toStateId]
-
-      // wrap in Promise?
-      withTransition.action({ fromStateId, transitionId, ...locals })
-      fromState.actions.onExit({ toState, transitionId, ...locals })
-      toState.actions.onEnter({ fromStateId, transitionId, ...locals })
-      machine.value = withTransition.toStateId
-
-      return {
-        value: machine.value,
-        withTransitionAction: withTransition.action,
-        onExit: fromState.actions.onExit,
-        onEnter: fromState.actions.onEnter
-      }
-
-      return machine.value
     }
+    toState = stateDefinition[withTransition.toStateId]
+
+    withTransition.action(locals)
+    fromState.actions.onExit(locals)
+    toState.actions.onEnter(locals)
+    _value = withTransition.toStateId
+
+    return new Promise((resolve, reject) => {
+      resolve({
+        value: _value,
+        ...locals
+      })
+    })
   }
 
-  return machine
-}
-
-export class FSMachine {
-  definition = { initialState: '' }
-  machine = { machineId: '', value: '', transition() {} }
-
-  constructor(definition = {}) {
-    this.definition = { ...this.definition, ...definition }
-    this.machine = createMachine(this.definition)
+  reset() {
+    _value = ''
   }
 
-  createMachine(definition = this.definition) {
-    this.machine = createMachine(definition)
+  static isStateDefined(fromStateId) {
+    return !!_definition[fromStateId]
   }
 }
 

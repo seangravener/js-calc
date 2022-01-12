@@ -2,20 +2,18 @@ import createMachine, { FSMachine } from './fsmachine.js';
 import { testMachineDefinition } from './test.config';
 
 describe('Given the Finite State Machine', () => {
-  let machine = {};
-
-  beforeEach(() => {
-    machine = {};
-  });
+  let machine = new FSMachine(testMachineDefinition);
 
   it('is created with an initial value', () => {
-    machine = createMachine(testMachineDefinition);
     expect(machine.value).toBe('OFF');
   });
 
-  describe('and uses Promises to transition ', () => {
+  describe('should transition ', () => {
+    beforeEach(() => {
+      machine.reset();
+    });
+
     it('from OFF -> ON', async () => {
-      machine = createMachine(testMachineDefinition);
       expect(machine.value).toBe('OFF');
 
       const { value } = await machine.transition$(machine.value, 'toggle');
@@ -24,7 +22,6 @@ describe('Given the Finite State Machine', () => {
     });
 
     it('from OFF -> ON -> OFF -> ON -> OFF', async () => {
-      machine = createMachine(testMachineDefinition);
       expect(machine.value).toBe('OFF');
 
       let nextState = await machine.transition$(machine.value, 'toggle');
@@ -45,51 +42,31 @@ describe('Given the Finite State Machine', () => {
     });
   });
 
-  describe('and transitions', () => {
-    it('from OFF -> ON', () => {
-      machine = createMachine(testMachineDefinition);
-      expect(machine.value).toBe('OFF');
-
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('ON');
-    });
-
-    it('from OFF -> ON -> OFF -> ON -> OFF', () => {
-      machine = createMachine(testMachineDefinition);
-      expect(machine.value).toBe('OFF');
-
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('ON');
-
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('OFF');
-
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('ON');
-
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('OFF');
-    });
-  });
-
   describe('FSMachine', () => {
-    let fsmachine;
+    let machine = new FSMachine(testMachineDefinition);
 
     beforeEach(() => {
-      fsmachine = new FSMachine(testMachineDefinition);
+      machine.reset();
     });
 
     it('is created', () => {
-      expect(fsmachine).toBeInstanceOf(FSMachine);
+      expect(machine).toBeInstanceOf(FSMachine);
     });
 
-    it('and can be toggled', () => {
-      const fsmachine = new FSMachine(testMachineDefinition);
-      const machine = fsmachine.machine;
+    it('and can be toggled', async () => {
       expect(machine.value).toBe('OFF');
 
-      machine.transition(machine.value, 'toggle');
-      expect(machine.value).toBe('ON');
+      await machine
+        .transition$(machine.value, 'toggle')
+        .then(({ value }) => expect(value).toBe('ON'));
+    });
+
+    it('should have expected properties', async () => {
+      expect(machine.value).toBe('OFF');
+
+      machine
+        .transition$(machine.value, 'toggle')
+        .then(({ value }) => expect(value).toBe('ON'));
     });
   });
 });

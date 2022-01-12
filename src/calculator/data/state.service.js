@@ -12,7 +12,7 @@ class StateService {
 
   set(definition = {}) {
     this.definition = { ...calcMachineDefinition, ...definition }
-    this.fsmachine = createMachine(this.definition)
+    this.fsmachine = new FSMachine(this.definition)
   }
 
   reset() {
