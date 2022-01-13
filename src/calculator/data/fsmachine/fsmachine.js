@@ -1,5 +1,19 @@
 let _value = ''
 let _definition = { initialState: '' }
+let _cache = { fromStateId: '', withTransition: '', toStateId: '' }
+
+const isValidTransition = (stateId, transitionId, definition) => {
+  if (!FSMachine.isStateDefined(stateId)) {
+    return false
+  } else if (
+    !definition[stateId].transitions[transitionId] ||
+    !definition[definition[stateId].transitions[transitionId].toStateId]
+  ) {
+    return false
+  }
+
+  return true
+}
 
 export class FSMachine {
   machineId = ''
@@ -24,30 +38,24 @@ export class FSMachine {
   }
 
   transition$(fromStateId, transitionId, locals = {}) {
-    const stateDefinition = this.definition
     let fromState, withTransition, toState
 
-    if (!FSMachine.isStateDefined(fromStateId)) return
-    fromState = stateDefinition[fromStateId]
-    withTransition = fromState.transitions[transitionId]
+    if (isValidTransition(fromStateId, transitionId, this.definition)) {
+      fromState = this.definition[fromStateId]
+      withTransition = fromState.transitions[transitionId]
+      toState = this.definition[withTransition.toStateId]
 
-    if (
-      !withTransition ||
-      !stateDefinition[fromState.transitions[transitionId].toStateId]
-    ) {
-      return new Promise((resolve, reject) => {
-        resolve({
-          value: this.value,
-          ...locals
-        })
-      })
+      withTransition.action(locals)
+      fromState.actions.onExit(locals)
+      toState.actions.onEnter(locals)
+      
+      _value = withTransition.toStateId
+      _cache = {
+        fromStateId: _value,
+        transitionId,
+        toStateId: withTransition.toStateId
+      }
     }
-    toState = stateDefinition[withTransition.toStateId]
-
-    withTransition.action(locals)
-    fromState.actions.onExit(locals)
-    toState.actions.onEnter(locals)
-    _value = withTransition.toStateId
 
     return new Promise((resolve, reject) => {
       resolve({
@@ -59,6 +67,7 @@ export class FSMachine {
 
   reset() {
     _value = ''
+    _cache = { fromStateId: '', withTransition: '', toStateId: '' }
   }
 
   static isStateDefined(fromStateId) {

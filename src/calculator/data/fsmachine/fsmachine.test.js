@@ -15,7 +15,7 @@ describe('Given the Finite State Machine', () => {
 
     it('from OFF -> ON', async () => {
       expect(machine.value).toBe('OFF');
-
+ 
       const { value } = await machine.transition$(machine.value, 'toggle');
       expect(value).toBe('ON');
       expect(machine.value).toBe('ON');
