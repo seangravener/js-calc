@@ -1,6 +1,6 @@
 let _value = ''
 let _definition = { initialState: '' }
-let _cache = { fromStateId: '', withTransition: '', toStateId: '' }
+let _history = { fromStateId: '', withTransition: '', toStateId: '' }
 
 const isValidTransition = (stateId, transitionId, definition) => {
   if (!FSMachine.isStateDefined(stateId)) {
@@ -30,6 +30,10 @@ export class FSMachine {
     return _value || this.definition.initialState
   }
 
+  get history() {
+    return _history
+  }
+
   constructor(definition = {}) {
     this.machineId = definition.machineId
     this.definition = { ...this.definition, ...definition }
@@ -48,9 +52,9 @@ export class FSMachine {
       withTransition.action(locals)
       fromState.actions.onExit(locals)
       toState.actions.onEnter(locals)
-      
+
       _value = withTransition.toStateId
-      _cache = {
+      _history = {
         fromStateId: _value,
         transitionId,
         toStateId: withTransition.toStateId
@@ -67,7 +71,7 @@ export class FSMachine {
 
   reset() {
     _value = ''
-    _cache = { fromStateId: '', withTransition: '', toStateId: '' }
+    _history = { fromStateId: '', withTransition: '', toStateId: '' }
   }
 
   static isStateDefined(fromStateId) {

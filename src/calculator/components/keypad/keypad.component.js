@@ -46,16 +46,24 @@ class KeypadComponent extends Component {
 
   async press$(key) {
     _keyCache.push(key)
-    const { previousKey, currentKey } = this
     const fsmachine = this.stateService.fsmachine
-    const locals = { previousKey, currentKey, api }
+    const locals = {
+      api,
+      previousKey: this.previousKey,
+      currentKey: this.currentKey
+    }
     const { value } = await fsmachine.transition$(
       fsmachine.value,
       key.type,
       locals
     )
 
-    return new Promise((resolve) => resolve({ value, ...locals }))
+    return new Promise((resolve) =>
+      resolve({
+        value,
+        ...locals
+      })
+    )
   }
 
   clear() {

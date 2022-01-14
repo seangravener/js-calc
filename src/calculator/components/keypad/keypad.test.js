@@ -75,4 +75,28 @@ describe('Given the <calc-keypad> module', () => {
         .catch((err) => console.log(err));
     });
   });
+
+  describe('and can compute an input patter', () => {
+    let inputPattern = ['1', '+', '1'];
+    let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
+
+    beforeEach(() => {
+      setMockHandler();
+      resetStateMachine();
+    });
+
+    // it('should transition as input is received', async () => {
+    //   expect(machine.value).toBe('START');
+
+    //   await keypad
+    //     .press$(keys[0])
+    //     .then(() => keypad.press$(keys[2]))
+    //     .then((locals) => {
+    //       expect(locals.previousKey.symbol).toBe('+');
+    //       expect(locals.currentKey.symbol).toBe('1');
+    //       expect(locals.value).toBe('OP');
+    //     })
+    //     .catch((err) => console.log(err));
+    // });
+  });
 });

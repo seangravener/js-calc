@@ -1,5 +1,5 @@
 import { noop } from '../../lib/functions.js'
-import { keypadBindings } from '../keypad/bindings.js'
+import { keypadBindings } from '../keypad/keypad.bindings.js'
 
 class Key {
   get isDefined() {

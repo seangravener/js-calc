@@ -1,5 +1,53 @@
-import createMachine, { FSMachine } from './fsmachine.js';
-import { testMachineDefinition } from './test.config';
+import { FSMachine } from './fsmachine.js';
+
+export const testMachineDefinition = {
+  machineId: 'testMachine',
+  initialState: 'OFF',
+
+  OFF: {
+    actions: {
+      onEnter$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
+      },
+      onExit$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
+      },
+      onEnter() {},
+      onExit() {}
+    },
+    transitions: {
+      toggle: {
+        toStateId: 'ON',
+        action$(locals) {
+          return new Promise((resolve, reject) => resolve(locals));
+        },
+        action() {}
+      }
+    }
+  },
+
+  ON: {
+    actions: {
+      onEnter$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
+      },
+      onExit$(locals) {
+        return new Promise((resolve, reject) => resolve(locals));
+      },
+      onEnter() {},
+      onExit() {}
+    },
+    transitions: {
+      toggle: {
+        toStateId: 'OFF',
+        action$(locals) {
+          return new Promise((resolve, reject) => resolve(locals));
+        },
+        action() {}
+      }
+    }
+  }
+};
 
 describe('Given the Finite State Machine', () => {
   let machine = new FSMachine(testMachineDefinition);
@@ -15,7 +63,7 @@ describe('Given the Finite State Machine', () => {
 
     it('from OFF -> ON', async () => {
       expect(machine.value).toBe('OFF');
- 
+
       const { value } = await machine.transition$(machine.value, 'toggle');
       expect(value).toBe('ON');
       expect(machine.value).toBe('ON');

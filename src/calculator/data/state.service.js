@@ -1,4 +1,4 @@
-import createMachine, { FSMachine } from './fsmachine/fsmachine.js'
+import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 
 let _instance = undefined
