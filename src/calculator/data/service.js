@@ -1,4 +1,4 @@
-import display from './display.js'
+import displayService from './display.service.js'
 import events from './events.js'
 import memory, { Memory } from './memory.js'
 import { assign } from '../lib/functions.js'
@@ -11,7 +11,7 @@ class DataService {
   }
 
   get display() {
-    return display
+    return displayService
   }
 
   get current() {
