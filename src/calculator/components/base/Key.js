@@ -25,14 +25,6 @@ class Key {
     return this.source.target
   }
 
-  // get resolver() {
-  //   return Key.getKeyTypeResolver(this.type) || noop
-  // }
-
-  // get bindings() {
-  //   return keypadBindings[this.type]
-  // }
-
   constructor(event) {
     this.source = event
   }
@@ -44,10 +36,6 @@ class Key {
   static getKeyTypes() {
     return Object.keys(keypadBindings)
   }
-
-  // static getKeyTypeResolver(keyType) {
-  //   return keypadResolvers[keyType]
-  // }
 
   debug() {
     console.log(this)

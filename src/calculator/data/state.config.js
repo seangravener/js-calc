@@ -5,7 +5,7 @@ import {
   FIRST_ARG,
   FIRST_ARG_FLOAT,
   OP
-} from '../components/keypad/actions/index.js';
+} from '../components/keypad/transitions/index.js';
 
 export const calcMachineDefinition = {
   machineId: 'calcMachineDefinition',

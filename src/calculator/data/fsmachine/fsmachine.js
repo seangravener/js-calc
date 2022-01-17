@@ -1,6 +1,6 @@
 let _value = ''
 let _definition = { initialState: '' }
-let _history = { fromStateId: '', withTransition: '', toStateId: '' }
+let _previous = { fromStateId: '', withTransition: '', toStateId: '' }
 
 const isValidTransition = (stateId, transitionId, definition) => {
   if (!FSMachine.isStateDefined(stateId)) {
@@ -30,8 +30,8 @@ export class FSMachine {
     return _value || this.definition.initialState
   }
 
-  get history() {
-    return _history
+  get previous() {
+    return _previous
   }
 
   constructor(definition = {}) {
@@ -41,7 +41,7 @@ export class FSMachine {
     _value = definition.value || this.value
   }
 
-  transition$(fromStateId, transitionId, locals = {}) {
+  async transition$(fromStateId, transitionId, locals = {}) {
     let fromState, withTransition, toState
 
     if (isValidTransition(fromStateId, transitionId, this.definition)) {
@@ -49,12 +49,12 @@ export class FSMachine {
       withTransition = fromState.transitions[transitionId]
       toState = this.definition[withTransition.toStateId]
 
-      withTransition.action(locals)
-      fromState.actions.onExit(locals)
-      toState.actions.onEnter(locals)
+      await withTransition.action.bind(this, { api: this })
+      fromState.actions.onExit.bind(this)
+      toState.actions.onEnter.bind(this)
 
       _value = withTransition.toStateId
-      _history = {
+      _previous = {
         fromStateId: _value,
         transitionId,
         toStateId: withTransition.toStateId
@@ -63,15 +63,14 @@ export class FSMachine {
 
     return new Promise((resolve, reject) => {
       resolve({
-        value: _value,
-        ...locals
+        value: _value
       })
     })
   }
 
   reset() {
     _value = ''
-    _history = { fromStateId: '', withTransition: '', toStateId: '' }
+    _previous = { fromStateId: '', withTransition: '', toStateId: '' }
   }
 
   static isStateDefined(fromStateId) {

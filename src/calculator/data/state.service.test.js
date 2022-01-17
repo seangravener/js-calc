@@ -1,49 +1,84 @@
-import { StateService } from './state.service.js';
+import { StateService, _STATE_ } from './state.service.js';
+import { Key } from '../components/base/Key';
 
 describe('Given the StateService API', () => {
   const service = StateService.load();
 
   it('is created', () => expect(service).toBeInstanceOf(StateService));
-  it("and the initial value is 'START'", () =>
-    expect(service.fsmachine.value).toBe('START'));
+  it("and the initial value is 'START'", async () => {
+    expect(service.machine.value).toBe('START');
+  });
 
-  describe('and the user calls ', () => {
-    let machine = service.fsmachine;
+  describe('and given input', () => {
+    const newKeyboardEvent = (key) =>
+      new KeyboardEvent('KeyboardEvent', { key });
+    let { current } = service;
+    let inputPattern, previous, keys;
+
+    beforeEach(() => {
+      inputPattern = ['1', '+', '2'];
+      keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
+    });
+
+    it('should reset to default state', async () => {
+      previous = service.current;
+      expect(service.current).toMatchObject(current);
+
+      const data = await service.set$(keys[0]);
+      expect(data).toMatchObject(service.current);
+      expect(previous).not.toMatchObject(service.current);
+
+      service.reset();
+      expect(service.current).toMatchObject(_STATE_);
+    });
+  });
+
+  describe('should #transition() between states ', () => {
+    let machine = service.machine;
+
+    const mockKeypress$ = (symbol) => {
+      return service.set$(
+        new Key(new KeyboardEvent('kedown', { key: symbol }))
+      );
+    };
 
     beforeEach(() => {
       machine.reset();
     });
 
-    it('#transition("START", "dotKey") -> FIRST_ARG_FLOAT', () => {
+    it('(START, dotKey) -> FIRST_ARG_FLOAT', async () => {
       expect(machine.value).toBe('START');
-      machine
-        .transition$(machine.value, 'dotKey')
-        .then(({ value }) => expect(value).toBe('FIRST_ARG_FLOAT'));
+
+      let nextState = await mockKeypress$('.');
+      expect(machine.value).toBe('FIRST_ARG_FLOAT');
+      expect(nextState.value).toBe('FIRST_ARG_FLOAT');
     });
 
-    it('#transition("START", "numKey") -> FIRST_ARG', () => {
+    it('(START, numKey) -> FIRST_ARG', async () => {
       expect(machine.value).toBe('START');
-      machine
-        .transition$(machine.value, 'numKey')
-        .then(({ value }) => expect(value).toBe('FIRST_ARG'));
+
+      let nextState = await mockKeypress$('1');
+      expect(nextState.value).toBe('FIRST_ARG');
+      expect(machine.value).toBe('FIRST_ARG');
     });
 
-    it('#transition("FIRST_ARG", "numKey") -> FIRST_ARG', () => {
-      service.set({ value: 'FIRST_ARG' });
+    it('(FIRST_ARG, numKey) -> FIRST_ARG', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1');
+      expect(nextState.value).toBe('FIRST_ARG');
       expect(machine.value).toBe('FIRST_ARG');
 
-      machine
-        .transition$(machine.value, 'numKey')
-        .then(({ value }) => expect(value).toBe('FIRST_ARG'));
+      nextState = await mockKeypress$('1');
+      expect(nextState.value).toBe('FIRST_ARG');
+      expect(machine.value).toBe('FIRST_ARG');
     });
 
-    it('#transition("FIRST_ARG", "opKey") -> OP', () => {
-      service.set({ value: 'FIRST_ARG' });
-      expect(machine.value).toBe('FIRST_ARG');
+    it('(FIRST_ARG, opKey) -> OP', async () => {
+      expect(machine.value).toBe('START');
 
-      machine
-        .transition$(machine.value, 'opKey')
-        .then(({ value }) => expect(value).toBe('OP'));
+      let nextState = await mockKeypress$('1').then(() => mockKeypress$('+'));
+      expect(nextState.value).toBe('OP');
     });
   });
 });

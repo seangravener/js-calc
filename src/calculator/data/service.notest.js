@@ -1,14 +1,14 @@
-import { DataService } from './service.js';
+import { StateService } from './state.service.js';
 import { _nullMemoryChunk_ } from './memory.js';
 
-const api = DataService.load();
+const api = StateService.load();
 
-describe('Given the DataService API', () => {
+xdescribe('Given the(StateService API', () => {
   beforeEach(() => {
     api.memory.clear();
   });
 
-  it('is created', () => expect(api).toBeInstanceOf(DataService));
+  it('is created', () => expect(api).toBeInstanceOf(StateService));
 
   describe('and the user calls', () => {
     let state = {};

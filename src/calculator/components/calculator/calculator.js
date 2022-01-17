@@ -1,11 +1,11 @@
 import { Component } from '../base/Component.js'
 import { EventBus } from '../../data/events.js'
-import { DataService } from '../../data/service.js'
+import { StateService } from '../../data/state.service.js'
 import { templateFn } from './calculator.template.js'
 
 class CalculatorComponent extends Component {
   events = EventBus.load()
-  api = DataService.load()
+  api = StateService.load()
 
   constructor() {
     super()

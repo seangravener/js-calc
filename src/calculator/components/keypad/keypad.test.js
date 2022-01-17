@@ -3,7 +3,7 @@ import { Key } from '../base/Key.js';
 
 describe('Given the <calc-keypad> module', () => {
   const keypad = new KeypadComponent();
-  const machine = keypad.stateService.fsmachine;
+  const machine = keypad.stateService.machine;
   const localKeyHandler = keypad.press$.bind(keypad);
   const newKeyboardEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
   // @todo const newMouseEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
@@ -18,7 +18,7 @@ describe('Given the <calc-keypad> module', () => {
   };
 
   const resetStateMachine = () => {
-    keypad.stateService.fsmachine.reset();
+    machine.reset();
   };
 
   beforeEach(() => {
@@ -32,71 +32,62 @@ describe('Given the <calc-keypad> module', () => {
     let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
 
     beforeEach(() => {
-      setMockHandler();
+      // setMockHandler();
+      resetStateMachine();
+    });
+
+    it('should update as input is received', async () => {
+      expect(machine.value).toBe('START');
+
+      const locals = await keypad
+        .press$(keys[0])
+        .then(() => keypad.press$(keys[1]))
+        .catch((err) => console.log(err));
+
+      expect(locals.previousKey.symbol).toBe('1');
+      expect(locals.currentKey.symbol).toBe('+');
+      expect(locals.value).toBe('OP');
+    });
+
+    it('should transition to known states as input is received', async () => {
+      let locals = {};
+      expect(machine.value).toBe('START');
+
+      locals = await keypad.press$(keys[0]);
+      expect(locals.currentKey.symbol).toBe('1');
+      expect(locals.value).toBe('FIRST_ARG');
+
+      locals = await keypad.press$(keys[1]);
+      expect(locals.currentKey.symbol).toBe('+');
+      expect(locals.value).toBe('OP');
+
+      locals = await keypad.press$(keys[2]);
+      expect(locals.currentKey.symbol).toBe('1');
+      expect(locals.value).toBe('OP');
+    });
+  });
+
+  describe('and can compute input patterns', () => {
+    let inputPattern = ['1', '+', '1'];
+    let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
+
+    beforeEach(() => {
+      // setMockHandler();
       resetStateMachine();
     });
 
     it('should transition as input is received', async () => {
       expect(machine.value).toBe('START');
 
-      await keypad
+      const locals = await keypad
         .press$(keys[0])
-        .then(() => keypad.press$(keys[1]))
         .then(() => keypad.press$(keys[2]))
-        .then((locals) => {
-          expect(locals.previousKey.symbol).toBe('+');
-          expect(locals.currentKey.symbol).toBe('1');
-          expect(locals.value).toBe('OP');
-        })
         .catch((err) => console.log(err));
+
+      expect(locals.previousKey.symbol).toBe('1');
+      expect(locals.currentKey.symbol).toBe('1');
+      // expect(locals.result).toBe('11');
+      expect(locals.value).toBe('FIRST_ARG');
     });
-
-    it('should transition to known states as input is received', async () => {
-      expect(machine.value).toBe('START');
-
-      await keypad
-        .press$(keys[0])
-        .then(({ currentKey, value }) => {
-          expect(currentKey.symbol).toBe('1');
-          expect(value).toBe('FIRST_ARG');
-
-          return keypad.press$(keys[1]);
-        })
-        .then(({ currentKey, value }) => {
-          expect(currentKey.symbol).toBe('+');
-          expect(value).toBe('OP');
-
-          return keypad.press$(keys[2]);
-        })
-        .then(({ currentKey, value }) => {
-          expect(currentKey.symbol).toBe('1');
-          expect(value).toBe('OP');
-        })
-        .catch((err) => console.log(err));
-    });
-  });
-
-  describe('and can compute an input patter', () => {
-    let inputPattern = ['1', '+', '1'];
-    let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
-
-    beforeEach(() => {
-      setMockHandler();
-      resetStateMachine();
-    });
-
-    // it('should transition as input is received', async () => {
-    //   expect(machine.value).toBe('START');
-
-    //   await keypad
-    //     .press$(keys[0])
-    //     .then(() => keypad.press$(keys[2]))
-    //     .then((locals) => {
-    //       expect(locals.previousKey.symbol).toBe('+');
-    //       expect(locals.currentKey.symbol).toBe('1');
-    //       expect(locals.value).toBe('OP');
-    //     })
-    //     .catch((err) => console.log(err));
-    // });
   });
 });

@@ -7,7 +7,7 @@ const controls = ({ previousKey, currentKey, api }) => {
 
   if (currentKey.symbol === 'Enter' || currentKey.symbol === '=') {
     if (previousKey.type === 'numbers' || previousKey.type === 'operators') {
-      console.log('display answer!', { ...current })
+      
       // api.save();
       // api.reps
     }

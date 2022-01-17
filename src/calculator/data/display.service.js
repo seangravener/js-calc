@@ -1,12 +1,20 @@
 import events from './events.js'
 
-const _BLANK_ = { msg: '', err: '', operandA: '', operator: '', operandB: '' }
+// layer this cache beneath the stateCache, then combine in stateService
+const _DISPLAY_ = {
+  msg: '',
+  err: '',
+  result: '',
+  operandA: '',
+  operator: '',
+  operandB: ''
+}
 let _instance = undefined
-let _displayCache = [_BLANK_]
+let _displayCache = [_DISPLAY_]
 
 class DisplayService {
   get current() {
-    return this.previous(0)
+    return this.recall(0)
   }
 
   get length() {
@@ -14,11 +22,11 @@ class DisplayService {
   }
 
   get msg() {
-    return this.position(0).msg
+    return this.recall(0).msg
   }
 
   get err() {
-    return this.position(0).err
+    return this.recall(0).err
   }
 
   get value() {
@@ -30,36 +38,36 @@ class DisplayService {
   }
 
   constructor() {
-    events.listenTo('input:next', () => this.clear())
-    events.listenTo('output:save', () => this.set({ msg: 'Saved!' }))
+    events.listenTo('output:msg', (msg) => this.set({ msg }))
+
+    events.listenTo('output:next', (state) =>
+      this.set({ display: state.display })
+    )
   }
 
-  previous(position = 0, offset = 1) {
+  recall(position = 0, offset = 1) {
     return _displayCache[_displayCache.length - position - offset]
   }
 
-  set(locals) {
-    _displayCache.push({ ...this.previous(), ...locals })
+  async set(locals) {
+    return await this.set$(locals)
   }
 
-  show(msg, duration = 0) {
-    this.set({ msg })
-    // events.listenTo("api:next", () => this.set({ msg: "" }));
-  }
-
-  expire(type) {
-    const cache = _displayCache[_displayCache.length - 1][type]
-    return cache
+  set$(locals) {
+    return new Promise((resolve) => {
+      _displayCache.push({ ...this.recall(), ...locals })
+      resolve(this.current)
+    })
   }
 
   clear() {
-    _displayCache = [_BLANK_]
+    _displayCache = [_DISPLAY_]
   }
 
-  static load(display = [_BLANK_]) {
+  static load(display = [_DISPLAY_]) {
     return _instance || (_instance = new DisplayService(display))
   }
 }
 
-export { _BLANK_, DisplayService }
+export { _DISPLAY_, DisplayService }
 export default DisplayService.load()

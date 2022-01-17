@@ -104,17 +104,8 @@ describe('Given the Finite State Machine', () => {
     it('and can be toggled', async () => {
       expect(machine.value).toBe('OFF');
 
-      await machine
-        .transition$(machine.value, 'toggle')
-        .then(({ value }) => expect(value).toBe('ON'));
-    });
-
-    it('should have expected properties', async () => {
-      expect(machine.value).toBe('OFF');
-
-      machine
-        .transition$(machine.value, 'toggle')
-        .then(({ value }) => expect(value).toBe('ON'));
+      const nextState = await machine.transition$(machine.value, 'toggle');
+      expect(nextState.value).toBe('ON');
     });
   });
 });

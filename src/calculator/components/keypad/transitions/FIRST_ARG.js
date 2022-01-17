@@ -1,17 +1,12 @@
 export const actions = {
-  onEnter() {
-    console.log('onEnter - JS-Calc is in FIRST_ARG')
-  },
-  onExit() {
-    console.log('onExit - JS-Calc is in FIRST_ARG')
-  }
+  onEnter() {},
+  onExit() {}
 }
 
 export const transitions = {
   numKey: {
     toStateId: 'FIRST_ARG',
     action() {
-      console.log('numKey! from FIRST_ARG')
       // display = display += num
     }
   },
