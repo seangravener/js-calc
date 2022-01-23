@@ -54,6 +54,8 @@ class DisplayService {
   }
 
   set$(locals) {
+    locals = _normalize(locals)
+
     return new Promise((resolve) => {
       _displayCache.push({ ...this.recall(), ...locals })
       resolve(this.current)
@@ -67,6 +69,10 @@ class DisplayService {
   static load(display = [_DISPLAY_]) {
     return _instance || (_instance = new DisplayService(display))
   }
+}
+
+const _normalize = function (locals) {
+  return locals.display ? locals.display : locals
 }
 
 export { _DISPLAY_, DisplayService }
