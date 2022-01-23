@@ -3,13 +3,13 @@ import events from './events.js'
 import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 
+let _instance = undefined
 const _STATE_ = {
   value: '',
-  display: _DISPLAY_,
+  display: _instance ? _instance.display.current : _DISPLAY_,
   currentKey: {},
   previousKey: {}
 }
-let _instance = undefined
 let _history = [_STATE_]
 
 class StateService {
@@ -48,7 +48,7 @@ class StateService {
   reset() {
     _history = [_STATE_]
     this.machine.reset()
-    this.refreshDisplay()
+    // this.refreshDisplay()
   }
 
   recall(position = 0, offset = 1) {
@@ -65,7 +65,7 @@ class StateService {
   }
 
   refreshDisplay() {
-    this.display.set$(this.current.display)
+    // this.display.set$(this.current.display)
   }
 
   getNextState(key) {
@@ -100,7 +100,10 @@ class StateService {
   }
 
   static load() {
-    return _instance || (_instance = new StateService())
+    _instance = _instance || new StateService()
+    _history = [_STATE_]
+
+    return _instance
   }
 }
 
