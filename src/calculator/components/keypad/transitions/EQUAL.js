@@ -21,4 +21,4 @@ export const transitions = {
   }
 }
 
-export const SEC_ARG_FLOAT = { actions, transitions }
+export const EQUAL = { actions, transitions }

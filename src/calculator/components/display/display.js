@@ -11,14 +11,12 @@ class DisplayComponent extends Component {
   }
 
   init() {
-    const locals = api.current
-    const display = api.display
     this.styles = styles
     this.templateFn = templateFn
-    this.locals = { ...this.locals, ...locals, display }
+    this.locals = api.display.current
 
-    events.listenTo('output:next', (locals) => {
-      this.locals = { ...this.locals, ...locals }
+    events.listenTo('input:next', (state) => {
+      this.locals = state.display.current
       this.render()
     })
   }

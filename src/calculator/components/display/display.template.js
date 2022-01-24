@@ -1,14 +1,3 @@
-const historyDisplay = ({ history }) => `
-  <div class="calc-operation">
-    ${exists(history)}
-  </div>`
-
-const mainDisplay = ({ operator, display }) => `
-  <div class="calc-typed" id="mainDisplay">
-    <span class="operator">${exists(operator)}</span>
-    ${display.value}
-  </div>`
-
 const exists = (value, placeholder = '') => (value ? `${value}` : placeholder)
 
 const compose = (...parts) =>
@@ -16,12 +5,23 @@ const compose = (...parts) =>
     return `${whole}${part}`
   }, '')
 
-const templateFn = ({ display, ...state }) => {
-  const { history } = display
+const historyDisplay = ({ history }) => `
+  <div class="calc-operation">
+    ${exists(history)}
+  </div>`
 
+const mainDisplay = ({ operator, operandA, operandB, result }) => `
+  <div class="calc-typed" id="mainDisplay">
+    <span class="operator">${exists(operator)}</span>
+    ${result || operandA || operandB}
+  </div>`
+
+const templateFn = (display) => {
+  // const { history, display } = display
+  console.log(display)
   return compose(
-    historyDisplay({ history }),
-    mainDisplay({ display, ...state })
+    // historyDisplay({ history }),
+    mainDisplay(display)
   )
 }
 

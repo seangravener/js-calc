@@ -3,20 +3,15 @@ export const actions = { onEnter() {}, onExit() {} }
 export const transitions = {
   numKey: {
     toStateId: 'FIRST_ARG',
-    async action() {
-      const { currentKey } = this
-      console.log('actin context', this)
-      
-      api.display.set$({ operandA: currentKey.symbol || '0' })
-      // await this.display.set$({ operandA: currentKey.symbol || '0' })
+    action({ api }) {
+      api.display.append({ operandA: api.currentKey.symbol })
     }
   },
   dotKey: {
     toStateId: 'FIRST_ARG_FLOAT',
     action({ api }) {
-      const { currentKey } = api.current
-      console.log('actin context', this)
-      api.display.set$({ operandA: currentKey.symbol || '0' })
+      // console.log('actin context', this)
+      // api.display.set({ operandB: currentKey.symbol || '0' })
       // api.display.value = '0.';
       // display = '0.'
     }

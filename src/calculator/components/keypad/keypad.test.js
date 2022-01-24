@@ -3,6 +3,7 @@ import { Key } from '../base/Key.js';
 
 describe('Given the <calc-keypad> module', () => {
   const keypad = new KeypadComponent();
+  const service = keypad.stateService;
   const machine = keypad.stateService.machine;
   const localKeyHandler = keypad.press$.bind(keypad);
   const newKeyboardEvent = (key) => new KeyboardEvent('KeyboardEvent', { key });
@@ -18,7 +19,8 @@ describe('Given the <calc-keypad> module', () => {
   };
 
   const resetStateMachine = () => {
-    machine.reset();
+    // machine.reset();
+    service.reset()
   };
 
   beforeEach(() => {
@@ -39,36 +41,31 @@ describe('Given the <calc-keypad> module', () => {
     it('should update as input is received', async () => {
       expect(machine.value).toBe('START');
 
-      const locals = await keypad
-        .press$(keys[0])
-        .then(() => keypad.press$(keys[1]))
-        .catch((err) => console.log(err));
-
-      expect(locals.previousKey.symbol).toBe('1');
-      expect(locals.currentKey.symbol).toBe('+');
-      expect(locals.value).toBe('OP');
+      await keypad.press$(keys[0]).then(() => keypad.press$(keys[1]));
+      expect(service.previousKey.symbol).toBe('1');
+      expect(service.currentKey.symbol).toBe('+');
+      expect(service.machine.value).toBe('OP');
     });
 
     it('should transition to known states as input is received', async () => {
-      let locals = {};
       expect(machine.value).toBe('START');
 
-      locals = await keypad.press$(keys[0]);
-      expect(locals.currentKey.symbol).toBe('1');
-      expect(locals.value).toBe('FIRST_ARG');
+      await keypad.press$(keys[0]);
+      expect(service.currentKey.symbol).toBe('1');
+      expect(service.machine.value).toBe('FIRST_ARG');
 
-      locals = await keypad.press$(keys[1]);
-      expect(locals.currentKey.symbol).toBe('+');
-      expect(locals.value).toBe('OP');
+      await keypad.press$(keys[1]);
+      expect(service.currentKey.symbol).toBe('+');
+      expect(service.machine.value).toBe('OP');
 
-      locals = await keypad.press$(keys[2]);
-      expect(locals.currentKey.symbol).toBe('1');
-      expect(locals.value).toBe('OP');
+      await keypad.press$(keys[2]);
+      expect(service.currentKey.symbol).toBe('1');
+      expect(service.machine.value).toBe('SEC_ARG');
     });
   });
 
   describe('and can compute input patterns', () => {
-    let inputPattern = ['1', '+', '1'];
+    let inputPattern = ['1', '+', '2'];
     let keys = inputPattern.map((symbol) => new Key(newKeyboardEvent(symbol)));
 
     beforeEach(() => {
@@ -78,16 +75,32 @@ describe('Given the <calc-keypad> module', () => {
 
     it('should transition as input is received', async () => {
       expect(machine.value).toBe('START');
+      expect(service.display.value).toBe('0.');
 
-      const locals = await keypad
-        .press$(keys[0])
-        .then(() => keypad.press$(keys[2]))
-        .catch((err) => console.log(err));
+      await keypad.press$(keys[0]) //.then(() => keypad.press$(keys[0]));
+      expect(machine.value).toBe('FIRST_ARG');
+      expect(service.currentKey.symbol).toBe('1');
+      expect(service.previousKey).toMatchObject({});
 
-      expect(locals.previousKey.symbol).toBe('1');
-      expect(locals.currentKey.symbol).toBe('1');
-      // expect(locals.result).toBe('11');
-      expect(locals.value).toBe('FIRST_ARG');
+      await keypad.press$(keys[0]).then(() => keypad.press$(keys[0]));
+      expect(machine.value).toBe('FIRST_ARG');
+      expect(service.display.value).toBe('111');
+      expect(service.previousKey.symbol).toBe('1');
+
+      await keypad.press$(keys[1]);
+      expect(machine.value).toBe('OP');
+      expect(service.display.value).toBe('111');
+      expect(service.currentKey.symbol).toBe('+');
+      expect(service.previousKey.symbol).toBe('1');
+      expect(service.display.current.operator).toBe('+');
+
+      await keypad.press$(keys[2]);
+      expect(machine.value).toBe('SEC_ARG');
+      expect(service.display.value).toBe('2');
+      expect(service.currentKey.symbol).toBe('2');
+      expect(service.previousKey.symbol).toBe('+');
+      expect(service.display.current.operator).toBe('+');
+      expect(service.display.current.operandB).toBe('2');
     });
   });
 });

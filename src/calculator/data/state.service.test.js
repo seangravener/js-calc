@@ -24,8 +24,8 @@ describe('Given the StateService API', () => {
       previous = service.current;
       expect(service.current).toMatchObject(current);
 
-      const data = await service.set$(keys[0]);
-      expect(data).toMatchObject(service.current);
+      const state = await service.set$(keys[0]);
+      expect(state.value).toBe(service.machine.value);
       expect(previous).not.toMatchObject(service.current);
 
       service.reset();
@@ -77,8 +77,12 @@ describe('Given the StateService API', () => {
     it('(FIRST_ARG, opKey) -> OP', async () => {
       expect(machine.value).toBe('START');
 
-      let nextState = await mockKeypress$('1').then(() => mockKeypress$('+'));
-      expect(nextState.value).toBe('OP');
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'));
+
+      expect(machine.value).toBe('SEC_ARG');
+      expect(nextState.value).toBe('SEC_ARG');
     });
   });
 });

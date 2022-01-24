@@ -1,3 +1,5 @@
+import events from "../events.js"
+
 let _value = ''
 let _definition = { initialState: '' }
 let _previous = { fromStateId: '', withTransition: '', toStateId: '' }
@@ -41,17 +43,19 @@ export class FSMachine {
     _value = definition.value || this.value
   }
 
-  async transition$(fromStateId, transitionId, locals = {}) {
+  async transition$(fromStateId, transitionId) {
     let fromState, withTransition, toState
+    // if (!transitionId) return
 
     if (isValidTransition(fromStateId, transitionId, this.definition)) {
       fromState = this.definition[fromStateId]
       withTransition = fromState.transitions[transitionId]
       toState = this.definition[withTransition.toStateId]
 
-      await withTransition.action.bind(this, { api: this })
-      fromState.actions.onExit.bind(this)
-      toState.actions.onEnter.bind(this)
+      // console.log('calling transition', withTransition)
+      withTransition.action.call(this, { api: this })
+      fromState.actions.onExit.call(this, { api: this })
+      toState.actions.onEnter.call(this, { api: this })
 
       _value = withTransition.toStateId
       _previous = {

@@ -39,8 +39,8 @@ class KeypadComponent extends Component {
     let key = new Key(event)
 
     if (key.isDefined) {
-      this.press$(key).then((locals) => {
-        events.publish(`input:next`, locals)
+      this.press$(key).then(() => {
+        events.publish(`input:next`, this.stateService.current)
       })
     }
   }

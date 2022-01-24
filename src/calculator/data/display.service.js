@@ -30,39 +30,59 @@ class DisplayService {
   }
 
   get value() {
-    const { msg, err, operants } = this.history()
-    const [operandA, operator, operandB] = operants
-    operandB = operator ? `${operandB}` : operandB
+    let { msg, err, operandA, operandB } = this.recall()
+    operandA = operandA || '0.'
 
-    return err || msg || operandB || `${operandA}.`
+    return err || msg || operandB || `${operandA}`
   }
 
   constructor() {
     events.listenTo('output:msg', (msg) => this.set({ msg }))
+    // events.listenTo('output:next', (locals) => console.log(locals))
 
-    events.listenTo('output:next', (state) =>
-      this.set({ display: state.display })
-    )
+    // events.publish('input:next', this.current)
   }
 
   recall(position = 0, offset = 1) {
     return _displayCache[_displayCache.length - position - offset]
   }
 
-  async set(locals) {
-    return await this.set$(locals)
+  set(locals) {
+    _displayCache.push({ ...this.current, ..._normalize(locals) })
+    events.publish('ouput:next', this.current)
+
+    return this.current
   }
 
-  set$(locals) {
-    locals = _normalize(locals)
-
-    return new Promise((resolve) => {
-      _displayCache.push({ ...this.recall(), ...locals })
-      resolve(this.current)
-    })
+  appendA(digit) {
+    this.set({ operandA: `${this.current.operandA || ''}${digit}` })
+  }
+  appendA(digit) {
+    this.set({ operandB: `${this.current.operandB || ''}${digit}` })
   }
 
-  clear() {
+  append({ operandB, operandA }) {
+    const currentA = this.current.operandA
+    const currentB = this.current.operandB
+    let update
+
+    if (operandA) {
+      update = { operandA: `${currentA || ''}${operandA}` }
+    } else {
+      update = { operandB: `${currentB || ''}${operandB}` }
+    }
+
+    this.set(update)
+  }
+
+  backspace(count = 1) {
+    let digits = this.current.operandB.split('')
+    digits.splice(-count)
+
+    this.set({ operandB: digits.length ? `${digits.join('')}` : '0' })
+  }
+
+  reset() {
     _displayCache = [_DISPLAY_]
   }
 

@@ -5,8 +5,8 @@ import { calcMachineDefinition } from './state.config.js'
 
 let _instance = undefined
 const _STATE_ = {
-  value: '',
-  display: _instance ? _instance.display.current : _DISPLAY_,
+  // extends StateServiceBase
+  display: displayService,
   currentKey: {},
   previousKey: {}
 }
@@ -29,11 +29,12 @@ class StateService {
   }
 
   get previousKey() {
-    return this.recall(1).currentKey
+    return this.recall(1) ? this.recall(1).currentKey : ''
   }
 
   get current() {
-    return this.recall(0)
+    const { currentKey, previousKey } = this
+    return { ...this.recall(0), currentKey, previousKey }
   }
 
   get previous() {
@@ -48,51 +49,25 @@ class StateService {
   reset() {
     _history = [_STATE_]
     this.machine.reset()
-    // this.refreshDisplay()
+    this.display.reset()
   }
 
   recall(position = 0, offset = 1) {
     return _history[_history.length - position - offset]
   }
 
-  async set$(key) {
-    const transitionArgs = [this.machine.value, key.type]
-    await this.machine.transition$.apply(this, transitionArgs)
-    _history.push(this.getNextState(key))
-    this.refreshDisplay() // replace with event
+  async set$(currentKey) {
+    const transitionArgs = [this.machine.value, currentKey.type]
+    _history.push({ ...this.current, currentKey })
 
-    return new Promise((resolve) => resolve(this.publish('next')))
+    // @TODO 
+    // forget the "cache layers"; too annoying to embed and propegate changes.
+    // move STATE object to machine.state
+    // including display
+    // use stateService to recall states
+
+    return this.machine.transition$.apply(this, transitionArgs)
   }
-
-  refreshDisplay() {
-    // this.display.set$(this.current.display)
-  }
-
-  getNextState(key) {
-    return {
-      ...this.current,
-      currentKey: key,
-      previousKey: this.currentKey ? this.currentKey : key,
-      display: this.current.display,
-      value: this.machine.value
-    }
-  }
-
-  // append(digit) {
-  //   const { operandB } = memory.asFloats()
-  //   this.setCurrent({ operandB: `${operandB || ''}${digit}` })
-  // }
-
-  // backspace(count = 1) {
-  //   let digits = this.current.operandB.split('')
-  //   digits.splice(-count)
-  //   this.setCurrent({ operandB: digits.length ? `${digits.join('')}` : '0' })
-  // }
-
-  // clear() {
-  //   memory.clear()
-  //   this.publish('next')
-  // }
 
   publish(eventName, payload = this.current) {
     events.publish(`output:${eventName}`, payload)
