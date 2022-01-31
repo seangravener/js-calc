@@ -7,6 +7,7 @@ const _STATE_ = { displayService: displayService, currentKey: {}, previousKey: {
 let _instance = undefined
 let _history = [_STATE_]
 
+
 class StateService {
   definition = {}
   machine = undefined

@@ -77,7 +77,7 @@ describe('Given the <calc-keypad> module', () => {
       expect(machine.value).toBe('START');
       expect(service.displayService.value).toBe('0.');
 
-      await keypad.press$(keys[0]) //.then(() => keypad.press$(keys[0]));
+      await keypad.press$(keys[0])
       expect(machine.value).toBe('FIRST_ARG');
       expect(service.currentKey.symbol).toBe('1');
       expect(service.previousKey).toMatchObject({});

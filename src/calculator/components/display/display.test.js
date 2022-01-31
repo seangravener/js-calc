@@ -1,4 +1,4 @@
-import { DisplayComponent } from './display.js';
+import { DisplayComponent } from './display.component.js';
 
 describe('Display component', () => {
   const display = new DisplayComponent();

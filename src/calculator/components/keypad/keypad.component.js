@@ -1,9 +1,9 @@
-import api, { StateService } from '../../data/state.service.js'
-import events from '../../data/events.js'
-import { Component } from '../base/Component.js'
 import { Key } from '../base/Key.js'
-import { templateFn, keypadLayout } from './keypad.template.js'
+import events from '../../data/events.js'
 import { styles } from './keypad.styles.js'
+import { Component } from '../base/Component.js'
+import api, { StateService } from '../../data/state.service.js'
+import { templateFn, keypadLayout } from './keypad.template.js'
 
 let _keyCache = []
 class KeypadComponent extends Component {
@@ -26,7 +26,7 @@ class KeypadComponent extends Component {
   }
 
   handleKeyPress(event) {
-    let key = new Key(event)
+    const key = new Key(event)
 
     if (key.isDefined) {
       this.press$(key).then(() => {
