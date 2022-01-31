@@ -13,10 +13,10 @@ class DisplayComponent extends Component {
   init() {
     this.styles = styles
     this.templateFn = templateFn
-    this.locals = api.display.current
+    this.locals = api.displayService.current
 
     events.listenTo('input:next', (state) => {
-      this.locals = state.display.current
+      this.locals = state.displayService.current
       this.render()
     })
   }

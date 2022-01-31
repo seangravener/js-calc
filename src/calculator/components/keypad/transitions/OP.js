@@ -4,14 +4,14 @@ export const transitions = {
   numKey: {
     toStateId: 'SEC_ARG',
     action({ api }) {
-      api.display.append({ operandB: api.currentKey.symbol })
-      // display = num
+      api.displayService.append({ operandB: api.currentKey.symbol })
+      // displayService = num
     }
   },
   dotKey: {
     toStateId: 'SEC_ARG_DOT',
     action({ api }) {
-      api.display.append({ operandB: '.' })
+      api.displayService.append({ operandB: '.' })
       // display = '0.'
     }
   }

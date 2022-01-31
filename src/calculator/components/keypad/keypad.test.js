@@ -75,7 +75,7 @@ describe('Given the <calc-keypad> module', () => {
 
     it('should transition as input is received', async () => {
       expect(machine.value).toBe('START');
-      expect(service.display.value).toBe('0.');
+      expect(service.displayService.value).toBe('0.');
 
       await keypad.press$(keys[0]) //.then(() => keypad.press$(keys[0]));
       expect(machine.value).toBe('FIRST_ARG');
@@ -84,23 +84,23 @@ describe('Given the <calc-keypad> module', () => {
 
       await keypad.press$(keys[0]).then(() => keypad.press$(keys[0]));
       expect(machine.value).toBe('FIRST_ARG');
-      expect(service.display.value).toBe('111');
+      expect(service.displayService.value).toBe('111');
       expect(service.previousKey.symbol).toBe('1');
 
       await keypad.press$(keys[1]);
       expect(machine.value).toBe('OP');
-      expect(service.display.value).toBe('111');
+      expect(service.displayService.value).toBe('111');
       expect(service.currentKey.symbol).toBe('+');
       expect(service.previousKey.symbol).toBe('1');
-      expect(service.display.current.operator).toBe('+');
+      expect(service.displayService.current.operator).toBe('+');
 
       await keypad.press$(keys[2]);
       expect(machine.value).toBe('SEC_ARG');
-      expect(service.display.value).toBe('2');
+      expect(service.displayService.value).toBe('2');
       expect(service.currentKey.symbol).toBe('2');
       expect(service.previousKey.symbol).toBe('+');
-      expect(service.display.current.operator).toBe('+');
-      expect(service.display.current.operandB).toBe('2');
+      expect(service.displayService.current.operator).toBe('+');
+      expect(service.displayService.current.operandB).toBe('2');
     });
   });
 });

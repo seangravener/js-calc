@@ -4,15 +4,15 @@ export const transitions = {
   numKey: {
     toStateId: 'FIRST_ARG',
     action({ api }) {
-      api.display.append({ operandA: api.currentKey.symbol })
+      api.displayService.append({ operandA: api.currentKey.symbol })
     }
   },
   opKey: {
     toStateId: 'OP',
     action({ api }) {
-      api.display.set({
+      api.displayService.set({
         operator: api.currentKey.symbol,
-        operandA: api.display.value
+        operandA: api.displayService.value
       })
       // api.display.append(api.currentKey.symbol)
       // op = opKey; acc1 = display;

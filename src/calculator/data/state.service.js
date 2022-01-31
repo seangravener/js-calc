@@ -3,20 +3,15 @@ import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 import displayService, { _DISPLAY_ } from './display.service.js'
 
+const _STATE_ = { displayService: displayService, currentKey: {}, previousKey: {} }
 let _instance = undefined
-const _STATE_ = {
-  // extends StateServiceBase?
-  display: displayService,
-  currentKey: {},
-  previousKey: {}
-}
 let _history = [_STATE_]
 
 class StateService {
   definition = {}
   machine = undefined
 
-  get display() {
+  get displayService() {
     return displayService
   }
 
@@ -42,7 +37,7 @@ class StateService {
   reset() {
     _history = [_STATE_]
     this.machine.reset()
-    this.display.reset()
+    this.displayService.reset()
   }
 
   recall(position = 0, offset = 1) {
@@ -52,12 +47,6 @@ class StateService {
   async set$(newKey) {
     const transitionArgs = [this.machine.value, newKey.type]
     _history.push({ ...this.current, currentKey: newKey })
-
-    // @TODO consolidate?
-    // forget the "cache layers"; too annoying to embed and propegate changes.
-    // move STATE object to machine.state
-    // including display
-    // use stateService to recall states
 
     return this.machine.transition$.apply(this, transitionArgs)
   }
