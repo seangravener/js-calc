@@ -7,16 +7,6 @@ import { styles } from './keypad.styles.js'
 
 let _keyCache = []
 class KeypadComponent extends Component {
-  get currentKey() {
-    return this.stateService.current.currentKey
-    // return _keyCache[_keyCache.length - 1] || {}
-  }
-
-  get previousKey() {
-    return this.stateService.current.previousKey
-    return _keyCache[_keyCache.length - 2] || {}
-  }
-
   constructor() {
     super()
 
@@ -47,7 +37,6 @@ class KeypadComponent extends Component {
 
   async press$(key) {
     _keyCache.push(key)
-    // somethin here?
     return this.stateService.set$(key)
   }
 

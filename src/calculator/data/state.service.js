@@ -1,11 +1,11 @@
-import displayService, { _DISPLAY_ } from './display.service.js'
 import events from './events.js'
 import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
+import displayService, { _DISPLAY_ } from './display.service.js'
 
 let _instance = undefined
 const _STATE_ = {
-  // extends StateServiceBase
+  // extends StateServiceBase?
   display: displayService,
   currentKey: {},
   previousKey: {}
@@ -16,29 +16,22 @@ class StateService {
   definition = {}
   machine = undefined
 
-  get length() {
-    return _history.length
-  }
-
   get display() {
     return displayService
   }
 
-  get currentKey() {
-    return this.recall(0).currentKey
-  }
-
-  get previousKey() {
-    return this.recall(1) ? this.recall(1).currentKey : ''
-  }
-
   get current() {
-    const { currentKey, previousKey } = this
+    const [{ currentKey }, { previousKey }] = [this.recall(0), this.recall(1)]
     return { ...this.recall(0), currentKey, previousKey }
   }
 
-  get previous() {
-    return this.recall(1)
+  get currentKey() {
+    return this.current.currentKey
+  }
+
+  get previousKey() {
+    const previous = this.recall(1)
+    return previous ? previous.currentKey : {}
   }
 
   constructor(definition = {}) {
@@ -53,14 +46,14 @@ class StateService {
   }
 
   recall(position = 0, offset = 1) {
-    return _history[_history.length - position - offset]
+    return _history[_history.length - position - offset] || _STATE_
   }
 
-  async set$(currentKey) {
-    const transitionArgs = [this.machine.value, currentKey.type]
-    _history.push({ ...this.current, currentKey })
+  async set$(newKey) {
+    const transitionArgs = [this.machine.value, newKey.type]
+    _history.push({ ...this.current, currentKey: newKey })
 
-    // @TODO 
+    // @TODO consolidate?
     // forget the "cache layers"; too annoying to embed and propegate changes.
     // move STATE object to machine.state
     // including display

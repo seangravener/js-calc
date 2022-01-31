@@ -1,23 +1,10 @@
-import events from "../events.js"
+import events from '../events.js'
 
 let _value = ''
 let _definition = { initialState: '' }
 let _previous = { fromStateId: '', withTransition: '', toStateId: '' }
 
-const isValidTransition = (stateId, transitionId, definition) => {
-  if (!FSMachine.isStateDefined(stateId)) {
-    return false
-  } else if (
-    !definition[stateId].transitions[transitionId] ||
-    !definition[definition[stateId].transitions[transitionId].toStateId]
-  ) {
-    return false
-  }
-
-  return true
-}
-
-export class FSMachine {
+class FSMachine {
   machineId = ''
 
   get definition() {
@@ -81,6 +68,21 @@ export class FSMachine {
     return !!_definition[fromStateId]
   }
 }
+
+const isValidTransition = (stateId, transitionId, definition) => {
+  if (!FSMachine.isStateDefined(stateId)) {
+    return false
+  } else if (
+    !definition[stateId].transitions[transitionId] ||
+    !definition[definition[stateId].transitions[transitionId].toStateId]
+  ) {
+    return false
+  }
+
+  return true
+}
+
+export { FSMachine }
 
 /**
  * Specs:

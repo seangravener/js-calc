@@ -1,6 +1,5 @@
 import events from './events.js'
 
-// layer this cache beneath the stateCache, then combine in stateService
 const _DISPLAY_ = {
   msg: '',
   err: '',
@@ -39,8 +38,6 @@ class DisplayService {
   constructor() {
     events.listenTo('output:msg', (msg) => this.set({ msg }))
     // events.listenTo('output:next', (locals) => console.log(locals))
-
-    // events.publish('input:next', this.current)
   }
 
   recall(position = 0, offset = 1) {

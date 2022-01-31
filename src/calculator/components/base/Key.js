@@ -8,7 +8,9 @@ class Key {
 
   get symbol() {
     // @todo map many-to-one symbols eg. [Enter, =], [Del, Backspace]
-    return this.source.key || this.source.target.textContent
+    return this.source && this.source.key
+      ? this.source.key || this.source.target.textContent
+      : ''
   }
 
   get type() {
