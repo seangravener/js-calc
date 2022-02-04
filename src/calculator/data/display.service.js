@@ -37,7 +37,11 @@ class DisplayService {
 
   constructor() {
     events.listenTo('output:msg', (msg) => this.set({ msg }))
-    // events.listenTo('output:next', (locals) => console.log(locals))
+    
+    events.listenTo('output:next', (locals) => {
+      // calulate result
+      // console.log('ouput:next: ', locals)
+    })
   }
 
   recall(position = 0, offset = 1) {

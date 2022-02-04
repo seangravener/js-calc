@@ -78,11 +78,117 @@ describe('Given the StateService API', () => {
       expect(machine.value).toBe('START');
 
       let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'));
+
+      expect(machine.value).toBe('OP');
+      expect(nextState.value).toBe('OP');
+    });
+
+    it('(OP, eqKey) -> OP', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
         .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('+'));
+
+      expect(machine.value).toBe('OP');
+      expect(nextState.value).toBe('OP');
+    });
+
+    it('(OP, numKey) -> OP', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('='));
+
+      expect(machine.value).toBe('OP');
+      expect(nextState.value).toBe('OP');
+    });
+
+    it('(OP, dotKey) -> SEC_ARG_DOT', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('.'));
+
+      expect(machine.value).toBe('SEC_ARG_DOT');
+      expect(nextState.value).toBe('SEC_ARG_DOT');
+    });
+
+    it('(SEC_ARG, dotKey) -> SEC_ARG_FLOAT', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
+        .then(() => mockKeypress$('.'));
+
+      expect(machine.value).toBe('SEC_ARG_FLOAT');
+      expect(nextState.value).toBe('SEC_ARG_FLOAT');
+    });
+
+    it('(SEC_ARG, opKey) -> OP', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
+        .then(() => mockKeypress$('+'));
+
+      expect(machine.value).toBe('OP');
+      expect(nextState.value).toBe('OP');
+    });
+
+    it('(SEC_ARG, numKey) -> SEC_ARG', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
         .then(() => mockKeypress$('1'));
 
       expect(machine.value).toBe('SEC_ARG');
       expect(nextState.value).toBe('SEC_ARG');
+    });
+
+    it('(SEC_ARG, eqKey) -> EQUAL', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
+        .then(() => mockKeypress$('='));
+
+      expect(machine.value).toBe('EQUAL');
+      expect(nextState.value).toBe('EQUAL');
+    });
+
+    it('(EQUAL, eqKey) -> EQUAL', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
+        .then(() => mockKeypress$('='))
+        .then(() => mockKeypress$('='));
+
+      expect(machine.value).toBe('EQUAL');
+      expect(nextState.value).toBe('EQUAL');
+    });
+
+    it('(EQUAL, dotKey) -> FIRST_ARG_FLOAT', async () => {
+      expect(machine.value).toBe('START');
+
+      let nextState = await mockKeypress$('1')
+        .then(() => mockKeypress$('+'))
+        .then(() => mockKeypress$('1'))
+        .then(() => mockKeypress$('='))
+        .then(() => mockKeypress$('.'));
+
+      expect(machine.value).toBe('FIRST_ARG_FLOAT');
+      expect(nextState.value).toBe('FIRST_ARG_FLOAT');
     });
   });
 });

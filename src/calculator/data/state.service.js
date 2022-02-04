@@ -3,10 +3,13 @@ import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 import displayService, { _DISPLAY_ } from './display.service.js'
 
-const _STATE_ = { displayService: displayService, currentKey: {}, previousKey: {} }
+const _STATE_ = {
+  displayService: displayService,
+  currentKey: {},
+  previousKey: {}
+}
 let _instance = undefined
 let _history = [_STATE_]
-
 
 class StateService {
   definition = {}
@@ -49,7 +52,12 @@ class StateService {
     const transitionArgs = [this.machine.value, newKey.type]
     _history.push({ ...this.current, currentKey: newKey })
 
-    return this.machine.transition$.apply(this, transitionArgs)
+    return this.machine.transition$
+      .apply(this, transitionArgs)
+      .then((value) => {
+        events.publish('ouput:next', this.current)
+        return value
+      })
   }
 
   publish(eventName, payload = this.current) {

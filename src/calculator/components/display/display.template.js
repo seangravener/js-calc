@@ -13,12 +13,12 @@ const historyDisplay = ({ history }) => `
 const mainDisplay = ({ operator, operandA, operandB, result }) => `
   <div class="calc-typed" id="mainDisplay">
     <span class="operator">${exists(operator)}</span>
-    ${result || operandA || operandB}
+    ${operandB || operandA}
   </div>`
 
 const templateFn = (display) => {
-  // const { history, display } = display
-  console.log(display)
+  const { operandA, operator, operandB, result} = display
+  console.log({ operandA, operator, operandB, result})
   return compose(
     // historyDisplay({ history }),
     mainDisplay(display)
