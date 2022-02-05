@@ -55,14 +55,9 @@ class StateService {
     return this.machine.transition$
       .apply(this, transitionArgs)
       .then((value) => {
-        events.publish('ouput:next', this.current)
+        events.publish('output:next', this.displayService.current)
         return value
       })
-  }
-
-  publish(eventName, payload = this.current) {
-    events.publish(`output:${eventName}`, payload)
-    return payload
   }
 
   static load() {
