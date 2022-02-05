@@ -1,14 +1,14 @@
 import events from './events.js'
 
+let _instance = undefined
 const _DISPLAY_ = {
   msg: '',
   err: '',
-  result: '',
+  result: _instance ? _instance.value : '',
   operandA: '',
   operator: '',
   operandB: ''
 }
-let _instance = undefined
 let _displayCache = [_DISPLAY_]
 
 class DisplayService {
@@ -37,10 +37,11 @@ class DisplayService {
 
   constructor() {
     events.listenTo('output:msg', (msg) => this.set({ msg }))
-    
-    events.listenTo('output:next', (locals) => {
+
+    events.listenTo('output:next', (display) => {
       // calulate result
-      // console.log('ouput:next: ', locals)
+      this.setResult(this.value)
+      console.log('ouput:next --> ', display)
     })
   }
 
@@ -50,9 +51,11 @@ class DisplayService {
 
   set(locals) {
     _displayCache.push({ ...this.current, ..._normalize(locals) })
-    events.publish('ouput:next', this.current)
-
     return this.current
+  }
+
+  setResult(value) {
+    _displayCache[_displayCache.length - 1].result = value
   }
 
   appendA(digit) {

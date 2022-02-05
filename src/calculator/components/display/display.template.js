@@ -13,7 +13,7 @@ const historyDisplay = ({ history }) => `
 const mainDisplay = ({ operator, operandA, operandB, result }) => `
   <div class="calc-typed" id="mainDisplay">
     <span class="operator">${exists(operator)}</span>
-    ${operandB || operandA}
+    ${result || operandB || operandA}
   </div>`
 
 const templateFn = (display) => {

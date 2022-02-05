@@ -21,7 +21,7 @@ describe('Given the DisplayService', () => {
       expect(displayService.current).toMatchObject(expected);
     });
 
-    it('should allow omitting state keys', () => {
+    it('#set({}) should allow omitting state keys', () => {
       let symbol = '-';
       expected.operator = symbol;
       displayService.set(input);
@@ -62,7 +62,7 @@ describe('Given the DisplayService', () => {
       expect(displayService.recall(1)).toMatchObject(input);
     });
 
-    it('should #append() digits', () => {
+    it('#append() digits', () => {
       displayService.set(input);
 
       displayService.append({ operandA: '1' });
@@ -75,7 +75,7 @@ describe('Given the DisplayService', () => {
       expect(displayService.current).toMatchObject({ operandB: '22' });
     });
 
-    it('should #backspace() a single digit', () => {
+    it('#backspace() single digits', () => {
       displayService.set(input);
 
       displayService.append({ operandB: '22' });
@@ -88,7 +88,7 @@ describe('Given the DisplayService', () => {
       expect(displayService.current).toMatchObject({ operandB: '2' });
     });
 
-    it('should #backspace(n) digits', () => {
+    it('#backspace(n) digits', () => {
       displayService.set(input);
 
       displayService.append({ operandB: '123' });
