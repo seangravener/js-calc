@@ -1,6 +1,7 @@
 import events from './events.js'
 
 let _instance = undefined
+// move state to top-level <App> 
 const _DISPLAY_ = {
   msg: '',
   err: '',
@@ -41,7 +42,7 @@ class DisplayService {
     events.listenTo('output:next', (display) => {
       // calulate result
       this.setResult(this.value)
-      console.log('ouput:next --> ', display)
+      // console.log('ouput:next --> ', display)
     })
   }
 

@@ -16,7 +16,7 @@ describe('Given the DisplayService', () => {
       expected = input;
     });
 
-    it('should be provided a current state', () => {
+    it('should be provided current state', () => {
       displayService.set(input);
       expect(displayService.current).toMatchObject(expected);
     });
@@ -99,6 +99,14 @@ describe('Given the DisplayService', () => {
 
       displayService.backspace(3);
       expect(displayService.current).toMatchObject({ operandB: '0' });
+    });
+
+    it('should calculate a result', () => {
+      
+    });
+
+    it('should reflect updated state', () => {
+      
     });
   });
 });

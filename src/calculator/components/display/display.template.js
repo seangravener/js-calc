@@ -18,7 +18,7 @@ const mainDisplay = ({ operator, operandA, operandB, result }) => `
 
 const templateFn = (display) => {
   const { operandA, operator, operandB, result} = display
-  console.log({ operandA, operator, operandB, result})
+  // console.log({ operandA, operator, operandB, result})
   return compose(
     // historyDisplay({ history }),
     mainDisplay(display)
