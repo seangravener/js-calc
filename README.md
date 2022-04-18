@@ -21,3 +21,8 @@ https://css-tricks.com/build-a-state-management-system-with-vanilla-javascript/
  * https://kentcdodds.com/blog/implementing-a-simple-state-machine-library-in-javascript
  */
 ```
+
+## Other Reading
+>> For me, using a state machine means asking the right questions. This approach simply leads to higher level of predictability. We see how the state machine pattern protects our app being in a wrong state or state that we don’t know about. There is no conditional logic in the view layer because the machine is capable of providing information of what should be rendered.
+https://krasimirtsonev.com/blog/article/getting-from-redux-to-state-machine-with-stent
+

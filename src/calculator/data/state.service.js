@@ -3,11 +3,13 @@ import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 import displayService, { _DISPLAY_ } from './display.service.js'
 
+// Replace with fsmachine.state
 const _STATE_ = {
-  displayService: displayService,
+  displayService: displayService, // remove service from state tree
   currentKey: {},
   previousKey: {}
 }
+
 let _instance = undefined
 let _history = [_STATE_]
 

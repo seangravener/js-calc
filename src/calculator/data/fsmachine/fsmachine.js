@@ -1,24 +1,11 @@
 import events from '../events.js'
-import { _STATE_ } from '../state.service.js'
-import { _DISPLAY_ } from '../display.service.js'
 
 let _value = ''
 let _definition = { initialState: '' }
 let _previous = { fromStateId: '', withTransition: '', toStateId: '' }
-let _state = [{ ..._STATE_, display: _DISPLAY_ }]
 
 class FSMachine {
   machineId = ''
-
-  get state() {
-    return { ..._state, value: this.value }
-  }
-
-  // @todo remove redunent .current props from services
-  set state(state) {
-    _state.push({ ..._state, ...state })
-    events.publish('output:next', this.state)
-  }
 
   get definition() {
     return _definition
@@ -32,10 +19,6 @@ class FSMachine {
     return _value || this.definition.initialState
   }
 
-  set _value(value) {
-    _value = value
-  }
-
   get previous() {
     return _previous
   }
@@ -44,7 +27,7 @@ class FSMachine {
     this.machineId = definition.machineId
     this.definition = { ...this.definition, ...definition }
 
-    this.value = definition.value || this.value
+    _value = definition.value || this.value
   }
 
   async transition$(fromStateId, transitionId) {
@@ -56,14 +39,10 @@ class FSMachine {
       withTransition = fromState.transitions[transitionId]
       toState = this.definition[withTransition.toStateId]
 
-      this.state = await withTransition.action
-        .call(this, { api: this })
-        .then(() => fromState.actions.onExit.call(this, { api: this }))
-        .then(() => toState.actions.onEnter.call(this, { api: this }))
-
-      // withTransition.action.call(this, { api: this })
-      // fromState.actions.onExit.call(this, { api: this })
-      // toState.actions.onEnter.call(this, { api: this })
+      // console.log('calling transition', withTransition)
+      withTransition.action.call(this, { api: this })
+      fromState.actions.onExit.call(this, { api: this })
+      toState.actions.onEnter.call(this, { api: this })
 
       _value = withTransition.toStateId
       _previous = {

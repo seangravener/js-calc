@@ -1,7 +1,9 @@
 import events from './events.js'
 
 let _instance = undefined
+
 // move state to top-level <App> 
+// Replace with fsmachine.state
 const _DISPLAY_ = {
   msg: '',
   err: '',
@@ -10,6 +12,8 @@ const _DISPLAY_ = {
   operator: '',
   operandB: ''
 }
+
+// todo - replace cache with data store
 let _displayCache = [_DISPLAY_]
 
 class DisplayService {
