@@ -66,7 +66,8 @@ class DisplayService {
   appendA(digit) {
     this.set({ operandA: `${this.current.operandA || ''}${digit}` })
   }
-  appendA(digit) {
+  
+  appendB(digit) {
     this.set({ operandB: `${this.current.operandB || ''}${digit}` })
   }
 

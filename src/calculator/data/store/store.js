@@ -1,4 +1,4 @@
-import eventBus, { EventBus } from './events'
+import eventBus, { EventBus } from '../events'
 
 /**
  * store returns copy of current state

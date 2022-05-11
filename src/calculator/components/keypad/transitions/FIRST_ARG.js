@@ -4,6 +4,7 @@ export const transitions = {
   numKey: {
     toStateId: 'FIRST_ARG',
     action({ api }) {
+      // display.append()
       api.displayService.append({ operandA: api.currentKey.symbol })
     }
   },

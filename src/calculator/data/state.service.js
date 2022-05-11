@@ -3,9 +3,8 @@ import { FSMachine } from './fsmachine/fsmachine.js'
 import { calcMachineDefinition } from './state.config.js'
 import displayService, { _DISPLAY_ } from './display.service.js'
 
-// Replace with fsmachine.state
 const _STATE_ = {
-  displayService: displayService, // remove service from state tree
+//  displayService: displayService, // remove service from state tree
   currentKey: {},
   previousKey: {}
 }

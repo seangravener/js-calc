@@ -5,7 +5,7 @@ const mutations = {};
 const state = { message1: 'hello', message2: 'everyone' };
 
 describe('Given the Store', () => {
-  const store = new Store({ actions, mutations, state });
+  const store = new Store({ actions, mutations, state }); 
 
   it('is created', () => expect(store).toBeInstanceOf(Store));
   it('and the initial state is ', async () => {
