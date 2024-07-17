@@ -1,6 +1,6 @@
 import { useBorderBox } from '../../lib/styles.js'
 
-let styles = `
+const localStyles = `
 .calc-button-row {
   width: 100%;
   background: var(--grey-4);
@@ -41,5 +41,5 @@ let styles = `
   color: var(--text--hover);
 }`
 
-styles = useBorderBox(styles)
+const styles = useBorderBox(localStyles)
 export { styles }

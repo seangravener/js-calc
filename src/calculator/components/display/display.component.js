@@ -3,6 +3,7 @@ import { styles } from './display.styles.js'
 import { Component } from '../base/Component.js'
 import { templateFn } from './display.template.js'
 import stateService from '../../data/state.service.js'
+import displayService from '../../data/display.service.js'
 
 class DisplayComponent extends Component {
   constructor() {
@@ -16,7 +17,7 @@ class DisplayComponent extends Component {
     this.locals = stateService.displayService.current
 
     events.listenTo('input:next', (state) => {
-      this.locals = state.displayService.current
+      this.locals = displayService.current
       this.render()
     })
   }
