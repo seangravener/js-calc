@@ -1,6 +1,7 @@
 import events from './events.js'
+import totalizator from '../lib/totalizator.js'
 
-let _instance = undefined
+let _instance;
 
 // move state to top-level <App> 
 // Replace with fsmachine.state
@@ -17,6 +18,10 @@ const _DISPLAY_ = {
 let _displayCache = [_DISPLAY_]
 
 class DisplayService {
+  get totalizator() {
+    return totalizator
+  }
+
   get current() {
     return this.recall(0)
   }
@@ -66,7 +71,7 @@ class DisplayService {
   appendA(digit) {
     this.set({ operandA: `${this.current.operandA || ''}${digit}` })
   }
-  
+
   appendB(digit) {
     this.set({ operandB: `${this.current.operandB || ''}${digit}` })
   }

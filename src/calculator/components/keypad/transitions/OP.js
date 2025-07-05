@@ -5,14 +5,18 @@ export const transitions = {
     toStateId: 'SEC_ARG',
     action({ api }) {
       api.displayService.append({ operandB: api.currentKey.symbol })
-      // displayService = num
     }
   },
   dotKey: {
     toStateId: 'SEC_ARG_DOT',
     action({ api }) {
-      api.displayService.append({ operandB: '.' })
-      // display = '0.'
+      api.displayService.set({ operandB: '0.' })
+    }
+  },
+  reset: {
+    toStateId: 'START',
+    action({ api }) {
+      api.displayService.reset()
     }
   }
 }

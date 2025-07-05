@@ -10,10 +10,13 @@ export const transitions = {
   dotKey: {
     toStateId: 'FIRST_ARG_FLOAT',
     action({ api }) {
-      // console.log('actin context', this)
-      // api.display.set({ operandB: currentKey.symbol || '0' })
-      // api.display.value = '0.';
-      // display = '0.'
+      api.displayService.set({ operandA: '0.' })
+    }
+  },
+  reset: {
+    toStateId: 'START',
+    action({ api }) {
+      api.displayService.reset()
     }
   }
 }
