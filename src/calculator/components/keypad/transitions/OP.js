@@ -1,3 +1,5 @@
+import { CONTROLS } from '../../../lib/constants.js'
+
 export const actions = { onEnter() {}, onExit() {} }
 
 export const transitions = {
@@ -10,7 +12,7 @@ export const transitions = {
   dotKey: {
     toStateId: 'SEC_ARG_DOT',
     action({ api }) {
-      api.displayService.set({ operandB: '0.' })
+      api.displayService.set({ operandB: `0${CONTROLS.DOT}` })
     }
   },
   reset: {

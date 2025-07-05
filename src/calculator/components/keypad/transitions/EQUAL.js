@@ -1,3 +1,5 @@
+import { CONTROLS } from '../../../lib/constants.js'
+
 export const actions = { onEnter() { }, onExit() { } }
 
 export const transitions = {
@@ -24,7 +26,7 @@ export const transitions = {
   dotKey: {
     toStateId: 'FIRST_ARG_FLOAT',
     action({ api }) {
-      api.displayService.set({ operandA: '0.', operator: '', operandB: '' })
+      api.displayService.set({ operandA: `0${CONTROLS.DOT}`, operator: '', operandB: '' })
     }
   },
   opKey: {

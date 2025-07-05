@@ -1,3 +1,5 @@
+import { OPERATORS, CONTROLS } from '../../lib/constants.js'
+
 const button = ({ symbol, classes }) =>
   `<div class="${classes.join(' ')}">${symbol}</div>`
 
@@ -12,10 +14,10 @@ const templateFn = ({ layout }) =>
 
 const keypadLayout = [
   [
-    { symbol: 'C', classes: ['button', 'c'] },
+    { symbol: CONTROLS.CLEAR, classes: ['button', 'c'] },
     { symbol: '≠', classes: ['button', 'l'] },
-    { symbol: '%', classes: ['button', 'l'] },
-    { symbol: '÷', classes: ['button', 'l'] }
+    { symbol: OPERATORS.MODULO, classes: ['button', 'l'] },
+    { symbol: OPERATORS.DIVIDE, classes: ['button', 'l'] }
   ],
   [
     { symbol: '7', classes: ['button'] },
@@ -33,13 +35,13 @@ const keypadLayout = [
     { symbol: '1', classes: ['button'] },
     { symbol: '2', classes: ['button'] },
     { symbol: '3', classes: ['button'] },
-    { symbol: '+', classes: ['button', 'l'] }
+    { symbol: OPERATORS.ADD, classes: ['button', 'l'] }
   ],
   [
-    { symbol: '.', classes: ['button'] },
+    { symbol: CONTROLS.DOT, classes: ['button'] },
     { symbol: '0', classes: ['button'] },
     { symbol: '<', classes: ['button'] },
-    { symbol: '=', classes: ['button', 'l'] }
+    { symbol: CONTROLS.EQUALS, classes: ['button', 'l'] }
   ]
 ]
 

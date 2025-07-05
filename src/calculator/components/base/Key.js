@@ -1,4 +1,5 @@
 import { keypadBindings } from '../keypad/keypad.bindings.js'
+import { SYMBOL_MAP } from '../../lib/constants.js'
 
 class Key {
   get isDefined() {
@@ -7,13 +8,7 @@ class Key {
 
   get symbol() {
     const keyValue = this.source.key || this.source.target.textContent
-    const symbolMap = {
-      'Enter': '=',
-      'Delete': 'Del',
-      'Backspace': 'Del',
-      'Escape': 'C'
-    }
-    return symbolMap[keyValue] || keyValue
+    return SYMBOL_MAP[keyValue] || keyValue
   }
 
   get type() {
