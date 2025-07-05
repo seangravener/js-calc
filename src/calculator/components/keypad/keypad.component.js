@@ -2,11 +2,12 @@ import { Key } from '../base/Key.js'
 import events from '../../data/events.js'
 import { styles } from './keypad.styles.js'
 import { Component } from '../base/Component.js'
-import api, { StateService } from '../../data/state.service.js'
+import { StateService } from '../../data/state.service.js'
 import { templateFn, keypadLayout } from './keypad.template.js'
 
-let _keyCache = []
 class KeypadComponent extends Component {
+  #keyCache = []
+  #maxCacheSize = 50
   constructor() {
     super()
 
@@ -36,12 +37,27 @@ class KeypadComponent extends Component {
   }
 
   async press$(key) {
-    _keyCache.push(key)
+    this.#keyCache.push(key)
+    if (this.#keyCache.length > this.#maxCacheSize) {
+      this.#keyCache.shift()
+    }
     return this.stateService.set$(key)
   }
 
   clear() {
-    _keyCache = []
+    this.#keyCache.length = 0
+  }
+
+  get keyHistory() {
+    return [...this.#keyCache]
+  }
+
+  get lastKey() {
+    return this.#keyCache.at(-1) ?? null
+  }
+
+  get keyCount() {
+    return this.#keyCache.length
   }
 
   connectedCallback() {
